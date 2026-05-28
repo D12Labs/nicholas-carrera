@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="night">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Prevent theme/accent flash -->
+  <script>
+    (function() {
+      var t = localStorage.getItem('nico-theme');
+      var a = localStorage.getItem('nico-accent');
+      if (t) document.documentElement.dataset.theme = t;
+      if (a) document.documentElement.style.setProperty('--accent', a);
+    })();
+  </script>
+
+  <!-- SEO -->
+  <title>NICO NICO: Musician, Producer & Developer | Chicago</title>
+  <meta name="description" content="Nico Carrera (Nico Nico) is a Chicago-based musician, producer, and developer. Music on Solfool Records. Work in creative technology, AI research, and UX design." />
+  <meta name="keywords" content="Nico Carrera, Nico Nico, Nicholas Carrera, thy_niconico, Solfool Records, Chicago musician, Chicago producer, SANVALENTIN, Excelsior, BTM, Subrosa, IDK, DePaul, URAP, TouchDesigner, creative technology" />
+
+  <!-- OG -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="NICO NICO: Musician & Developer" />
+  <meta property="og:description" content="Chicago musician, producer, and developer. Music on Solfool Records. Work in creative technology and UX design." />
+  <meta property="og:image" content="https://i.scdn.co/image/ab67616d00001e02705c68c2323938f6faf02986" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@thy_niconico" />
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Nico Carrera",
+    "alternateName": ["Nico Nico", "thy_niconico"],
+    "description": "Chicago-based musician, producer, and developer. Releases on Solfool Records.",
+    "url": "https://nico.site",
+    "sameAs": [
+      "https://open.spotify.com/artist/6nwPZ9M9IIgQrpMMJFlJVC",
+      "https://www.instagram.com/thy_niconico",
+      "https://www.youtube.com/@niconico",
+      "https://soundcloud.com/theniconico"
+    ]
+  }
+  </script>
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────────────── */
+    :root {
+      --bg:       #0a0a0a;
+      --fg:       #f0ece4;
+      --border:   #2a2a2a;
+      --muted:    #555;
+      --accent:   #00ff41;
+
+      --space-1:  8px;
+      --space-2:  16px;
+      --space-3:  24px;
+      --space-4:  32px;
+      --space-6:  48px;
+      --space-8:  64px;
+      --space-12: 96px;
+
+      --mono: 'JetBrains Mono', monospace;
+      --max-w: 1200px;
+    }
+
+    [data-theme="day"] {
+      --bg:     #f0ece4;
+      --fg:     #0a0a0a;
+      --border: #d0ccc4;
+      --muted:  #888;
+    }
+
+    /* ─── RESET ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 10px; scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--mono);
+      font-size: 1.4rem;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.2s, color 0.2s;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; width: 100%; }
+    button { all: unset; cursor: pointer; }
+
+    /* ─── GRID ───────────────────────────────────────────────── */
+    .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--space-4);
+    }
+
+    /* ─── HUD ────────────────────────────────────────────────── */
+    .hud {
+      position: fixed;
+      top: var(--space-3);
+      right: var(--space-3);
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      z-index: 100;
+    }
+
+    /* color wheel */
+    .color-wheel {
+      width: 32px;
+      height: 32px;
+      position: relative;
+      cursor: crosshair;
+      user-select: none;
+      touch-action: none;
+      opacity: 0.5;
+      transition: opacity 0.15s;
+    }
+    .color-wheel:hover,
+    .color-wheel.dragging { opacity: 1; }
+    .wheel-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: conic-gradient(
+        hsl(0,100%,55%), hsl(30,100%,55%), hsl(60,100%,55%),
+        hsl(90,100%,55%), hsl(120,100%,55%), hsl(150,100%,55%),
+        hsl(180,100%,55%), hsl(210,100%,55%), hsl(240,100%,55%),
+        hsl(270,100%,55%), hsl(300,100%,55%), hsl(330,100%,55%),
+        hsl(360,100%,55%)
+      );
+      -webkit-mask: radial-gradient(circle, transparent 46%, black 46%);
+      mask: radial-gradient(circle, transparent 46%, black 46%);
+      transition: -webkit-mask 0.1s, mask 0.1s;
+    }
+    .color-wheel.dragging .wheel-ring {
+      -webkit-mask: radial-gradient(circle, transparent 36%, black 36%);
+      mask: radial-gradient(circle, transparent 36%, black 36%);
+    }
+    .wheel-center {
+      position: absolute;
+      inset: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      pointer-events: none;
+    }
+
+    /* theme toggle */
+    .hud-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.5;
+      transition: opacity 0.15s;
+    }
+    .hud-btn:hover { opacity: 1; }
+    .hud-btn svg { width: 20px; height: 20px; }
+
+    /* ─── HEADER ─────────────────────────────────────────────── */
+    header {
+      padding: var(--space-8) 0 var(--space-6);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: var(--space-4);
+    }
+    .site-name {
+      font-size: clamp(4rem, 10vw, 9.6rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 0.9;
+      text-transform: uppercase;
+    }
+    .site-meta {
+      text-align: right;
+      color: var(--muted);
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 2;
+    }
+    .site-meta a:hover { color: var(--fg); }
+
+    /* ─── SECTION LABELS ─────────────────────────────────────── */
+    .section-label {
+      font-size: 1rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: var(--space-3);
+    }
+
+    /* ─── INDEX ──────────────────────────────────────────────── */
+    .index-section {
+      padding: var(--space-6) 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .index-list { list-style: none; }
+    .index-item {
+      display: grid;
+      grid-template-columns: 3ch 1fr auto auto;
+      gap: var(--space-2);
+      align-items: baseline;
+      padding: var(--space-1) 0;
+      border-top: 1px solid var(--border);
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: color 0.1s;
+    }
+    .index-item:hover { color: var(--muted); }
+    .index-item:hover .index-num { color: var(--fg); }
+    .index-num { color: var(--muted); font-size: 1.1rem; }
+    .index-title { font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; }
+    .index-type { color: var(--muted); font-size: 1.1rem; letter-spacing: 0.08em; text-transform: uppercase; }
+    .index-year { color: var(--muted); font-size: 1.1rem; }
+
+    /* ─── MUSIC ──────────────────────────────────────────────── */
+    .releases-section {
+      padding: var(--space-6) 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .releases-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1px;
+      border: 1px solid var(--border);
+      margin-top: var(--space-3);
+    }
+    .release-card {
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* artwork */
+    .artwork-wrap {
+      position: relative;
+      aspect-ratio: 1;
+      overflow: hidden;
+      background: var(--border);
+    }
+    .artwork-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(20%);
+      transition: filter 0.3s, transform 0.3s;
+    }
+    .release-card:hover .artwork-wrap img {
+      filter: grayscale(0%);
+      transform: scale(1.02);
+    }
+    .artwork-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(10,10,10,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .release-card:hover .artwork-overlay { opacity: 1; }
+    .play-btn {
+      width: 52px;
+      height: 52px;
+      border: 2px solid var(--fg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .play-btn svg { width: 20px; height: 20px; fill: var(--fg); margin-left: 3px; }
+
+    /* card body */
+    .card-body {
+      padding: var(--space-2);
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: var(--space-1);
+    }
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 1rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .card-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+    .card-tracks {
+      margin-top: auto;
+      padding-top: var(--space-1);
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .track-row {
+      display: grid;
+      grid-template-columns: 1.5ch 1fr auto;
+      gap: var(--space-1);
+      align-items: center;
+      font-size: 1.1rem;
+      color: var(--muted);
+      padding: 2px 0;
+      cursor: pointer;
+      transition: color 0.1s;
+    }
+    .track-row:hover { color: var(--fg); }
+    .track-row.playing { color: var(--accent); }
+    .track-row.playing .track-num::before { content: '▶'; font-size: 0.8em; }
+    .track-num { color: var(--border); }
+    .track-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .track-dur { font-size: 1rem; }
+
+    /* shared link pills */
+    .card-links {
+      display: flex;
+      gap: var(--space-1);
+      flex-wrap: wrap;
+      margin-top: var(--space-1);
+    }
+    .link-pill {
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      padding: 3px 8px;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .link-pill:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ─── VIDEO ──────────────────────────────────────────────── */
+    .video-section {
+      padding: var(--space-6) 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1px;
+      border: 1px solid var(--border);
+      margin-top: var(--space-3);
+    }
+    .video-card { display: flex; flex-direction: column; }
+    .video-thumb-link { display: block; }
+    .video-thumb {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: var(--border);
+    }
+    .video-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(20%);
+      transition: filter 0.3s, transform 0.3s;
+    }
+    .video-card:hover .video-thumb img {
+      filter: grayscale(0%);
+      transform: scale(1.02);
+    }
+    .video-thumb-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(10,10,10,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .video-card:hover .video-thumb-overlay { opacity: 1; }
+    .play-btn-lg {
+      width: 64px;
+      height: 64px;
+      border: 2px solid var(--fg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .play-btn-lg svg { width: 28px; height: 28px; fill: var(--fg); margin-left: 4px; }
+    .video-body {
+      padding: var(--space-2);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .video-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .video-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+    .video-roles {
+      font-size: 1rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+    .video-desc {
+      font-size: 1.1rem;
+      color: var(--muted);
+      margin-top: var(--space-1);
+      line-height: 1.6;
+    }
+
+    /* ─── CODE / UX ──────────────────────────────────────────── */
+    .code-section {
+      padding: var(--space-6) 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .code-list {
+      margin-top: var(--space-3);
+      border-bottom: 1px solid var(--border);
+    }
+    .code-item {
+      border-top: 1px solid var(--border);
+      padding: var(--space-4) 0;
+    }
+    .code-header {
+      display: grid;
+      grid-template-columns: 3ch 1fr auto;
+      gap: var(--space-2);
+      align-items: start;
+      margin-bottom: 6px;
+    }
+    .code-num { color: var(--muted); font-size: 1.1rem; padding-top: 0.35em; }
+    .code-title {
+      font-size: clamp(1.8rem, 2.5vw, 2.4rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      min-width: 0;
+    }
+    .code-year { color: var(--muted); font-size: 1.1rem; padding-top: 0.35em; }
+    .code-sub {
+      padding-left: calc(3ch + var(--space-2));
+      font-size: 1.1rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-2);
+    }
+    .code-body {
+      padding-left: calc(3ch + var(--space-2));
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: var(--space-2);
+    }
+    .code-body p {
+      font-size: 1.3rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 680px;
+    }
+    .code-stack {
+      padding-left: calc(3ch + var(--space-2));
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: var(--space-2);
+    }
+    .stack-tag {
+      font-size: 1rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      color: var(--muted);
+    }
+    .code-links {
+      padding-left: calc(3ch + var(--space-2));
+      display: flex;
+      gap: var(--space-1);
+      flex-wrap: wrap;
+    }
+
+    /* ─── PLAYER BAR ─────────────────────────────────────────── */
+    .player-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: var(--space-2) var(--space-4);
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      z-index: 100;
+      transform: translateY(100%);
+      transition: transform 0.25s ease;
+    }
+    .player-bar.active { transform: translateY(0); }
+    .player-now { flex: 1; min-width: 0; }
+    .player-track {
+      font-weight: 700;
+      font-size: 1.3rem;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .player-release {
+      font-size: 1rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .player-controls { display: flex; align-items: center; gap: var(--space-2); }
+    .ctrl-btn { opacity: 0.6; transition: opacity 0.15s; }
+    .ctrl-btn:hover { opacity: 1; }
+    .ctrl-btn svg { width: 18px; height: 18px; fill: var(--fg); }
+    .ctrl-play svg { width: 24px; height: 24px; }
+    .player-progress {
+      flex: 2;
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      font-size: 1rem;
+      color: var(--muted);
+    }
+    .progress-track {
+      flex: 1;
+      height: 2px;
+      background: var(--border);
+      position: relative;
+      cursor: pointer;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.5s linear;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: var(--space-6) 0 var(--space-12);
+      margin-top: var(--space-6);
+    }
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+      align-items: end;
+    }
+    .footer-label {
+      font-size: 2.4rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      color: var(--muted);
+    }
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: flex-end;
+    }
+    .footer-link {
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.15s;
+    }
+    .footer-link:hover { color: var(--fg); }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .header-inner { grid-template-columns: 1fr; }
+      .site-meta { text-align: left; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .footer-links { align-items: flex-start; }
+      .releases-grid { grid-template-columns: 1fr; }
+      .video-grid { grid-template-columns: 1fr; }
+      .player-progress { display: none; }
+      .index-item { grid-template-columns: 3ch 1fr auto; }
+      .index-type { display: none; }
+      .code-sub, .code-body, .code-stack, .code-links { padding-left: 0; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- SEO fallback -->
+  <div style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)" aria-hidden="true">
+    <h1>Nico Nico, Nico Carrera, Nicholas Carrera</h1>
+    <p>Chicago-based musician, producer, and developer. Music on Solfool Records. Work in AI research, creative technology, and UX design. Releases: SANVALENTIN (2025), Subrosa EP (2022), IDK feat. Berry Jones (2023), Get Lost (2021).</p>
+  </div>
+
+  <!-- HUD -->
+  <div class="hud" role="toolbar" aria-label="Site controls">
+    <div class="color-wheel" id="color-wheel" role="button" tabindex="0" aria-label="Pick accent color" title="Pick accent color">
+      <div class="wheel-ring"></div>
+      <div class="wheel-center" id="wheel-center"></div>
+    </div>
+    <button class="hud-btn" id="theme-toggle" aria-label="Toggle light/dark theme" title="Toggle light/dark">
+      <svg id="icon-night" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="4"/>
+        <line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+      <svg id="icon-day" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="container">
+      <div class="header-inner">
+        <h1 class="site-name">NICO<br>NICO</h1>
+        <div class="site-meta">
+          <div>Chicago, IL</div>
+          <div>Solfool Records</div>
+          <div><a href="https://www.instagram.com/thy_niconico" target="_blank" rel="noopener">@thy_niconico</a></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- INDEX -->
+  <section class="index-section" aria-label="Work index">
+    <div class="container">
+      <p class="section-label">Index</p>
+      <ul class="index-list" id="index-list"></ul>
+    </div>
+  </section>
+
+  <!-- MUSIC -->
+  <section class="releases-section" aria-label="Music releases">
+    <div class="container">
+      <p class="section-label">Music</p>
+      <div class="releases-grid" id="releases-grid"></div>
+    </div>
+  </section>
+
+  <!-- VIDEO -->
+  <section class="video-section" aria-label="Video work">
+    <div class="container">
+      <p class="section-label">Video</p>
+      <div class="video-grid" id="video-grid"></div>
+    </div>
+  </section>
+
+  <!-- CODE / UX -->
+  <section class="code-section" aria-label="Code and UX work">
+    <div class="container">
+      <p class="section-label">Code / UX</p>
+      <div class="code-list" id="code-list"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-label">Solfool<br>Records</div>
+        <nav class="footer-links" aria-label="External links">
+          <a class="footer-link" href="https://open.spotify.com/artist/6nwPZ9M9IIgQrpMMJFlJVC" target="_blank" rel="noopener">Spotify</a>
+          <a class="footer-link" href="https://soundcloud.com/theniconico" target="_blank" rel="noopener">SoundCloud</a>
+          <a class="footer-link" href="https://www.youtube.com/@niconico" target="_blank" rel="noopener">YouTube</a>
+          <a class="footer-link" href="https://www.instagram.com/thy_niconico" target="_blank" rel="noopener">Instagram</a>
+          <a class="footer-link" href="https://www.ninaprotocol.com/releases/nico-nico-sanvalentin" target="_blank" rel="noopener">Nina Protocol</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <!-- PLAYER BAR -->
+  <div class="player-bar" id="player-bar" role="region" aria-label="Now playing">
+    <div class="player-now">
+      <div class="player-track" id="player-track-name"></div>
+      <div class="player-release" id="player-release-name"></div>
+    </div>
+    <div class="player-controls">
+      <button class="ctrl-btn" id="ctrl-prev" aria-label="Previous">
+        <svg viewBox="0 0 24 24"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+      </button>
+      <button class="ctrl-btn ctrl-play" id="ctrl-play" aria-label="Play/Pause">
+        <svg id="icon-play" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <svg id="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+      </button>
+      <button class="ctrl-btn" id="ctrl-next" aria-label="Next">
+        <svg viewBox="0 0 24 24"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+      </button>
+    </div>
+    <div class="player-progress">
+      <span id="time-current">0:00</span>
+      <div class="progress-track" id="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <span id="time-total">0:00</span>
+    </div>
+  </div>
+
+  <audio id="audio-el"></audio>
+
+  <script>
+    // ─── DATA ──────────────────────────────────────────────────────────────────
+
+    const releases = [
+      {
+        slug: "sanvalentin",
+        title: "SANVALENTIN",
+        year: 2025,
+        type: "Single",
+        artwork: "https://i.scdn.co/image/ab67616d00001e02705c68c2323938f6faf02986",
+        tracks: [
+          { title: "Excelsior", duration: "1:26", preview: "https://s3.amazonaws.com/audio.distrokid.com/preview_69276364_D48654F3-0C69-4C98-BE23A9448EB3F44A.mp3" },
+          { title: "BTM",       duration: "1:39", preview: "https://s3.amazonaws.com/audio.distrokid.com/preview_69276365_ADE9596E-AA2C-49AE-8BC7988CA71B7EF1.mp3" },
+        ],
+        links: {
+          spotify: "https://open.spotify.com/album/49NmBuOgRFetgZMdTBpkc1",
+          apple:   "https://music.apple.com/us/album/sanvalentin-single/1797202555",
+          nina:    "https://www.ninaprotocol.com/releases/nico-nico-sanvalentin",
+          youtube: "https://www.youtube.com/watch?v=EjhHHsvlRtU",
+        },
+      },
+      {
+        slug: "subrosa",
+        title: "Subrosa",
+        year: 2022,
+        type: "EP",
+        artwork: "https://i.scdn.co/image/ab67616d00001e024607ff0f75ccf699e127d20e",
+        tracks: [
+          { title: "It's You",       duration: "2:27", preview: "https://s3.amazonaws.com/audio.distrokid.com/preview_36597517_65AC9D27-68CC-41C3-B3DF46E0436F4A75.mp3" },
+          { title: "Evergreen",      duration: "3:18", preview: "https://s3.amazonaws.com/audio.distrokid.com/preview_36597518_A8CB16F9-E3AC-44C4-8B2E4632C539F844.mp3" },
+          { title: "UFeelMe?",       duration: "2:44", preview: "https://s3.amazonaws.com/audio.distrokid.com/preview_36597519_FF7132D2-6C84-455E-840DFBA54CF1A810.mp3" },
+          { title: "Outta Control",  duration: "2:39", preview: "https://s3.amazonaws.com/audio.distrokid.com/preview_36597520_77E9D4A5-E3AC-4F11-AD4CDC1706701FED.mp3" },
+          { title: "Without Trying", duration: "1:11", preview: "https://s3.amazonaws.com/audio.distrokid.com/preview_36597521_D48E1ED9-FDB4-4427-B6556F3BDF7C4485.mp3" },
+          { title: "Subrosa",        duration: "2:53", preview: "https://s3.amazonaws.com/audio.distrokid.com/preview_36597522_201533C7-DE25-4670-B5B164396B64C86D.mp3" },
+        ],
+        links: {
+          spotify: "https://open.spotify.com/album/1JfafTvN3UhzL6AOSr3LkS",
+          apple:   "https://music.apple.com/us/album/subrosa-ep/1653270140",
+          deezer:  "https://www.deezer.com/album/374121757",
+        },
+      },
+      {
+        slug: "idk",
+        title: "IDK",
+        year: 2023,
+        type: "Single",
+        artwork: "https://i.scdn.co/image/ab67616d00001e020a1af8e57cb50de640e37bb4",
+        tracks: [
+          { title: "IDK (feat. Berry Jones)", duration: "2:50", preview: "https://s3.amazonaws.com/audio.distrokid.com/preview_48025611_44A62747-5C45-4F6B-93A1A5E5A5EE137E.mp3" },
+        ],
+        links: {
+          spotify:    "https://open.spotify.com/album/36vhl4b237BhGRT0VxLpMP",
+          apple:      "https://music.apple.com/us/album/idk-feat-berry-jones-single/1712986253",
+          soundcloud: "https://soundcloud.com/theniconico/idk-feat-berry-jones",
+          youtube:    "https://www.youtube.com/watch?v=vXFvEDHpi1E",
+          tidal:      "https://listen.tidal.com/album/323263090",
+        },
+      },
+      {
+        slug: "get-lost",
+        title: "Get Lost",
+        year: 2021,
+        type: "Single",
+        artwork: "https://i.scdn.co/image/ab67616d00001e029189410338484bd59360bc0b",
+        tracks: [
+          { title: "Get Lost", duration: "2:46", preview: "https://s3.amazonaws.com/audio.distrokid.com/preview_51894878_06DC3EF5-889A-42E5-B9D91A2C16D7CF30.mp3" },
+        ],
+        links: {
+          spotify: "https://open.spotify.com/album/2aHAgNjbJzQd8ni60Xc6QC",
+          apple:   "https://music.apple.com/us/album/get-lost-single/1555829966",
+          deezer:  "https://www.deezer.com/album/211124862",
+        },
+      },
+    ];
+
+    const videos = [
+      {
+        slug: "excelsior-btm-mv",
+        title: "EXCELSIOR / BTM",
+        year: 2026,
+        type: "Music Video",
+        roles: "Director, Editor",
+        description: "Official music video for SANVALENTIN. Shot across London and Chicago.\nDOP London: Johnathon Holley. DOP Chicago: London Jones.",
+        thumbnail: "https://img.youtube.com/vi/EjhHHsvlRtU/maxresdefault.jpg",
+        links: { youtube: "https://www.youtube.com/watch?v=EjhHHsvlRtU" },
+      },
+    ];
+
+    const projects = [
+      {
+        slug: "urap",
+        num: "01",
+        title: "LLM Descriptor-to-Geometry",
+        year: 2026,
+        type: "Research",
+        role: "Solo",
+        org: "DePaul University",
+        body: [
+          “Built a pipeline mapping natural language descriptors (“smoothness,” “tension,” “joyfulness”) to procedural 3D geometry using LLMs.”,
+          "Ran prompt experiments across 4 models (Mistral 7B, Claude Haiku/Sonnet/Opus). Built a FastAPI server with multi-model routing, SSE streaming, and composite JSON cache. Extended to TouchDesigner: WebSocket endpoint, Script SOP geometry builders, live pipeline from browser to real-time 3D.",
+          "Key finding: constraint improves creativity. Sphere-constrained prompts rated 9/10 vs. open-base 4–5/10. Architectural constraints, not model reasoning, are the real bottleneck.",
+        ],
+        stack: ["Python", "FastAPI", "Claude API", "Ollama", "TouchDesigner", "P5.js", "WebSocket", "SSE"],
+        links: {
+          live:   "https://urap-fall-2025.pages.dev",
+          github: "https://github.com/nickcarrera/urap-2025-26",
+        },
+      },
+      {
+        slug: "caterpillar",
+        num: "02",
+        title: "CAT SSO & Access Control",
+        year: 2026,
+        type: "UX Design",
+        role: "Team of 4",
+        org: "DePaul × Caterpillar",
+        body: [
+          "Redesigned operator identity and access control for Caterpillar heavy equipment. Sub-5% Operator ID adoption. Guest Mode had become the de facto standard across the fleet.",
+          "Field research at Cat’s Edwards facility revealed the real problem: a trust deficit, not a UI failure. Under union reprimand culture, operators saw no personal value in logging in. Fobs were hidden under seats on rental machines to bypass login entirely.",
+          "Reframed the question from “how do we make login easier?” to “why should operators log in at all?” Delivered a three-layer system architecture and universal portal concept validated with Cat’s NFC integration lead.",
+        ],
+        stack: ["Figma", "FigJam", "Miro", "Heuristic Evaluation", "Field Research", "Stakeholder Interviews"],
+        links: {},
+      },
+      {
+        slug: "wabash",
+        num: "03",
+        title: "Wabash Lights Data Viz",
+        year: 2025,
+        type: "Creative Code",
+        role: "Solo",
+        org: "Public Installation",
+        body: [
+          "Translated the Urban Displacement Project’s Chicago gentrification dataset (1990–2018) into animated light behavior deployed to the Wabash Lights, underside of the CTA elevated tracks in downtown Chicago.",
+          "Designed a composite displacement metric from 6 variables across the UDP Chicago Typology Output. Mapped 8 typology levels to an LED-constrained color palette. Balanced statistical rigor against the ethical weight of representing displaced communities.",
+          "Saw it go live on the physical installation.",
+        ],
+        stack: ["P5.js", "JavaScript", "Tableau", "Statistical Analysis", "OOP", "Public Installation"],
+        links: {},
+      },
+    ];
+
+    // ─── INDEX ─────────────────────────────────────────────────────────────────
+
+    const LINK_LABELS = {
+      spotify: "Spotify", apple: "Apple", youtube: "YouTube",
+      soundcloud: "SoundCloud", nina: "Nina", tidal: "Tidal", deezer: "Deezer",
+      live: "Live ↗", github: "GitHub ↗", case_study: "Case Study ↗",
+    };
+
+    const indexItems = [
+      { title: "SANVALENTIN",                type: "SINGLE",        year: 2025, target: "card-sanvalentin" },
+      { title: "EXCELSIOR / BTM",            type: "MUSIC VIDEO",   year: 2026, target: "card-excelsior-btm-mv" },
+      { title: "LLM Descriptor-to-Geometry", type: "RESEARCH",      year: 2026, target: "card-urap" },
+      { title: "CAT SSO & Access Control",   type: "UX DESIGN",     year: 2026, target: "card-caterpillar" },
+      { title: "Wabash Lights Data Viz",     type: "CREATIVE CODE", year: 2025, target: "card-wabash" },
+      { title: "Subrosa",                    type: "EP",            year: 2022, target: "card-subrosa" },
+      { title: "IDK",                        type: "SINGLE",        year: 2023, target: "card-idk" },
+      { title: "Get Lost",                   type: "SINGLE",        year: 2021, target: "card-get-lost" },
+    ];
+
+    const indexList = document.getElementById("index-list");
+    indexItems.forEach((item, i) => {
+      const li = document.createElement("li");
+      li.className = "index-item";
+      li.innerHTML = `
+        <span class="index-num">${String(i + 1).padStart(2, "0")}</span>
+        <span class="index-title">${item.title}</span>
+        <span class="index-type">${item.type}</span>
+        <span class="index-year">${item.year}</span>
+      `;
+      li.addEventListener("click", () => {
+        document.getElementById(item.target)?.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+      indexList.appendChild(li);
+    });
+
+    // ─── RELEASE CARDS ─────────────────────────────────────────────────────────
+
+    const relGrid = document.getElementById("releases-grid");
+    releases.forEach(r => {
+      const card = document.createElement("article");
+      card.className = "release-card";
+      card.id = `card-${r.slug}`;
+
+      const trackRows = r.tracks.map((t, i) => `
+        <div class="track-row" data-preview="${t.preview}" data-release="${r.title}" data-track="${t.title}" data-idx="${i}" data-slug="${r.slug}">
+          <span class="track-num">${i + 1}</span>
+          <span class="track-name">${t.title}</span>
+          <span class="track-dur">${t.duration}</span>
+        </div>
+      `).join("");
+
+      const linkPills = Object.entries(r.links)
+        .filter(([, v]) => v)
+        .map(([k, v]) => `<a class="link-pill" href="${v}" target="_blank" rel="noopener">${LINK_LABELS[k] || k}</a>`)
+        .join("");
+
+      card.innerHTML = `
+        <div class="artwork-wrap">
+          <img src="${r.artwork}" alt="${r.title} artwork" loading="lazy" />
+          <div class="artwork-overlay">
+            <div class="play-btn" data-preview="${r.tracks[0].preview}" data-release="${r.title}" data-track="${r.tracks[0].title}" data-slug="${r.slug}" data-idx="0">
+              <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta"><span>${r.type}</span><span>${r.year}</span></div>
+          <div class="card-title">${r.title}</div>
+          <div class="card-tracks">${trackRows}</div>
+          <div class="card-links">${linkPills}</div>
+        </div>
+      `;
+      relGrid.appendChild(card);
+    });
+
+    // ─── VIDEO CARDS ───────────────────────────────────────────────────────────
+
+    const videoGrid = document.getElementById("video-grid");
+    videos.forEach(v => {
+      const card = document.createElement("article");
+      card.className = "video-card";
+      card.id = `card-${v.slug}`;
+
+      const linkPills = Object.entries(v.links)
+        .filter(([, url]) => url)
+        .map(([k, url]) => `<a class="link-pill" href="${url}" target="_blank" rel="noopener">${LINK_LABELS[k] || k}</a>`)
+        .join("");
+
+      card.innerHTML = `
+        <a class="video-thumb-link" href="${v.links.youtube || "#"}" target="_blank" rel="noopener">
+          <div class="video-thumb">
+            <img src="${v.thumbnail}" alt="${v.title} thumbnail" loading="lazy" />
+            <div class="video-thumb-overlay">
+              <div class="play-btn-lg">
+                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              </div>
+            </div>
+          </div>
+        </a>
+        <div class="video-body">
+          <div class="video-meta"><span>${v.type}</span><span>${v.year}</span></div>
+          <div class="video-title">${v.title}</div>
+          <div class="video-roles">${v.roles}</div>
+          <div class="video-desc">${v.description.split("\n").join("<br>")}</div>
+          <div class="card-links">${linkPills}</div>
+        </div>
+      `;
+      videoGrid.appendChild(card);
+    });
+
+    // ─── CODE CARDS ────────────────────────────────────────────────────────────
+
+    const codeList = document.getElementById("code-list");
+    projects.forEach(p => {
+      const item = document.createElement("article");
+      item.className = "code-item";
+      item.id = `card-${p.slug}`;
+
+      const bodyHTML  = p.body.map(line => `<p>${line}</p>`).join("");
+      const stackHTML = p.stack.map(t => `<span class="stack-tag">${t}</span>`).join("");
+      const linksHTML = Object.entries(p.links)
+        .filter(([, url]) => url)
+        .map(([k, url]) => `<a class="link-pill" href="${url}" target="_blank" rel="noopener">${LINK_LABELS[k] || k}</a>`)
+        .join("");
+
+      item.innerHTML = `
+        <div class="code-header">
+          <span class="code-num">${p.num}</span>
+          <span class="code-title">${p.title}</span>
+          <span class="code-year">${p.year}</span>
+        </div>
+        <div class="code-sub">${p.type} &nbsp;&middot;&nbsp; ${p.role} &nbsp;&middot;&nbsp; ${p.org}</div>
+        <div class="code-body">${bodyHTML}</div>
+        <div class="code-stack">${stackHTML}</div>
+        ${linksHTML ? `<div class="code-links">${linksHTML}</div>` : ""}
+      `;
+      codeList.appendChild(item);
+    });
+
+    // ─── AUDIO PLAYER ──────────────────────────────────────────────────────────
+
+    const audio     = document.getElementById("audio-el");
+    const bar       = document.getElementById("player-bar");
+    const trackNm   = document.getElementById("player-track-name");
+    const releaseNm = document.getElementById("player-release-name");
+    const iconPlay  = document.getElementById("icon-play");
+    const iconPause = document.getElementById("icon-pause");
+    const fill      = document.getElementById("progress-fill");
+    const timeCur   = document.getElementById("time-current");
+    const timeTot   = document.getElementById("time-total");
+
+    let currentSlug = null;
+    let currentIdx  = null;
+    let allTracks   = [];
+
+    releases.forEach(r => r.tracks.forEach((t, i) => {
+      allTracks.push({ preview: t.preview, release: r.title, track: t.title, slug: r.slug, idx: i });
+    }));
+
+    function fmt(s) {
+      const m = Math.floor(s / 60), sec = Math.floor(s % 60);
+      return `${m}:${sec.toString().padStart(2, "0")}`;
+    }
+
+    function playTrack(preview, release, track, slug, idx) {
+      document.querySelectorAll(".track-row.playing").forEach(el => el.classList.remove("playing"));
+      currentSlug = slug;
+      currentIdx  = idx;
+      audio.src = preview;
+      audio.play();
+      trackNm.textContent   = track;
+      releaseNm.textContent = release;
+      bar.classList.add("active");
+      iconPlay.style.display  = "none";
+      iconPause.style.display = "block";
+      const row = document.querySelector(`.track-row[data-slug="${slug}"][data-idx="${idx}"]`);
+      if (row) row.classList.add("playing");
+    }
+
+    function pauseToggle() {
+      if (audio.paused) {
+        audio.play();
+        iconPlay.style.display  = "none";
+        iconPause.style.display = "block";
+      } else {
+        audio.pause();
+        iconPlay.style.display  = "block";
+        iconPause.style.display = "none";
+      }
+    }
+
+    function flatIdx() {
+      return allTracks.findIndex(t => t.slug === currentSlug && t.idx === currentIdx);
+    }
+
+    document.getElementById("ctrl-play").addEventListener("click", pauseToggle);
+    document.getElementById("ctrl-next").addEventListener("click", () => {
+      const i = flatIdx();
+      if (i < allTracks.length - 1) {
+        const t = allTracks[i + 1];
+        playTrack(t.preview, t.release, t.track, t.slug, t.idx);
+      }
+    });
+    document.getElementById("ctrl-prev").addEventListener("click", () => {
+      const i = flatIdx();
+      if (i > 0) {
+        const t = allTracks[i - 1];
+        playTrack(t.preview, t.release, t.track, t.slug, t.idx);
+      }
+    });
+
+    audio.addEventListener("timeupdate", () => {
+      if (!audio.duration) return;
+      fill.style.width = (audio.currentTime / audio.duration * 100) + "%";
+      timeCur.textContent = fmt(audio.currentTime);
+    });
+    audio.addEventListener("loadedmetadata", () => {
+      timeTot.textContent = fmt(audio.duration);
+    });
+    audio.addEventListener("ended", () => {
+      const i = flatIdx();
+      if (i < allTracks.length - 1) {
+        const t = allTracks[i + 1];
+        playTrack(t.preview, t.release, t.track, t.slug, t.idx);
+      } else {
+        iconPlay.style.display  = "block";
+        iconPause.style.display = "none";
+      }
+    });
+
+    document.getElementById("progress-track").addEventListener("click", e => {
+      if (!audio.duration) return;
+      const rect = e.currentTarget.getBoundingClientRect();
+      audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+    });
+
+    document.addEventListener("click", e => {
+      const row = e.target.closest(".track-row");
+      const btn = e.target.closest(".play-btn");
+      if (row && row.dataset.preview) {
+        playTrack(row.dataset.preview, row.dataset.release, row.dataset.track, row.dataset.slug, Number(row.dataset.idx));
+      } else if (btn && btn.dataset.preview) {
+        playTrack(btn.dataset.preview, btn.dataset.release, btn.dataset.track, btn.dataset.slug, Number(btn.dataset.idx));
+      }
+    });
+
+    // ─── THEME TOGGLE ──────────────────────────────────────────────────────────
+
+    const html      = document.documentElement;
+    const themeBtn  = document.getElementById("theme-toggle");
+    const iconNight = document.getElementById("icon-night");
+    const iconDay   = document.getElementById("icon-day");
+
+    const savedTheme = localStorage.getItem("nico-theme");
+    if (savedTheme) html.dataset.theme = savedTheme;
+    syncThemeIcons();
+
+    themeBtn.addEventListener("click", () => {
+      html.dataset.theme = html.dataset.theme === "night" ? "day" : "night";
+      localStorage.setItem("nico-theme", html.dataset.theme);
+      syncThemeIcons();
+    });
+
+    function syncThemeIcons() {
+      const night = html.dataset.theme !== "day";
+      iconNight.style.display = night ? "block" : "none";
+      iconDay.style.display   = night ? "none"  : "block";
+    }
+
+    // ─── COLOR WHEEL ───────────────────────────────────────────────────────────
+
+    const colorWheel  = document.getElementById("color-wheel");
+    const wheelCenter = document.getElementById("wheel-center");
+    let wheelDragging = false;
+
+    const savedAccent = localStorage.getItem("nico-accent");
+    if (savedAccent) wheelCenter.style.background = savedAccent;
+
+    function applyAccentFromEvent(e) {
+      const rect = colorWheel.getBoundingClientRect();
+      const cx = rect.left + rect.width  / 2;
+      const cy = rect.top  + rect.height / 2;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      const angle = Math.atan2(clientY - cy, clientX - cx);
+      const hue   = ((angle * 180 / Math.PI) + 90 + 360) % 360;
+      const color = `hsl(${Math.round(hue)}, 100%, 58%)`;
+      html.style.setProperty("--accent", color);
+      wheelCenter.style.background = color;
+      localStorage.setItem("nico-accent", color);
+    }
+
+    colorWheel.addEventListener("mousedown", e => {
+      wheelDragging = true;
+      colorWheel.classList.add("dragging");
+      applyAccentFromEvent(e);
+      e.preventDefault();
+    });
+    document.addEventListener("mousemove", e => {
+      if (wheelDragging) applyAccentFromEvent(e);
+    });
+    document.addEventListener("mouseup", () => {
+      if (!wheelDragging) return;
+      wheelDragging = false;
+      colorWheel.classList.remove("dragging");
+    });
+
+    colorWheel.addEventListener("touchstart", e => {
+      wheelDragging = true;
+      colorWheel.classList.add("dragging");
+      applyAccentFromEvent(e);
+      e.preventDefault();
+    }, { passive: false });
+    document.addEventListener("touchmove", e => {
+      if (wheelDragging) applyAccentFromEvent(e);
+    }, { passive: false });
+    document.addEventListener("touchend", () => {
+      wheelDragging = false;
+      colorWheel.classList.remove("dragging");
+    });
+  </script>
+</body>
+</html>

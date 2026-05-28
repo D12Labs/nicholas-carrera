@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="night">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <script>
+    (function() {
+      var t = localStorage.getItem('nico-theme');
+      var a = localStorage.getItem('nico-accent');
+      if (t) document.documentElement.dataset.theme = t;
+      if (a) document.documentElement.style.setProperty('--accent', a);
+    })();
+  </script>
+
+  <title>Nicholas Carrera — Creative Technologist & UX Designer</title>
+  <meta name="description" content="Nicholas Carrera, creative technologist and UX designer based in Chicago. Case studies: AI descriptor-to-geometry research, Caterpillar SSO redesign, Wabash Lights data visualization." />
+  <meta property="og:title" content="Nicholas Carrera — Creative Technologist & UX Designer" />
+  <meta property="og:description" content="Chicago-based creative technologist and UX designer. Work in AI research, UX design, and creative code." />
+  <meta name="twitter:card" content="summary" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────────────── */
+    :root {
+      --bg:       #0a0a0a;
+      --fg:       #f0ece4;
+      --border:   #2a2a2a;
+      --muted:    #555;
+      --accent:   #00ff41;
+
+      --space-1:  8px;
+      --space-2:  16px;
+      --space-3:  24px;
+      --space-4:  32px;
+      --space-6:  48px;
+      --space-8:  64px;
+      --space-12: 96px;
+
+      --mono: 'JetBrains Mono', monospace;
+      --max-w: 1200px;
+    }
+
+    [data-theme="day"] {
+      --bg:     #f0ece4;
+      --fg:     #0a0a0a;
+      --border: #d0ccc4;
+      --muted:  #888;
+    }
+
+    /* ─── RESET ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 10px; scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--mono);
+      font-size: 1.4rem;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.2s, color 0.2s;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { all: unset; cursor: pointer; }
+
+    /* ─── GRID ───────────────────────────────────────────────── */
+    .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--space-4);
+    }
+
+    /* ─── HUD ────────────────────────────────────────────────── */
+    .hud {
+      position: fixed;
+      top: var(--space-3);
+      right: var(--space-3);
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      z-index: 100;
+    }
+    .color-wheel {
+      width: 32px;
+      height: 32px;
+      position: relative;
+      cursor: crosshair;
+      user-select: none;
+      touch-action: none;
+      opacity: 0.5;
+      transition: opacity 0.15s;
+    }
+    .color-wheel:hover,
+    .color-wheel.dragging { opacity: 1; }
+    .wheel-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: conic-gradient(
+        hsl(0,100%,55%), hsl(30,100%,55%), hsl(60,100%,55%),
+        hsl(90,100%,55%), hsl(120,100%,55%), hsl(150,100%,55%),
+        hsl(180,100%,55%), hsl(210,100%,55%), hsl(240,100%,55%),
+        hsl(270,100%,55%), hsl(300,100%,55%), hsl(330,100%,55%),
+        hsl(360,100%,55%)
+      );
+      -webkit-mask: radial-gradient(circle, transparent 46%, black 46%);
+      mask: radial-gradient(circle, transparent 46%, black 46%);
+      transition: -webkit-mask 0.1s, mask 0.1s;
+    }
+    .color-wheel.dragging .wheel-ring {
+      -webkit-mask: radial-gradient(circle, transparent 36%, black 36%);
+      mask: radial-gradient(circle, transparent 36%, black 36%);
+    }
+    .wheel-center {
+      position: absolute;
+      inset: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      pointer-events: none;
+    }
+    .hud-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.5;
+      transition: opacity 0.15s;
+    }
+    .hud-btn:hover { opacity: 1; }
+    .hud-btn svg { width: 20px; height: 20px; }
+
+    /* ─── HEADER ─────────────────────────────────────────────── */
+    header {
+      padding: var(--space-8) 0 var(--space-6);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: var(--space-4);
+    }
+    .site-name {
+      font-size: clamp(4rem, 8vw, 7.2rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 0.9;
+      text-transform: uppercase;
+    }
+    .site-role {
+      font-size: 1.3rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: var(--space-2);
+    }
+    .site-meta {
+      text-align: right;
+      color: var(--muted);
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 2;
+    }
+    .site-meta a:hover { color: var(--fg); }
+
+    /* ─── INDEX ──────────────────────────────────────────────── */
+    .index-section {
+      padding: var(--space-6) 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-label {
+      font-size: 1rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: var(--space-3);
+    }
+    .index-list { list-style: none; }
+    .index-item {
+      display: grid;
+      grid-template-columns: 3ch 1fr auto auto;
+      gap: var(--space-2);
+      align-items: baseline;
+      padding: var(--space-1) 0;
+      border-top: 1px solid var(--border);
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: color 0.1s;
+    }
+    .index-item:hover { color: var(--muted); }
+    .index-item:hover .index-num { color: var(--fg); }
+    .index-num { color: var(--muted); font-size: 1.1rem; }
+    .index-title { font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; }
+    .index-type { color: var(--muted); font-size: 1.1rem; letter-spacing: 0.08em; text-transform: uppercase; }
+    .index-year { color: var(--muted); font-size: 1.1rem; }
+
+    /* ─── WORK LIST ──────────────────────────────────────────── */
+    .work-section { padding: var(--space-6) 0; }
+    .work-list { border-bottom: 1px solid var(--border); }
+
+    .work-item {
+      border-top: 1px solid var(--border);
+      padding: var(--space-6) 0;
+    }
+
+    /* header row */
+    .work-header {
+      display: grid;
+      grid-template-columns: 3ch 1fr auto;
+      gap: var(--space-2);
+      align-items: start;
+      margin-bottom: var(--space-1);
+    }
+    .work-num { color: var(--muted); font-size: 1.1rem; padding-top: 0.4em; }
+    .work-title {
+      font-size: clamp(2.4rem, 4vw, 3.6rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      min-width: 0;
+    }
+    .work-year { color: var(--muted); font-size: 1.1rem; padding-top: 0.4em; white-space: nowrap; }
+
+    /* sub row */
+    .work-sub {
+      padding-left: calc(3ch + var(--space-2));
+      font-size: 1.1rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-4);
+    }
+
+    /* media rail */
+    .work-media {
+      padding-left: calc(3ch + var(--space-2));
+      display: grid;
+      grid-template-columns: repeat(var(--count, 1), 1fr);
+      gap: 4px;
+      height: 300px;
+      margin-bottom: var(--space-4);
+    }
+    .media-img {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .media-placeholder {
+      border: 1px dashed var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+
+    /* outcome — elevated lead statement */
+    .work-outcome-lead {
+      padding-left: calc(3ch + var(--space-2));
+      margin: var(--space-3) 0 var(--space-5);
+    }
+    .work-outcome {
+      font-size: clamp(1.4rem, 1.8vw, 1.6rem);
+      color: var(--fg);
+      line-height: 1.7;
+      border-left: 2px solid var(--accent);
+      padding-left: var(--space-3);
+    }
+
+    /* body — asymmetric: context sidebar | built dominant */
+    .work-body {
+      padding-left: calc(3ch + var(--space-2));
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: var(--space-6) var(--space-8);
+      margin-bottom: var(--space-4);
+    }
+
+    .work-label {
+      font-size: 1rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .work-text {
+      font-size: 1.3rem;
+      color: var(--fg);
+      line-height: 1.7;
+      opacity: 0.75;
+    }
+    .work-did .work-text + .work-text {
+      margin-top: var(--space-2);
+      padding-top: var(--space-2);
+      border-top: 1px solid var(--border);
+    }
+
+    /* stack + links */
+    .work-footer {
+      padding-left: calc(3ch + var(--space-2));
+      display: flex;
+      gap: var(--space-4);
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+    .work-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      flex: 1;
+    }
+    .stack-tag {
+      font-size: 1rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      color: var(--muted);
+    }
+    .work-links { display: flex; gap: var(--space-1); flex-wrap: wrap; }
+    .link-pill {
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      padding: 3px 8px;
+      transition: border-color 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .link-pill:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ─── FOOTER ─────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: var(--space-6) 0 var(--space-12);
+      margin-top: var(--space-6);
+    }
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+      align-items: end;
+    }
+    .footer-name {
+      font-size: 2.4rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      color: var(--muted);
+    }
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: flex-end;
+    }
+    .footer-link {
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.15s;
+    }
+    .footer-link:hover { color: var(--fg); }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────────── */
+    @media (max-width: 760px) {
+      .header-inner { grid-template-columns: 1fr; }
+      .site-meta { text-align: left; }
+      .index-item { grid-template-columns: 3ch 1fr auto; }
+      .index-type { display: none; }
+      .work-body { grid-template-columns: 1fr; }
+      .work-footer { flex-direction: column; align-items: flex-start; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .footer-links { align-items: flex-start; }
+      .work-sub,
+      .work-outcome-lead,
+      .work-media,
+      .work-body,
+      .work-footer { padding-left: 0; }
+      .work-media { grid-template-columns: 1fr; height: auto; }
+      .work-media .media-img { height: 200px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HUD -->
+  <div class="hud" role="toolbar" aria-label="Site controls">
+    <div class="color-wheel" id="color-wheel" role="button" tabindex="0" aria-label="Pick accent color" title="Pick accent color">
+      <div class="wheel-ring"></div>
+      <div class="wheel-center" id="wheel-center"></div>
+    </div>
+    <button class="hud-btn" id="theme-toggle" aria-label="Toggle light/dark" title="Toggle light/dark">
+      <svg id="icon-night" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="4"/>
+        <line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+      <svg id="icon-day" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="container">
+      <div class="header-inner">
+        <div>
+          <h1 class="site-name">Nicholas<br>Carrera</h1>
+          <p class="site-role">Creative Technologist &nbsp;&middot;&nbsp; UX Designer &nbsp;&middot;&nbsp; Developer</p>
+        </div>
+        <div class="site-meta">
+          <div>Chicago, IL</div>
+          <div>DePaul University</div>
+          <div><a href="mailto:niconicocarrera@gmail.com">niconicocarrera@gmail.com</a></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- INDEX -->
+  <section class="index-section" aria-label="Work index">
+    <div class="container">
+      <p class="section-label">Selected Work</p>
+      <ul class="index-list" id="index-list"></ul>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section class="work-section" aria-label="Case studies">
+    <div class="container">
+      <div class="work-list" id="work-list"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-name">Nicholas<br>Carrera</div>
+        <nav class="footer-links" aria-label="Contact links">
+          <a class="footer-link" href="mailto:niconicocarrera@gmail.com">niconicocarrera@gmail.com</a>
+          <a class="footer-link" href="https://github.com/niconicocarrera" target="_blank" rel="noopener">GitHub</a>
+          <a class="footer-link" href="https://www.linkedin.com/in/nicholas-carrera-3b458229b/" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="footer-link" href="https://www.instagram.com/thy_niconico" target="_blank" rel="noopener">Instagram</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ─── DATA ──────────────────────────────────────────────────────────────────
+
+    const projects = [
+      {
+        slug: "urap",
+        num: "01",
+        title: "LLM Descriptor-to-Geometry",
+        year: 2026,
+        type: "Research",
+        role: "Solo",
+        org: "DePaul University",
+        context: "No existing system mapped abstract language (&ldquo;smoothness,&rdquo; &ldquo;tension,&rdquo; &ldquo;joyfulness&rdquo;) to structured geometric parameters in a semantically meaningful way. Built as undergraduate research at DePaul under faculty advisor Nathan Koch (Creative Technologies), investigating whether LLMs reason about geometry or pattern-match from training data.",
+        did: [
+          "Designed and ran prompt experiments across 4 LLMs (Mistral 7B, Claude Haiku/Sonnet/Opus), testing meta-cognitive prompting, noise variation, and constrained vs. unconstrained shape generation across 10 intensity levels.",
+          "Built a FastAPI server with multi-model provider routing (Anthropic API + Ollama), SSE streaming so the browser receives level-by-level parameter objects as they generate, and a composite JSON cache keyed on descriptor + model + template.",
+          "Extended to TouchDesigner: WebSocket endpoint, Script SOP cook() dispatch logic keyed on a baseShape token (sphere, torus, helix, crystal, branching), background thread to keep HTTP off TD's render loop.",
+        ],
+        outcome: "Full pipeline operational: type a descriptor in the browser → Claude streams parameters level-by-level → WebSocket delivers each level to TD → Script SOP builds and recooks 3D geometry in real time. Key finding: constraint improves creativity. Sphere-constrained prompts rated 9/10 vs. open-base 4–5/10. Architectural constraints, not model reasoning, are the real bottleneck.",
+        stack: ["Python", "FastAPI", "Claude API", "Ollama", "TouchDesigner", "P5.js", "WebSocket", "SSE", "Cloudflare Pages"],
+        links: {
+          live:   "https://urap-fall-2025.pages.dev",
+          github: "https://github.com/nickcarrera/urap-2025-26",
+        },
+        images: [
+          { src: "", fit: "cover",   caption: "Pipeline interface" },
+          { src: "", fit: "contain", caption: "Architecture diagram" },
+        ],
+      },
+      {
+        slug: "caterpillar",
+        num: "02",
+        title: "CAT SSO & Access Control",
+        year: 2026,
+        type: "UX Design",
+        role: "Team of 4",
+        org: "DePaul × Caterpillar",
+        context: "UXD Capstone at DePaul (Jan–Jun 2026), partnered with Caterpillar. The system had sub-5% Operator ID adoption. Guest Mode had become the de facto standard across the fleet, exposing machines to anonymous use and collecting nameless operational data.",
+        did: [
+          "Conducted Nielsen heuristic evaluation across multiple Cat machine types, documenting cross-machine inconsistencies in terminology, iconography, and buried menu hierarchies that broke operator muscle memory across job-sites.",
+          "Ran on-site field research at Cat's Edwards facility, interviewing Demo Instructors and operating simulator machines. Discovered operators defaulted to Guest Mode under union reprimand culture because authentication offered nothing in return. Fobs were hidden under seats on rental machines to bypass login entirely.",
+          "Led the team's pivot to a \"designing backwards\" problem framing: reframing from \"how do we make login easier?\" to \"why should operators log in at all?\" Drove the value-exchange concept where personalization, fleet metrics, and data transparency become the incentive.",
+          "Proposed a three-layer system architecture (identity, machine authorization, session/personalization) with three sign-in methods (NFC tap, SMS code, 4-digit PIN) and a USB bidirectional-sync fallback for offline connectivity.",
+        ],
+        outcome: "Reframed a years-old adoption problem from a usability failure into a trust and value-exchange failure. Delivered a system architecture and universal portal concept validated in a stakeholder interview with Cat's NFC integration lead (Arjun Veneshetty).",
+        stack: ["Figma", "FigJam", "Miro", "Nielsen Heuristic Evaluation", "Semi-structured Interviews", "Field Research", "Stakeholder Interviews", "Systems Architecture", "Wireframing"],
+        links: {},
+        images: [
+          { src: "", fit: "cover",   caption: "Field research" },
+          { src: "", fit: "contain", caption: "System architecture" },
+          { src: "", fit: "contain", caption: "Flow diagram" },
+        ],
+      },
+      {
+        slug: "wabash",
+        num: "03",
+        title: "Wabash Lights Data Viz",
+        year: 2025,
+        type: "Creative Code",
+        role: "Solo",
+        org: "Public Installation · Chicago",
+        context: "Translated the Urban Displacement Project's Chicago Gentrification and Displacement dataset (1990–2018) into an animated, code-driven light visualization deployed to the Wabash Lights, a public art installation spanning the underside of the CTA elevated tracks in downtown Chicago.",
+        did: [
+          "Designed a composite statistical metric (Renter-to-Owner Ratio Shift) from 6 key variables across the UDP Chicago Typology Output, then applied mean/median/standard deviation analysis at the census tract level to group neighborhoods into 8 typology levels spanning gentrification and exclusivity.",
+          "Built an animated P5.js visualization translating numeric trends into color-weighted light behavior, mapping an 8-color typology palette to the architectural constraints of the Wabash Lights LED installation.",
+          "Framed the technical work through a critical lens: interrogating what data can and can't say about displaced communities, and designing visual abstraction that honored the weight of the underlying story.",
+        ],
+        outcome: "Saw the work go live on the Wabash Lights installation in downtown Chicago, making decades of housing displacement legible across a public urban canvas. Developed a methodology for translating human-centered datasets into spatial visual form bridging statistical rigor, code-driven animation, and data ethics.",
+        stack: ["P5.js", "JavaScript", "OOP", "Tableau", "Statistical Analysis", "Data Cleaning", "Composite Metric Design", "Color Theory", "Public Installation Design"],
+        links: {},
+        images: [
+          { src: "", fit: "cover", caption: "Installation" },
+          { src: "", fit: "cover", caption: "Viz running" },
+        ],
+      },
+    ];
+
+    // ─── INDEX ─────────────────────────────────────────────────────────────────
+
+    const indexList = document.getElementById("index-list");
+    projects.forEach((p, i) => {
+      const li = document.createElement("li");
+      li.className = "index-item";
+      li.innerHTML = `
+        <span class="index-num">${String(i + 1).padStart(2, "0")}</span>
+        <span class="index-title">${p.title}</span>
+        <span class="index-type">${p.type}</span>
+        <span class="index-year">${p.year}</span>
+      `;
+      li.addEventListener("click", () => {
+        document.getElementById(`work-${p.slug}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      indexList.appendChild(li);
+    });
+
+    // ─── WORK CARDS ────────────────────────────────────────────────────────────
+
+    const LINK_LABELS = { live: "Live ↗", github: "GitHub ↗", case_study: "Case Study ↗" };
+
+    const workList = document.getElementById("work-list");
+    projects.forEach(p => {
+      const item = document.createElement("article");
+      item.className = "work-item";
+      item.id = `work-${p.slug}`;
+
+      const realImages = p.images?.filter(i => i.src) ?? [];
+      const mediaHTML = realImages.length ? `
+        <div class="work-media" style="--count:${realImages.length}">
+          ${realImages.map(img =>
+            `<img class="media-img" src="${img.src}" alt="${img.caption || ''}" style="object-fit:${img.fit || 'cover'}">`
+          ).join("")}
+        </div>` : "";
+
+      const didHTML   = p.did.map(line => `<p class="work-text">${line}</p>`).join("");
+      const stackHTML = p.stack.map(t => `<span class="stack-tag">${t}</span>`).join("");
+      const linksHTML = Object.entries(p.links)
+        .filter(([, url]) => url)
+        .map(([k, url]) => `<a class="link-pill" href="${url}" target="_blank" rel="noopener">${LINK_LABELS[k] || k}</a>`)
+        .join("");
+
+      item.innerHTML = `
+        <div class="work-header">
+          <span class="work-num">${p.num}</span>
+          <span class="work-title">${p.title}</span>
+          <span class="work-year">${p.year}</span>
+        </div>
+        <div class="work-sub">${p.type} &nbsp;&middot;&nbsp; ${p.role} &nbsp;&middot;&nbsp; ${p.org}</div>
+        <div class="work-outcome-lead">
+          <p class="work-label">Outcome</p>
+          <p class="work-outcome">${p.outcome}</p>
+        </div>
+        ${mediaHTML}
+        <div class="work-body">
+          <div>
+            <p class="work-label">Context</p>
+            <p class="work-text">${p.context}</p>
+          </div>
+          <div class="work-did">
+            <p class="work-label">What I built</p>
+            ${didHTML}
+          </div>
+        </div>
+        <div class="work-footer">
+          <div class="work-stack">${stackHTML}</div>
+          ${linksHTML ? `<div class="work-links">${linksHTML}</div>` : ""}
+        </div>
+      `;
+      workList.appendChild(item);
+    });
+
+    // ─── THEME TOGGLE ──────────────────────────────────────────────────────────
+
+    const html      = document.documentElement;
+    const themeBtn  = document.getElementById("theme-toggle");
+    const iconNight = document.getElementById("icon-night");
+    const iconDay   = document.getElementById("icon-day");
+
+    const savedTheme = localStorage.getItem("nico-theme");
+    if (savedTheme) html.dataset.theme = savedTheme;
+    syncThemeIcons();
+
+    themeBtn.addEventListener("click", () => {
+      html.dataset.theme = html.dataset.theme === "night" ? "day" : "night";
+      localStorage.setItem("nico-theme", html.dataset.theme);
+      syncThemeIcons();
+    });
+
+    function syncThemeIcons() {
+      const night = html.dataset.theme !== "day";
+      iconNight.style.display = night ? "block" : "none";
+      iconDay.style.display   = night ? "none"  : "block";
+    }
+
+    // ─── COLOR WHEEL ───────────────────────────────────────────────────────────
+
+    const colorWheel  = document.getElementById("color-wheel");
+    const wheelCenter = document.getElementById("wheel-center");
+    let wheelDragging = false;
+
+    const savedAccent = localStorage.getItem("nico-accent");
+    if (savedAccent) wheelCenter.style.background = savedAccent;
+
+    function applyAccentFromEvent(e) {
+      const rect = colorWheel.getBoundingClientRect();
+      const cx = rect.left + rect.width  / 2;
+      const cy = rect.top  + rect.height / 2;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      const hue = ((Math.atan2(clientY - cy, clientX - cx) * 180 / Math.PI) + 90 + 360) % 360;
+      const color = `hsl(${Math.round(hue)}, 100%, 58%)`;
+      html.style.setProperty("--accent", color);
+      wheelCenter.style.background = color;
+      localStorage.setItem("nico-accent", color);
+    }
+
+    colorWheel.addEventListener("mousedown", e => {
+      wheelDragging = true;
+      colorWheel.classList.add("dragging");
+      applyAccentFromEvent(e);
+      e.preventDefault();
+    });
+    document.addEventListener("mousemove", e => { if (wheelDragging) applyAccentFromEvent(e); });
+    document.addEventListener("mouseup",   () => {
+      if (!wheelDragging) return;
+      wheelDragging = false;
+      colorWheel.classList.remove("dragging");
+    });
+    colorWheel.addEventListener("touchstart", e => {
+      wheelDragging = true;
+      colorWheel.classList.add("dragging");
+      applyAccentFromEvent(e);
+      e.preventDefault();
+    }, { passive: false });
+    document.addEventListener("touchmove", e => { if (wheelDragging) applyAccentFromEvent(e); }, { passive: false });
+    document.addEventListener("touchend",  () => { wheelDragging = false; colorWheel.classList.remove("dragging"); });
+  </script>
+</body>
+</html>
