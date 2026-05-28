@@ -359,7 +359,9 @@
       text-transform: uppercase;
       letter-spacing: -0.02em;
       color: var(--muted);
+      transition: color 0.15s;
     }
+    .footer-name:hover { color: var(--fg); }
     .footer-links {
       display: flex;
       flex-direction: column;
@@ -454,12 +456,11 @@
   <footer>
     <div class="container">
       <div class="footer-inner">
-        <div class="footer-name">Nicholas<br>Carrera</div>
+        <a class="footer-name" href="#" aria-label="Back to top">Nicholas<br>Carrera</a>
         <nav class="footer-links" aria-label="Contact links">
           <a class="footer-link" href="mailto:niconicocarrera@gmail.com">niconicocarrera@gmail.com</a>
           <a class="footer-link" href="https://github.com/niconicocarrera" target="_blank" rel="noopener">GitHub</a>
           <a class="footer-link" href="https://www.linkedin.com/in/nicholas-carrera-3b458229b/" target="_blank" rel="noopener">LinkedIn</a>
-          <a class="footer-link" href="https://www.instagram.com/thy_niconico" target="_blank" rel="noopener">Instagram</a>
         </nav>
       </div>
     </div>
