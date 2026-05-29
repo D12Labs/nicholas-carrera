@@ -377,6 +377,133 @@
     }
     .footer-link:hover { color: var(--fg); }
 
+    /* ─── WABASH PROJECT MEDIA ──────────────────────────────── */
+    .wabash-media {
+      padding-left: calc(3ch + var(--space-2));
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: var(--space-4);
+    }
+    .wabash-irl-wrap {
+      height: 240px;
+      overflow: hidden;
+      background: #0e0e0e;
+    }
+    .wabash-irl-wrap video {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+    .wabash-source-wrap {
+      height: 80px;
+      overflow: hidden;
+      background: #000;
+      position: relative;
+      cursor: pointer;
+    }
+    .wabash-source-wrap video {
+      width: 100%; height: 100%;
+      object-fit: contain; display: block;
+    }
+    .wabash-source-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.55);
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+    /* Playing: overlay disappears; hover always brings it back */
+    .wabash-source-wrap.is-playing .wabash-source-overlay { background: rgba(0,0,0,0); }
+    .wabash-source-wrap:hover      .wabash-source-overlay { background: rgba(0,0,0,0.45); }
+    /* Idle label: hide after first play */
+    .wsrc-idle {
+      font-size: 1rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.72);
+    }
+    .wabash-source-wrap.has-played .wsrc-idle { display: none; }
+    /* Controls: hidden until hover */
+    .wsrc-controls { display: none; align-items: center; gap: 8px; }
+    .wabash-source-wrap.has-played:hover .wsrc-controls { display: flex; }
+    .wsrc-btn {
+      all: unset;
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.75);
+      border: 1px solid rgba(255,255,255,0.22);
+      padding: 3px 10px;
+      transition: border-color 0.15s, color 0.15s;
+      white-space: nowrap;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .wsrc-btn:hover { color: #fff; border-color: rgba(255,255,255,0.55); }
+    .wabash-data {
+      padding-left: calc(3ch + var(--space-2));
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: var(--space-6);
+      margin-bottom: var(--space-4);
+    }
+    .wdata-label {
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .weq-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .weq-lhs { font-size: 1.8rem; font-weight: 700; }
+    .weq-sep  { font-size: 1.6rem; color: var(--muted); }
+    .weq-frac { display: flex; flex-direction: column; align-items: center; }
+    .weq-num, .weq-den { font-size: 1.1rem; padding: 3px 8px; white-space: nowrap; }
+    .weq-bar  { width: 100%; height: 1px; background: var(--muted); }
+    .weq-mult { font-size: 1.3rem; color: var(--muted); }
+    .wdata-thresholds { display: flex; flex-direction: column; gap: 5px; }
+    .wt-chip {
+      font-size: 1rem;
+      padding: 3px 8px;
+      display: inline-block;
+      letter-spacing: 0.04em;
+    }
+    .wt-renter { background: #0c1520; color: #76ABFB; }
+    .wt-stable { background: #141414; color: var(--muted); }
+    .wt-owner  { background: #180a00; color: #FF6600; }
+    [data-theme="day"] .wt-renter { background: rgba(118, 171, 251, 0.12); color: #2a5aaa; }
+    [data-theme="day"] .wt-stable { background: rgba(0, 0, 0, 0.06);       color: var(--muted); }
+    [data-theme="day"] .wt-owner  { background: rgba(255, 102, 0, 0.10);   color: #b84400; }
+    .wtable { width: 100%; border-collapse: collapse; }
+    .wtable th {
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 400;
+      padding: 0 10px 8px 0;
+      text-align: left;
+    }
+    .wtable td {
+      padding: 5px 10px 5px 0;
+      border-bottom: 1px solid #1e1e1e;
+      font-size: 1.1rem;
+      color: var(--muted);
+      vertical-align: middle;
+    }
+    .wswatch { display: flex; align-items: center; gap: 7px; }
+    .wswatch-dot { width: 11px; height: 11px; border-radius: 1px; flex-shrink: 0; }
+
     /* ─── RESPONSIVE ─────────────────────────────────────────── */
     @media (max-width: 760px) {
       .header-inner { grid-template-columns: 1fr; }
@@ -394,6 +521,9 @@
       .work-footer { padding-left: 0; }
       .work-media { grid-template-columns: 1fr; height: auto; }
       .work-media .media-img { height: 200px; }
+      .wabash-media { padding-left: 0; }
+      .wabash-irl-wrap { height: 200px; }
+      .wabash-data { grid-template-columns: 1fr; padding-left: 0; }
     }
   </style>
 </head>
@@ -488,7 +618,7 @@
         stack: ["Generative AI", "LLM Prompt Design", "Multi-model Routing", "Procedural Generation", "Creative Coding", "TouchDesigner", "Real-time Data Viz"],
         links: {
           live:   "https://urap-fall-2025.pages.dev",
-          github: "https://github.com/nickcarrera/urap-2025-26",
+          github: "https://github.com/niconicocarrera/urap-2025-26",
         },
         images: [
           { src: "", fit: "cover",   caption: "Pipeline interface" },
@@ -534,12 +664,69 @@
           "Framed the technical work through a critical lens: interrogating what data can and can't say about displaced communities, and designing visual abstraction that honored the weight of the underlying story.",
         ],
         outcome: "Saw the work go live on the Wabash Lights installation in downtown Chicago, making decades of housing displacement legible across a public urban canvas. Developed a methodology for translating human-centered datasets into spatial visual form bridging statistical rigor, code-driven animation, and data ethics.",
+        mediaHTML: `
+  <div class="wabash-media">
+    <div class="wabash-irl-wrap">
+      <video autoplay loop muted playsinline poster="public/media/wabash/wabashlights_irl_thumb.jpg">
+        <source src="public/media/wabash/wabashlights_irl.webm" type="video/webm">
+        <source src="public/media/wabash/wabashlights_irl.mp4"  type="video/mp4">
+      </video>
+    </div>
+    <div class="wabash-source-wrap" id="wabash-src-wrap">
+      <video id="wabash-src-vid" playsinline>
+        <source src="public/media/wabash/wabashlights_source.webm" type="video/webm">
+        <source src="public/media/wabash/wabashlights_source.mp4"  type="video/mp4">
+      </video>
+      <div class="wabash-source-overlay" id="wabash-src-overlay">
+        <span class="wsrc-idle" id="wsrc-idle">&#x25B6;&nbsp; Source Animation</span>
+        <div class="wsrc-controls" id="wsrc-controls">
+          <button class="wsrc-btn" id="wsrc-pause">Pause</button>
+          <button class="wsrc-btn" data-action="restart">Restart</button>
+          <a class="wsrc-btn" href="https://editor.p5js.org/niconico/sketches/JsD_jBcDK" target="_blank" rel="noopener">P5.js &#x2197;</a>
+        </div>
+      </div>
+    </div>
+  </div>`,
+        dataHTML: `
+  <div class="wabash-data">
+    <div>
+      <div class="wdata-label">Ratio Shift Index</div>
+      <div class="weq-wrap">
+        <span class="weq-lhs">S</span>
+        <span class="weq-sep">=</span>
+        <div class="weq-frac">
+          <span class="weq-num">R&#x2082;&#x2080;&#x2081;&#x2088; / O&#x2082;&#x2080;&#x2081;&#x2088;</span>
+          <span class="weq-bar"></span>
+          <span class="weq-den">R&#x2081;&#x2089;&#x2089;&#x2080; / O&#x2081;&#x2089;&#x2089;&#x2080;</span>
+        </div>
+        <span class="weq-mult">&#xD7; 10</span>
+      </div>
+      <div class="wdata-thresholds">
+        <span class="wt-chip wt-renter">S &gt; 10: renter dominance</span>
+        <span class="wt-chip wt-stable">S = 10: stable</span>
+        <span class="wt-chip wt-owner">S &lt; 10: owner dominance</span>
+      </div>
+    </div>
+    <div>
+      <div class="wdata-label">Typology Levels</div>
+      <table class="wtable">
+        <thead><tr><th></th><th>Typology</th><th>Wt</th></tr></thead>
+        <tbody>
+          <tr><td><div class="wswatch"><div class="wswatch-dot" style="background:#76ABFB"></div></div></td><td>Ongoing Displacement</td><td>8</td></tr>
+          <tr><td><div class="wswatch"><div class="wswatch-dot" style="background:#A1A1E0"></div></div></td><td>At Risk of Gentrification</td><td>10</td></tr>
+          <tr><td><div class="wswatch"><div class="wswatch-dot" style="background:#655AD1"></div></div></td><td>Early/Ongoing Gentrification</td><td>12</td></tr>
+          <tr><td><div class="wswatch"><div class="wswatch-dot" style="background:#662BC1"></div></div></td><td>Advanced Gentrification</td><td>8</td></tr>
+          <tr><td><div class="wswatch"><div class="wswatch-dot" style="background:#FFB789"></div></div></td><td>Stable/Moderate Mixed Income</td><td>17</td></tr>
+          <tr><td><div class="wswatch"><div class="wswatch-dot" style="background:#FFA85B"></div></div></td><td>At Risk of Becoming Exclusive</td><td>9</td></tr>
+          <tr><td><div class="wswatch"><div class="wswatch-dot" style="background:#FF6600"></div></div></td><td>Becoming Exclusive</td><td>7</td></tr>
+          <tr><td><div class="wswatch"><div class="wswatch-dot" style="background:#E00000"></div></div></td><td>Stable/Advanced Exclusive</td><td>11</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>`,
         stack: ["Data Physicalization", "Civic Data", "Generative Animation", "Public Installation", "Composite Metric Design", "LED Constraint Design", "P5.js"],
         links: {},
-        images: [
-          { src: "", fit: "cover", caption: "Installation" },
-          { src: "", fit: "cover", caption: "Viz running" },
-        ],
+        images: [],
       },
     ];
 
@@ -571,13 +758,14 @@
       item.className = "work-item";
       item.id = `work-${p.slug}`;
 
+      const dataHTML  = p.dataHTML  || "";
       const realImages = p.images?.filter(i => i.src) ?? [];
-      const mediaHTML = realImages.length ? `
+      const mediaHTML = p.mediaHTML || (realImages.length ? `
         <div class="work-media" style="--count:${realImages.length}">
           ${realImages.map(img =>
             `<img class="media-img" src="${img.src}" alt="${img.caption || ''}" style="object-fit:${img.fit || 'cover'}">`
           ).join("")}
-        </div>` : "";
+        </div>` : "");
 
       const didHTML   = p.did.map(line => `<p class="work-text">${line}</p>`).join("");
       const stackHTML = p.stack.map(t => `<span class="stack-tag">${t}</span>`).join("");
@@ -608,6 +796,7 @@
             ${didHTML}
           </div>
         </div>
+        ${dataHTML}
         <div class="work-footer">
           <div class="work-stack">${stackHTML}</div>
           ${linksHTML ? `<div class="work-links">${linksHTML}</div>` : ""}
@@ -615,6 +804,36 @@
       `;
       workList.appendChild(item);
     });
+
+    // ─── WABASH SOURCE VIDEO ───────────────────────────────────────────────────
+
+    (function () {
+      const wrap     = document.getElementById('wabash-src-wrap');
+      if (!wrap) return;
+      const vid      = document.getElementById('wabash-src-vid');
+      const pauseBtn = document.getElementById('wsrc-pause');
+
+      wrap.addEventListener('click', e => {
+        if (e.target.closest('a')) return;                   // P5.js link — let browser open it
+        if (e.target.closest('[data-action="restart"]')) {
+          vid.currentTime = 0; vid.play(); return;
+        }
+        vid.paused ? vid.play() : vid.pause();               // toggle on everything else
+      });
+
+      vid.addEventListener('play', () => {
+        wrap.classList.add('is-playing', 'has-played');
+        if (pauseBtn) pauseBtn.textContent = 'Pause';
+      });
+      vid.addEventListener('pause', () => {
+        wrap.classList.remove('is-playing');
+        if (pauseBtn) pauseBtn.textContent = 'Resume';
+      });
+      vid.addEventListener('ended', () => {
+        wrap.classList.remove('is-playing');
+        if (pauseBtn) pauseBtn.textContent = 'Resume';
+      });
+    })();
 
     // ─── THEME TOGGLE ──────────────────────────────────────────────────────────
 
