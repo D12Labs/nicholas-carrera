@@ -22,8 +22,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js" defer></script>
-
   <style>
     /* ─── TOKENS ─────────────────────────────────────────────── */
     :root {
@@ -505,17 +503,6 @@
     .wswatch { display: flex; align-items: center; gap: 7px; }
     .wswatch-dot { width: 11px; height: 11px; border-radius: 1px; flex-shrink: 0; }
 
-    /* ─── WABASH P5 LED STRIP ────────────────────────────────── */
-    .wabash-p5-wrap {
-      width: 100%;
-      overflow: hidden;
-      line-height: 0;
-    }
-    .wabash-p5-wrap canvas {
-      display: block;
-      width: 100% !important;
-    }
-
     /* ─── CAT NDA NOTE ───────────────────────────────────────── */
     .cat-nda {
       padding-left: calc(3ch + var(--space-2));
@@ -578,6 +565,7 @@
       cursor: pointer;
       margin: 8px 0 4px;
       display: block;
+      touch-action: pan-x;
     }
     .urap-range::-webkit-slider-thumb {
       appearance: none;
@@ -590,6 +578,10 @@
       width: 8px; height: 8px;
       background: var(--accent);
       border: none;
+    }
+    @media (hover: none) {
+      .urap-range::-webkit-slider-thumb { width: 20px; height: 20px; }
+      .urap-range::-moz-range-thumb     { width: 20px; height: 20px; }
     }
     .urap-scale-labels {
       display: flex;
@@ -801,7 +793,6 @@
         </div>
       </div>
     </div>
-    <div id="wabash-p5-wrap" class="wabash-p5-wrap"></div>
   </div>`,
         dataHTML: `
   <div class="wabash-data">
@@ -1062,132 +1053,6 @@
         if (pauseBtn) pauseBtn.textContent = 'Resume';
       });
     })();
-
-    // ─── WABASH P5 SOURCE ANIMATION ───────────────────────────────────────────
-    // Original sketch: 4 rails × 1px × 468px, MULT=10 to make nodes visible at scale.
-    // Warm particles (owner-dominant) travel right; cool particles (gentrifying) travel left.
-    // Yellow flash on collision. Made responsive and looping for portfolio embed.
-    window.addEventListener('load', function () {
-      const container = document.getElementById('wabash-p5-wrap');
-      if (!container || typeof p5 === 'undefined') return;
-
-      new p5(function (p) {
-        const NUM_RAILS  = 4;
-        const NODE_COUNT = 468;     // actual LED node count per rail
-        const SPACING    = 0;
-        const MARGIN     = 0;
-
-        let MULT, RAIL_WIDTH, RAIL_HEIGHT;
-        let particles = [], emitters = [];
-
-        // Colors matching original sketch
-        const LEFT_COLORS  = ['#FFC8A5', '#FFA85B', '#FF6600', '#E00000']; // owner-dominant
-        const RIGHT_COLORS = ['#76ABFB', '#A1A1E0', '#655AD1', '#662BC1']; // gentrifying
-        const LEFT_VALUES  = [17, 9, 7, 11];
-        const RIGHT_VALUES = [8, 10, 12, 8];
-
-        function getMult() {
-          // Scale MULT to fit container width — minimum 3 so rails are clearly visible
-          return Math.max(3, Math.round(container.offsetWidth / NODE_COUNT));
-        }
-
-        function getRailY(railIndex) {
-          return MARGIN + railIndex * (RAIL_HEIGHT + SPACING);
-        }
-
-        function buildEmitters() {
-          emitters = [];
-          particles = [];
-          for (let r = 0; r < NUM_RAILS; r++) {
-            emitters.push(new Emitter(MARGIN,              r,  1, p.color(LEFT_COLORS[r]),  Math.floor(LEFT_VALUES[r])));
-            emitters.push(new Emitter(RAIL_WIDTH - MARGIN, r, -1, p.color(RIGHT_COLORS[r]), Math.floor(RIGHT_VALUES[r])));
-          }
-        }
-
-        p.setup = function () {
-          MULT        = getMult();
-          RAIL_WIDTH  = NODE_COUNT * MULT;
-          RAIL_HEIGHT = MULT;
-          p.createCanvas(RAIL_WIDTH + MARGIN * 2, NUM_RAILS * (RAIL_HEIGHT + SPACING) + MARGIN * 2).parent(container);
-          p.frameRate(60);
-          p.pixelDensity(1);
-          p.noStroke();
-          buildEmitters();
-        };
-
-        p.windowResized = function () {
-          MULT        = getMult();
-          RAIL_WIDTH  = NODE_COUNT * MULT;
-          RAIL_HEIGHT = MULT;
-          p.resizeCanvas(RAIL_WIDTH + MARGIN * 2, NUM_RAILS * (RAIL_HEIGHT + SPACING) + MARGIN * 2);
-          buildEmitters();
-        };
-
-        p.draw = function () {
-          p.clear(); // transparent — site bg shows through
-
-          for (const emitter of emitters) { emitter.maybeEmit(); }
-
-          for (let i = particles.length - 1; i >= 0; i--) {
-            const px = particles[i];
-            px.update();
-            px.display();
-            if (px.x < MARGIN || px.x >= RAIL_WIDTH - MARGIN) { particles.splice(i, 1); }
-          }
-
-          // Collision flash
-          for (let i = 0; i < particles.length; i++) {
-            for (let j = i + 1; j < particles.length; j++) {
-              if (particles[i].rail === particles[j].rail &&
-                  p.abs(particles[i].x - particles[j].x) < MULT * 2) {
-                p.fill(255, 255, 100);
-                p.rect(particles[i].x, getRailY(particles[i].rail), MULT, MULT);
-              }
-            }
-          }
-
-          // Loop: reset emitters when all done and canvas is clear
-          const allDone = emitters.every(e => e.emitted >= e.totalToEmit);
-          if (allDone && particles.length === 0) { buildEmitters(); }
-        };
-
-        class Pixel {
-          constructor(x, rail, dir, col) {
-            this.x     = x;
-            this.rail  = rail;
-            this.dir   = dir;
-            this.color = col;
-            this.speed = p.random(7, 10);
-          }
-          update()  { this.x += this.dir * this.speed; }
-          display() {
-            p.fill(this.color);
-            p.rect(this.x, getRailY(this.rail), MULT, MULT);
-          }
-        }
-
-        class Emitter {
-          constructor(x, rail, dir, col, targetCount) {
-            this.x             = x;
-            this.rail          = rail;
-            this.dir           = dir;
-            this.color         = col;
-            this.totalToEmit   = targetCount;
-            this.emitted       = 0;
-            this.interval      = Math.floor(900 / targetCount);
-            this.lastEmitFrame = 0;
-          }
-          maybeEmit() {
-            if (this.emitted < this.totalToEmit &&
-                (p.frameCount - this.lastEmitFrame) >= this.interval) {
-              particles.push(new Pixel(this.x, this.rail, this.dir, this.color));
-              this.emitted++;
-              this.lastEmitFrame = p.frameCount;
-            }
-          }
-        }
-      });
-    });
 
     // ─── THEME TOGGLE ──────────────────────────────────────────────────────────
 
