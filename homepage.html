@@ -608,6 +608,88 @@
     }
     .footer-link:hover { color: var(--fg); }
 
+    /* ─── WABASH PROJECT MEDIA ──────────────────────────────── */
+    .wabash-media {
+      padding-left: calc(3ch + var(--space-2));
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 4px;
+      margin-bottom: var(--space-2);
+      height: 220px;
+    }
+    .wabash-video-wrap, .wabash-p5-wrap {
+      overflow: hidden;
+      background: #0e0e0e;
+    }
+    .wabash-video-wrap video {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+    .wabash-p5-wrap iframe {
+      width: 100%; height: 100%;
+      border: none; display: block;
+    }
+    .wabash-data {
+      padding-left: calc(3ch + var(--space-2));
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: var(--space-4);
+      margin: var(--space-2) 0 var(--space-2);
+    }
+    .wdata-label {
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .weq-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .weq-lhs { font-size: 1.6rem; font-weight: 700; letter-spacing: 0.04em; }
+    .weq-sep  { font-size: 1.4rem; color: var(--muted); }
+    .weq-frac { display: flex; flex-direction: column; align-items: center; }
+    .weq-num, .weq-den {
+      font-size: 1rem;
+      padding: 2px 6px;
+      color: var(--fg);
+      white-space: nowrap;
+    }
+    .weq-bar  { width: 100%; height: 1px; background: var(--muted); }
+    .weq-mult { font-size: 1.2rem; color: var(--muted); }
+    .wdata-thresholds { display: flex; flex-direction: column; gap: 4px; }
+    .wt-chip {
+      font-size: 0.95rem;
+      padding: 2px 6px;
+      display: inline-block;
+      letter-spacing: 0.04em;
+    }
+    .wt-renter { background: #0c1520; color: #76ABFB; }
+    .wt-stable { background: #141414; color: var(--muted); }
+    .wt-owner  { background: #180a00; color: #FF6600; }
+    .wtable { width: 100%; border-collapse: collapse; }
+    .wtable th {
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 400;
+      padding: 0 8px 6px 0;
+      text-align: left;
+    }
+    .wtable td {
+      padding: 4px 8px 4px 0;
+      border-bottom: 1px solid #161616;
+      font-size: 1rem;
+      color: var(--muted);
+      vertical-align: middle;
+    }
+    .wswatch { display: flex; align-items: center; gap: 6px; }
+    .wswatch-dot { width: 10px; height: 10px; border-radius: 1px; flex-shrink: 0; }
+
     /* ─── RESPONSIVE ─────────────────────────────────────────── */
     @media (max-width: 640px) {
       .header-inner { grid-template-columns: 1fr; }
@@ -620,6 +702,10 @@
       .index-item { grid-template-columns: 3ch 1fr auto; }
       .index-type { display: none; }
       .code-sub, .code-body, .code-stack, .code-links { padding-left: 0; }
+      .wabash-media { grid-template-columns: 1fr; height: auto; padding-left: 0; }
+      .wabash-video-wrap { aspect-ratio: 16/9; }
+      .wabash-p5-wrap { aspect-ratio: 16/9; }
+      .wabash-data { grid-template-columns: 1fr; padding-left: 0; }
     }
   </style>
 </head>
@@ -879,6 +965,55 @@
           "Designed a composite displacement metric from 6 variables across the UDP Chicago Typology Output. Mapped 8 typology levels to an LED-constrained color palette. Balanced statistical rigor against the ethical weight of representing displaced communities.",
           "Saw it go live on the physical installation.",
         ],
+        mediaHTML: `
+  <div class="wabash-media">
+    <div class="wabash-video-wrap">
+      <video autoplay loop muted playsinline poster="public/media/wabash/wabashlights_irl_thumb.jpg">
+        <source src="public/media/wabash/wabashlights_irl.webm" type="video/webm">
+        <source src="public/media/wabash/wabashlights_irl.mp4"  type="video/mp4">
+      </video>
+    </div>
+    <div class="wabash-p5-wrap">
+      <iframe src="https://editor.p5js.org/niconico/present/JsD_jBcDK"
+              scrolling="no" title="Wabash Lights animation" allow="autoplay"></iframe>
+    </div>
+  </div>
+  <div class="wabash-data">
+    <div>
+      <div class="wdata-label">Ratio Shift Index</div>
+      <div class="weq-wrap">
+        <span class="weq-lhs">S</span>
+        <span class="weq-sep">=</span>
+        <div class="weq-frac">
+          <span class="weq-num">R₂₀₁⁸ / O₂₀₁⁸</span>
+          <span class="weq-bar"></span>
+          <span class="weq-den">R₁₉₉₀ / O₁₉₉₀</span>
+        </div>
+        <span class="weq-mult">× 10</span>
+      </div>
+      <div class="wdata-thresholds">
+        <span class="wt-chip wt-renter">S &gt; 10: renter dominance</span>
+        <span class="wt-chip wt-stable">S = 10: stable</span>
+        <span class="wt-chip wt-owner">S &lt; 10: owner dominance</span>
+      </div>
+    </div>
+    <div>
+      <div class="wdata-label">Typology Levels</div>
+      <table class="wtable">
+        <thead><tr><th></th><th>Typology</th><th>Wt</th></tr></thead>
+        <tbody>
+          <tr><td><div class="wswatch"><div class="wswatch-dot" style="background:#76ABFB"></div></div></td><td>Ongoing Displacement</td><td>8</td></tr>
+          <tr><td><div class="wswatch"><div class="wswatch-dot" style="background:#A1A1E0"></div></div></td><td>At Risk of Gentrification</td><td>10</td></tr>
+          <tr><td><div class="wswatch"><div class="wswatch-dot" style="background:#655AD1"></div></div></td><td>Early/Ongoing Gentrification</td><td>12</td></tr>
+          <tr><td><div class="wswatch"><div class="wswatch-dot" style="background:#662BC1"></div></div></td><td>Advanced Gentrification</td><td>8</td></tr>
+          <tr><td><div class="wswatch"><div class="wswatch-dot" style="background:#FFB789"></div></div></td><td>Stable/Moderate Mixed Income</td><td>17</td></tr>
+          <tr><td><div class="wswatch"><div class="wswatch-dot" style="background:#FFA85B"></div></div></td><td>At Risk of Becoming Exclusive</td><td>9</td></tr>
+          <tr><td><div class="wswatch"><div class="wswatch-dot" style="background:#FF6600"></div></div></td><td>Becoming Exclusive</td><td>7</td></tr>
+          <tr><td><div class="wswatch"><div class="wswatch-dot" style="background:#E00000"></div></div></td><td>Stable/Advanced Exclusive</td><td>11</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>`,
         stack: ["P5.js", "JavaScript", "Tableau", "Statistical Analysis", "OOP", "Public Installation"],
         links: {},
       },
@@ -1008,6 +1143,7 @@
         .filter(([, url]) => url)
         .map(([k, url]) => `<a class="link-pill" href="${url}" target="_blank" rel="noopener">${LINK_LABELS[k] || k}</a>`)
         .join("");
+      const mediaHTML = p.mediaHTML || "";
 
       item.innerHTML = `
         <div class="code-header">
@@ -1016,6 +1152,7 @@
           <span class="code-year">${p.year}</span>
         </div>
         <div class="code-sub">${p.type} &nbsp;&middot;&nbsp; ${p.role} &nbsp;&middot;&nbsp; ${p.org}</div>
+        ${mediaHTML}
         <div class="code-body">${bodyHTML}</div>
         <div class="code-stack">${stackHTML}</div>
         ${linksHTML ? `<div class="code-links">${linksHTML}</div>` : ""}

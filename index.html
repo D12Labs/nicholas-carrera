@@ -775,7 +775,7 @@
         context: "Translated the Urban Displacement Project's Chicago Gentrification and Displacement dataset (1990–2018) into an animated, code-driven light visualization deployed to the Wabash Lights, a public art installation spanning the underside of the CTA elevated tracks in downtown Chicago.",
         did: [
           "Designed a composite statistical metric (Renter-to-Owner Ratio Shift) from 6 key variables across the UDP Chicago Typology Output, then applied mean/median/standard deviation analysis at the census tract level to group neighborhoods into 8 typology levels spanning gentrification and exclusivity.",
-          "Built an animated P5.js visualization translating numeric trends into color-weighted light behavior, mapping an 8-color typology palette to the architectural constraints of the Wabash Lights LED installation.",
+          "Built the source animation in P5.js constrained to the physical grid of the installation: 4 rails, each exactly 1px tall by 468px wide. Used a 10x pixel multiplier to make individual nodes visible at scale. Warm-toned particles (owner-dominant typologies) travel right; cool-toned particles (gentrifying typologies) travel left. Collision flashes yellow.",
           "Framed the technical work through a critical lens: interrogating what data can and can't say about displaced communities, and designing visual abstraction that honored the weight of the underlying story.",
         ],
         outcome: "Saw the work go live on the Wabash Lights installation in downtown Chicago, making decades of housing displacement legible across a public urban canvas. Developed a methodology for translating human-centered datasets into spatial visual form bridging statistical rigor, code-driven animation, and data ethics.",
@@ -1063,100 +1063,129 @@
       });
     })();
 
-    // ─── WABASH P5 LED STRIP ──────────────────────────────────────────────────
+    // ─── WABASH P5 SOURCE ANIMATION ───────────────────────────────────────────
+    // Original sketch: 4 rails × 1px × 468px, MULT=10 to make nodes visible at scale.
+    // Warm particles (owner-dominant) travel right; cool particles (gentrifying) travel left.
+    // Yellow flash on collision. Made responsive and looping for portfolio embed.
     window.addEventListener('load', function () {
       const container = document.getElementById('wabash-p5-wrap');
       if (!container || typeof p5 === 'undefined') return;
 
-      const TYPOLOGIES = [
-        { hex: '#76ABFB', rgb: [118, 171, 251], label: 'Ongoing Displacement',          weight: 8,  stdDev: 7.96  },
-        { hex: '#A1A1E0', rgb: [161, 161, 224], label: 'At Risk of Gentrification',     weight: 10, stdDev: 10.33 },
-        { hex: '#655AD1', rgb: [101,  90, 209], label: 'Early/Ongoing Gentrification',  weight: 12, stdDev: 12.16 },
-        { hex: '#662BC1', rgb: [102,  43, 193], label: 'Advanced Gentrification',       weight: 8,  stdDev: 8.02  },
-        { hex: '#FFB789', rgb: [255, 183, 137], label: 'Stable/Moderate Mixed Income',  weight: 17, stdDev: 17.03 },
-        { hex: '#FFA85B', rgb: [255, 168,  91], label: 'At Risk of Becoming Exclusive', weight: 9,  stdDev: 9.35  },
-        { hex: '#FF6600', rgb: [255, 102,   0], label: 'Becoming Exclusive',            weight: 7,  stdDev: 6.96  },
-        { hex: '#E00000', rgb: [224,   0,   0], label: 'Stable/Advanced Exclusive',     weight: 11, stdDev: 11.56 },
-      ];
-      const TOTAL_WEIGHT = TYPOLOGIES.reduce((s, t) => s + t.weight, 0);
-
       new p5(function (p) {
-        const LED_W = 4;
-        const LED_H = 8;
-        const GAP   = 1;
+        const NUM_RAILS  = 4;
+        const NODE_COUNT = 468;     // actual LED node count per rail
+        const SPACING    = 0;
+        const MARGIN     = 0;
 
-        let canvasW, stripH;
-        let leds = [], zones = [];
-        const MAX_SD = Math.max(...TYPOLOGIES.map(t => t.stdDev));
+        let MULT, RAIL_WIDTH, RAIL_HEIGHT;
+        let particles = [], emitters = [];
 
-        p.setup = function () {
-          canvasW = container.offsetWidth;
-          stripH  = LED_H * (LED_W + GAP);
-          const cnv = p.createCanvas(canvasW, stripH);
-          cnv.parent(container);
-          p.noStroke();
-          p.frameRate(60);
-          buildLEDs();
-        };
+        // Colors matching original sketch
+        const LEFT_COLORS  = ['#FFC8A5', '#FFA85B', '#FF6600', '#E00000']; // owner-dominant
+        const RIGHT_COLORS = ['#76ABFB', '#A1A1E0', '#655AD1', '#662BC1']; // gentrifying
+        const LEFT_VALUES  = [17, 9, 7, 11];
+        const RIGHT_VALUES = [8, 10, 12, 8];
 
-        p.windowResized = function () {
-          canvasW = container.offsetWidth;
-          p.resizeCanvas(canvasW, stripH);
-          buildLEDs();
-        };
+        function getMult() {
+          // Scale MULT to fit container width — minimum 3 so rails are clearly visible
+          return Math.max(3, Math.round(container.offsetWidth / NODE_COUNT));
+        }
 
-        function buildLEDs() {
-          leds  = [];
-          zones = [];
-          const numCols = Math.floor(canvasW / (LED_W + GAP));
-          let startCol  = 0;
+        function getRailY(railIndex) {
+          return MARGIN + railIndex * (RAIL_HEIGHT + SPACING);
+        }
 
-          TYPOLOGIES.forEach((typ, i) => {
-            const cols = Math.round((typ.weight / TOTAL_WEIGHT) * numCols);
-            zones.push({ startCol, endCol: startCol + cols, typIndex: i });
-            startCol += cols;
-          });
-
-          for (let col = 0; col < numCols; col++) {
-            let typIndex = zones.length - 1;
-            for (const z of zones) {
-              if (col >= z.startCol && col < z.endCol) { typIndex = z.typIndex; break; }
-            }
-            for (let row = 0; row < LED_H; row++) {
-              leds.push({
-                x:        col * (LED_W + GAP),
-                y:        row * (LED_W + GAP),
-                typIndex,
-                phase:    p.random(p.TWO_PI),
-                rowPhase: p.map(row, 0, LED_H - 1, 0, p.PI),
-              });
-            }
+        function buildEmitters() {
+          emitters = [];
+          particles = [];
+          for (let r = 0; r < NUM_RAILS; r++) {
+            emitters.push(new Emitter(MARGIN,              r,  1, p.color(LEFT_COLORS[r]),  Math.floor(LEFT_VALUES[r])));
+            emitters.push(new Emitter(RAIL_WIDTH - MARGIN, r, -1, p.color(RIGHT_COLORS[r]), Math.floor(RIGHT_VALUES[r])));
           }
         }
 
-        p.draw = function () {
-          p.clear(); // transparent — site background shows through
-          const t = p.millis() * 0.001;
-
-          for (const led of leds) {
-            const typ    = TYPOLOGIES[led.typIndex];
-            const speed  = 0.6 + (typ.stdDev / MAX_SD) * 1.8;
-            const wave   = 0.5 + 0.5 * Math.sin(t * speed + led.phase);
-            const vignette  = 0.75 + 0.25 * Math.sin(led.rowPhase);
-            const brightness = Math.pow(wave * vignette, 1.4);
-            const [r, g, b]  = typ.rgb;
-            p.fill(r * brightness, g * brightness, b * brightness);
-            p.rect(led.x, led.y, LED_W, LED_W, 0.5);
-          }
-
-          // Zone boundary highlights
-          for (const z of zones) {
-            if (z.startCol === 0) continue;
-            const x = z.startCol * (LED_W + GAP) - GAP;
-            p.fill(255, 255, 255, 12);
-            p.rect(x, 0, 1, stripH);
-          }
+        p.setup = function () {
+          MULT        = getMult();
+          RAIL_WIDTH  = NODE_COUNT * MULT;
+          RAIL_HEIGHT = MULT;
+          p.createCanvas(RAIL_WIDTH + MARGIN * 2, NUM_RAILS * (RAIL_HEIGHT + SPACING) + MARGIN * 2).parent(container);
+          p.frameRate(60);
+          p.pixelDensity(1);
+          p.noStroke();
+          buildEmitters();
         };
+
+        p.windowResized = function () {
+          MULT        = getMult();
+          RAIL_WIDTH  = NODE_COUNT * MULT;
+          RAIL_HEIGHT = MULT;
+          p.resizeCanvas(RAIL_WIDTH + MARGIN * 2, NUM_RAILS * (RAIL_HEIGHT + SPACING) + MARGIN * 2);
+          buildEmitters();
+        };
+
+        p.draw = function () {
+          p.clear(); // transparent — site bg shows through
+
+          for (const emitter of emitters) { emitter.maybeEmit(); }
+
+          for (let i = particles.length - 1; i >= 0; i--) {
+            const px = particles[i];
+            px.update();
+            px.display();
+            if (px.x < MARGIN || px.x >= RAIL_WIDTH - MARGIN) { particles.splice(i, 1); }
+          }
+
+          // Collision flash
+          for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+              if (particles[i].rail === particles[j].rail &&
+                  p.abs(particles[i].x - particles[j].x) < MULT * 2) {
+                p.fill(255, 255, 100);
+                p.rect(particles[i].x, getRailY(particles[i].rail), MULT, MULT);
+              }
+            }
+          }
+
+          // Loop: reset emitters when all done and canvas is clear
+          const allDone = emitters.every(e => e.emitted >= e.totalToEmit);
+          if (allDone && particles.length === 0) { buildEmitters(); }
+        };
+
+        class Pixel {
+          constructor(x, rail, dir, col) {
+            this.x     = x;
+            this.rail  = rail;
+            this.dir   = dir;
+            this.color = col;
+            this.speed = p.random(7, 10);
+          }
+          update()  { this.x += this.dir * this.speed; }
+          display() {
+            p.fill(this.color);
+            p.rect(this.x, getRailY(this.rail), MULT, MULT);
+          }
+        }
+
+        class Emitter {
+          constructor(x, rail, dir, col, targetCount) {
+            this.x             = x;
+            this.rail          = rail;
+            this.dir           = dir;
+            this.color         = col;
+            this.totalToEmit   = targetCount;
+            this.emitted       = 0;
+            this.interval      = Math.floor(900 / targetCount);
+            this.lastEmitFrame = 0;
+          }
+          maybeEmit() {
+            if (this.emitted < this.totalToEmit &&
+                (p.frameCount - this.lastEmitFrame) >= this.interval) {
+              particles.push(new Pixel(this.x, this.rail, this.dir, this.color));
+              this.emitted++;
+              this.lastEmitFrame = p.frameCount;
+            }
+          }
+        }
       });
     });
 
