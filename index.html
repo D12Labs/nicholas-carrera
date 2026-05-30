@@ -504,6 +504,80 @@
     .wswatch { display: flex; align-items: center; gap: 7px; }
     .wswatch-dot { width: 11px; height: 11px; border-radius: 1px; flex-shrink: 0; }
 
+    /* ─── URAP DEMO ──────────────────────────────────────────── */
+    .urap-demo {
+      padding-left: calc(3ch + var(--space-2));
+      margin-bottom: var(--space-4);
+    }
+    .urap-controls {
+      display: flex;
+      gap: var(--space-4);
+      align-items: flex-end;
+      margin-bottom: 10px;
+    }
+    .urap-field {}
+    .urap-field-label {
+      display: block;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+    .urap-select {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      background: transparent;
+      color: var(--fg);
+      border: 1px solid var(--border);
+      padding: 5px 8px;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+    .urap-slider-field { flex: 1; }
+    .urap-slider-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .urap-scale-val {
+      font-size: 0.85rem;
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+    }
+    .urap-range {
+      width: 100%;
+      appearance: none;
+      -webkit-appearance: none;
+      height: 1px;
+      background: var(--border);
+      outline: none;
+      cursor: pointer;
+      margin: 8px 0 4px;
+      display: block;
+    }
+    .urap-range::-webkit-slider-thumb {
+      appearance: none;
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      cursor: pointer;
+    }
+    .urap-range::-moz-range-thumb {
+      width: 8px; height: 8px;
+      background: var(--accent);
+      border: none;
+    }
+    .urap-scale-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.62rem;
+      color: var(--muted);
+    }
+    #urap-canvas-wrap canvas { display: block; width: 100%; }
+
     /* ─── RESPONSIVE ─────────────────────────────────────────── */
     @media (max-width: 760px) {
       .header-inner { grid-template-columns: 1fr; }
@@ -524,6 +598,7 @@
       .wabash-media { padding-left: 0; }
       .wabash-irl-wrap { height: 200px; }
       .wabash-data { grid-template-columns: 1fr; padding-left: 0; }
+      .urap-demo { padding-left: 0; }
     }
   </style>
 </head>
@@ -615,15 +690,37 @@
           "Extended to TouchDesigner: WebSocket endpoint, Script SOP cook() dispatch logic keyed on a baseShape token (sphere, torus, helix, crystal, branching), background thread to keep HTTP off TD's render loop.",
         ],
         outcome: "Full pipeline operational: type a descriptor in the browser → Claude streams parameters level-by-level → WebSocket delivers each level to TD → Script SOP builds and recooks 3D geometry in real time. Key finding: constraint improves creativity. Sphere-constrained prompts rated 9/10 vs. open-base 4–5/10. Architectural constraints, not model reasoning, are the real bottleneck.",
+        dataHTML: `
+  <div class="urap-demo">
+    <div class="urap-controls">
+      <div class="urap-field">
+        <label class="urap-field-label" for="urap-descriptor">Descriptor</label>
+        <select id="urap-descriptor" class="urap-select">
+          <option value="smoothness">smoothness</option>
+          <option value="complexity">complexity</option>
+          <option value="tension">tension</option>
+          <option value="joyfulness">joyfulness</option>
+          <option value="elegance">elegance</option>
+          <option value="dynamism">dynamism</option>
+        </select>
+      </div>
+      <div class="urap-field urap-slider-field">
+        <div class="urap-slider-row">
+          <label class="urap-field-label">Intensity</label>
+          <span id="urap-scale-val" class="urap-scale-val">5.0</span>
+        </div>
+        <input type="range" id="urap-scale" class="urap-range" min="1" max="10" step="0.1" value="5">
+        <div class="urap-scale-labels"><span>1</span><span>10</span></div>
+      </div>
+    </div>
+    <div id="urap-canvas-wrap"></div>
+  </div>`,
         stack: ["Generative AI", "LLM Prompt Design", "Multi-model Routing", "Procedural Generation", "Creative Coding", "TouchDesigner", "Real-time Data Viz"],
         links: {
           live:   "https://urap-fall-2025.pages.dev",
           github: "https://github.com/niconicocarrera/urap-2025-26",
         },
-        images: [
-          { src: "", fit: "cover",   caption: "Pipeline interface" },
-          { src: "", fit: "contain", caption: "Architecture diagram" },
-        ],
+        images: [],
       },
       {
         slug: "caterpillar",
@@ -804,6 +901,118 @@
       `;
       workList.appendChild(item);
     });
+
+    // ─── URAP DESCRIPTOR SKETCH ───────────────────────────────────────────────
+    (function () {
+      const wrap = document.getElementById('urap-canvas-wrap');
+      if (!wrap) return;
+
+      const canvas = document.createElement('canvas');
+      wrap.appendChild(canvas);
+      const ctx = canvas.getContext('2d');
+
+      const PRESETS = {
+        smoothness: { freq: 1.2, ampRatio: 0.10, speed: 0.30, harmonics: 1, ys: 1.0 },
+        complexity:  { freq: 4.0, ampRatio: 0.28, speed: 1.00, harmonics: 4, ys: 1.0 },
+        tension:     { freq: 2.0, ampRatio: 0.18, speed: 0.25, harmonics: 2, ys: 1.6 },
+        joyfulness:  { freq: 3.0, ampRatio: 0.32, speed: 1.80, harmonics: 3, ys: 1.0 },
+        elegance:    { freq: 0.8, ampRatio: 0.08, speed: 0.50, harmonics: 1, ys: 1.0 },
+        dynamism:    { freq: 3.5, ampRatio: 0.25, speed: 2.50, harmonics: 3, ys: 1.0 },
+      };
+
+      let descriptor = 'smoothness';
+      let intensity   = 5;
+      let t           = 0;
+      let raf;
+
+      const descriptorEl = document.getElementById('urap-descriptor');
+      const scaleEl      = document.getElementById('urap-scale');
+      const scaleValEl   = document.getElementById('urap-scale-val');
+
+      descriptorEl?.addEventListener('change', e => { descriptor = e.target.value; });
+      scaleEl?.addEventListener('input', e => {
+        intensity = parseFloat(e.target.value);
+        if (scaleValEl) scaleValEl.textContent = intensity.toFixed(1);
+      });
+
+      function cssVar(name) {
+        return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      }
+
+      function resize() {
+        canvas.width  = wrap.offsetWidth;
+        canvas.height = 200;
+      }
+
+      function draw() {
+        const w = canvas.width, h = canvas.height;
+        if (!w || !h) { raf = requestAnimationFrame(draw); return; }
+
+        const cx = w / 2, cy = h / 2;
+        const R  = Math.min(w * 0.26, h * 0.38);
+        const pr = PRESETS[descriptor] || PRESETS.smoothness;
+        const iN = (intensity - 1) / 9;
+        const amp = pr.ampRatio * iN * R;
+
+        const bg = cssVar('--bg') || '#0a0a0a';
+        const fg = cssVar('--fg') || '#f0ece4';
+
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, w, h);
+
+        const SLICES = 16, STACKS = 24;
+        ctx.strokeStyle = fg;
+        ctx.lineWidth   = 0.6;
+        ctx.globalAlpha = 0.45;
+
+        function disp(phi, theta) {
+          let d = 0;
+          for (let k = 1; k <= pr.harmonics; k++) {
+            d += amp * Math.sin(pr.freq * k * phi + pr.freq * theta + t * k) / k;
+          }
+          return d;
+        }
+
+        // Latitude rings
+        for (let si = 1; si < SLICES; si++) {
+          const phi = (si / SLICES) * Math.PI;
+          ctx.beginPath();
+          let first = true;
+          for (let stj = 0; stj <= STACKS; stj++) {
+            const theta = (stj / STACKS) * 2 * Math.PI;
+            const r = R + disp(phi, theta);
+            const x = cx + r * Math.sin(phi) * Math.cos(theta);
+            const y = cy + (r * Math.cos(phi)) * pr.ys;
+            first ? (ctx.moveTo(x, y), first = false) : ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+        }
+
+        // Longitude arcs (every other to keep it readable)
+        for (let stj = 0; stj < STACKS; stj += 2) {
+          const theta = (stj / STACKS) * 2 * Math.PI;
+          ctx.beginPath();
+          let first = true;
+          for (let si = 0; si <= SLICES; si++) {
+            const phi = (si / SLICES) * Math.PI;
+            const r = R + disp(phi, theta);
+            const x = cx + r * Math.sin(phi) * Math.cos(theta);
+            const y = cy + (r * Math.cos(phi)) * pr.ys;
+            first ? (ctx.moveTo(x, y), first = false) : ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+        }
+
+        ctx.globalAlpha = 1;
+        t  += pr.speed * 0.016;
+        raf = requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('resize', resize);
+      // defer first resize until after paint so offsetWidth is available
+      requestAnimationFrame(() => { resize(); cancelAnimationFrame(raf); draw(); });
+    })();
 
     // ─── WABASH SOURCE VIDEO ───────────────────────────────────────────────────
 
