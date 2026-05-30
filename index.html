@@ -22,6 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js" defer></script>
 
   <style>
     /* ─── TOKENS ─────────────────────────────────────────────── */
@@ -504,6 +505,26 @@
     .wswatch { display: flex; align-items: center; gap: 7px; }
     .wswatch-dot { width: 11px; height: 11px; border-radius: 1px; flex-shrink: 0; }
 
+    /* ─── WABASH P5 LED STRIP ────────────────────────────────── */
+    .wabash-p5-wrap {
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+    }
+    .wabash-p5-wrap canvas {
+      display: block;
+      width: 100% !important;
+    }
+
+    /* ─── CAT NDA NOTE ───────────────────────────────────────── */
+    .cat-nda {
+      padding-left: calc(3ch + var(--space-2));
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      margin-bottom: var(--space-4);
+    }
+
     /* ─── URAP DEMO ──────────────────────────────────────────── */
     .urap-demo {
       padding-left: calc(3ch + var(--space-2));
@@ -697,7 +718,7 @@
         <label class="urap-field-label" for="urap-descriptor">Descriptor</label>
         <select id="urap-descriptor" class="urap-select">
           <option value="smoothness">smoothness</option>
-          <option value="complexity">complexity</option>
+          <option value="complexity" selected>complexity</option>
           <option value="tension">tension</option>
           <option value="joyfulness">joyfulness</option>
           <option value="elegance">elegance</option>
@@ -738,13 +759,10 @@
           "Reframed authentication from a screen-level problem to a distributed systems design challenge, mapping the full ecosystem across Cat Cloud, machine edge, local cache, and offline provisioning flows. Designed for the hardest case first: fleet managers can provision operators on a fully disconnected machine in five steps, syncing to the full fleet on reconnect. Delivered a three-scenario architecture (connected, offline, hybrid cache-first) that reduced operator provisioning from 30-45 minutes to under 2 minutes.",
         ],
         outcome: "Repositioned authentication from a compliance burden to a value exchange, delivering a three-scenario distributed architecture (connected, offline, hybrid cache-first) that cut operator provisioning from 30-45 minutes to under 2 minutes. Validated with Cat&rsquo;s NFC integration lead.",
+        dataHTML: `<p class="cat-nda">Visuals under NDA — available June 13, 2026.</p>`,
         stack: ["Qualitative Research", "Ethnographic Field Research", "Insight Synthesis", "Systems Thinking", "Enterprise UX", "Stakeholder Management", "Figma"],
         links: {},
-        images: [
-          { src: "", fit: "cover",   caption: "Field research" },
-          { src: "", fit: "contain", caption: "System architecture" },
-          { src: "", fit: "contain", caption: "Flow diagram" },
-        ],
+        images: [],
       },
       {
         slug: "wabash",
@@ -783,6 +801,7 @@
         </div>
       </div>
     </div>
+    <div id="wabash-p5-wrap" class="wabash-p5-wrap"></div>
   </div>`,
         dataHTML: `
   <div class="wabash-data">
@@ -920,7 +939,7 @@
         dynamism:    { freq: 3.5, ampRatio: 0.25, speed: 2.50, harmonics: 3, ys: 1.0 },
       };
 
-      let descriptor = 'smoothness';
+      let descriptor = 'complexity';
       let intensity   = 5;
       let t           = 0;
       let raf;
@@ -1043,6 +1062,103 @@
         if (pauseBtn) pauseBtn.textContent = 'Resume';
       });
     })();
+
+    // ─── WABASH P5 LED STRIP ──────────────────────────────────────────────────
+    window.addEventListener('load', function () {
+      const container = document.getElementById('wabash-p5-wrap');
+      if (!container || typeof p5 === 'undefined') return;
+
+      const TYPOLOGIES = [
+        { hex: '#76ABFB', rgb: [118, 171, 251], label: 'Ongoing Displacement',          weight: 8,  stdDev: 7.96  },
+        { hex: '#A1A1E0', rgb: [161, 161, 224], label: 'At Risk of Gentrification',     weight: 10, stdDev: 10.33 },
+        { hex: '#655AD1', rgb: [101,  90, 209], label: 'Early/Ongoing Gentrification',  weight: 12, stdDev: 12.16 },
+        { hex: '#662BC1', rgb: [102,  43, 193], label: 'Advanced Gentrification',       weight: 8,  stdDev: 8.02  },
+        { hex: '#FFB789', rgb: [255, 183, 137], label: 'Stable/Moderate Mixed Income',  weight: 17, stdDev: 17.03 },
+        { hex: '#FFA85B', rgb: [255, 168,  91], label: 'At Risk of Becoming Exclusive', weight: 9,  stdDev: 9.35  },
+        { hex: '#FF6600', rgb: [255, 102,   0], label: 'Becoming Exclusive',            weight: 7,  stdDev: 6.96  },
+        { hex: '#E00000', rgb: [224,   0,   0], label: 'Stable/Advanced Exclusive',     weight: 11, stdDev: 11.56 },
+      ];
+      const TOTAL_WEIGHT = TYPOLOGIES.reduce((s, t) => s + t.weight, 0);
+
+      new p5(function (p) {
+        const LED_W = 4;
+        const LED_H = 8;
+        const GAP   = 1;
+
+        let canvasW, stripH;
+        let leds = [], zones = [];
+        const MAX_SD = Math.max(...TYPOLOGIES.map(t => t.stdDev));
+
+        p.setup = function () {
+          canvasW = container.offsetWidth;
+          stripH  = LED_H * (LED_W + GAP);
+          const cnv = p.createCanvas(canvasW, stripH);
+          cnv.parent(container);
+          p.noStroke();
+          p.frameRate(60);
+          buildLEDs();
+        };
+
+        p.windowResized = function () {
+          canvasW = container.offsetWidth;
+          p.resizeCanvas(canvasW, stripH);
+          buildLEDs();
+        };
+
+        function buildLEDs() {
+          leds  = [];
+          zones = [];
+          const numCols = Math.floor(canvasW / (LED_W + GAP));
+          let startCol  = 0;
+
+          TYPOLOGIES.forEach((typ, i) => {
+            const cols = Math.round((typ.weight / TOTAL_WEIGHT) * numCols);
+            zones.push({ startCol, endCol: startCol + cols, typIndex: i });
+            startCol += cols;
+          });
+
+          for (let col = 0; col < numCols; col++) {
+            let typIndex = zones.length - 1;
+            for (const z of zones) {
+              if (col >= z.startCol && col < z.endCol) { typIndex = z.typIndex; break; }
+            }
+            for (let row = 0; row < LED_H; row++) {
+              leds.push({
+                x:        col * (LED_W + GAP),
+                y:        row * (LED_W + GAP),
+                typIndex,
+                phase:    p.random(p.TWO_PI),
+                rowPhase: p.map(row, 0, LED_H - 1, 0, p.PI),
+              });
+            }
+          }
+        }
+
+        p.draw = function () {
+          p.clear(); // transparent — site background shows through
+          const t = p.millis() * 0.001;
+
+          for (const led of leds) {
+            const typ    = TYPOLOGIES[led.typIndex];
+            const speed  = 0.6 + (typ.stdDev / MAX_SD) * 1.8;
+            const wave   = 0.5 + 0.5 * Math.sin(t * speed + led.phase);
+            const vignette  = 0.75 + 0.25 * Math.sin(led.rowPhase);
+            const brightness = Math.pow(wave * vignette, 1.4);
+            const [r, g, b]  = typ.rgb;
+            p.fill(r * brightness, g * brightness, b * brightness);
+            p.rect(led.x, led.y, LED_W, LED_W, 0.5);
+          }
+
+          // Zone boundary highlights
+          for (const z of zones) {
+            if (z.startCol === 0) continue;
+            const x = z.startCol * (LED_W + GAP) - GAP;
+            p.fill(255, 255, 255, 12);
+            p.rect(x, 0, 1, stripH);
+          }
+        };
+      });
+    });
 
     // ─── THEME TOGGLE ──────────────────────────────────────────────────────────
 
