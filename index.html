@@ -425,9 +425,12 @@
       color: rgba(255,255,255,0.72);
     }
     .wabash-source-wrap.has-played .wsrc-idle { display: none; }
-    /* Controls: hidden until hover */
+    /* Controls: hidden until hover (desktop) or pause (touch) */
     .wsrc-controls { display: none; align-items: center; gap: 8px; }
     .wabash-source-wrap.has-played:hover .wsrc-controls { display: flex; }
+    @media (pointer: coarse) {
+      .wabash-source-wrap.has-played:not(.is-playing) .wsrc-controls { display: flex; }
+    }
     .wsrc-btn {
       all: unset;
       cursor: pointer;
@@ -780,7 +783,7 @@
       </video>
     </div>
     <div class="wabash-source-wrap" id="wabash-src-wrap">
-      <video id="wabash-src-vid" playsinline>
+      <video id="wabash-src-vid" playsinline muted>
         <source src="public/media/wabash/wabashlights_source.webm" type="video/webm">
         <source src="public/media/wabash/wabashlights_source.mp4"  type="video/mp4">
       </video>
@@ -1035,9 +1038,9 @@
       wrap.addEventListener('click', e => {
         if (e.target.closest('a')) return;                   // P5.js link — let browser open it
         if (e.target.closest('[data-action="restart"]')) {
-          vid.currentTime = 0; vid.play(); return;
+          vid.currentTime = 0; vid.play().catch(() => {}); return;
         }
-        vid.paused ? vid.play() : vid.pause();               // toggle on everything else
+        vid.paused ? vid.play().catch(() => {}) : vid.pause();
       });
 
       vid.addEventListener('play', () => {
