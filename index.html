@@ -74,6 +74,20 @@
       padding: 0 var(--space-8);
     }
 
+    /* ─── RESUME LINK ───────────────────────────────────────────── */
+    .resume-link {
+      position: fixed;
+      top: var(--space-3);
+      left: var(--space-3);
+      font-size: 0.9rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      z-index: 100;
+      transition: color 0.15s;
+    }
+    .resume-link:hover { color: var(--fg); }
+
     /* ─── HUD ────────────────────────────────────────────────── */
     .hud {
       position: fixed;
@@ -620,6 +634,8 @@
 </head>
 
 <body>
+
+  <a class="resume-link" href="/resume.pdf" target="_blank" rel="noopener" aria-label="Download resume">R&#xe9;sum&#xe9; &#x2197;</a>
 
   <!-- HUD -->
   <div class="hud" role="toolbar" aria-label="Site controls">
