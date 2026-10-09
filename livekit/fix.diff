@@ -1,0 +1,14 @@
+diff --git a/packages/react/vite.config.js b/packages/react/vite.config.js
+index 3ee1543..5f7d774 100644
+--- a/packages/react/vite.config.js
++++ b/packages/react/vite.config.js
+@@ -14,6 +14,9 @@ export default defineConfig({
+       // outputDir: ['dist/esm', 'dist/cjs'], // Output .d.ts files for both formats
+     }),
+   ],
++  // Bundled UMD deps (loglevel) must take their CommonJS branch regardless of a global AMD
++  // loader at runtime; otherwise module.exports is never assigned (livekit/components-js#1428).
++  define: { 'define.amd': 'undefined' },
+   build: {
+     minify: 'esbuild',
+     emptyOutDir: true,
