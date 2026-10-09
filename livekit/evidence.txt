@@ -1,0 +1,26 @@
+livekit/components-js #1428, reproduction log (Node v22.23.2, 2026-10-09)
+
+[published packages from npm, repro.mjs with define.amd set]
+@livekit/components-react@2.9.23  ->  OK: imported
+@livekit/components-react@2.9.24  ->  THROWS: Ms.default.getLogger is not a function
+
+[same published packages, define.amd NOT set]
+@livekit/components-react@2.9.23  ->  OK
+@livekit/components-react@2.9.24  ->  OK            (so only AMD-loader environments are affected)
+
+[built from source, commit 1ce6ca0, packages/react, define.amd set]
+main, unmodified                  ->  THROWS: xs.default.getLogger is not a function
+main + one-line vite config fix   ->  OK: imported with define.amd
+
+[after the fix]
+plain import (no define.amd)      ->  OK, 155 exports
+pnpm test (packages/react)        ->  9 files, 30 tests passed
+
+[root cause evidence]
+2.9.24 room chunk, inlined loglevel:  typeof define == "function" && define.amd ? define(r) : typeof t == "obje...   (check is live at runtime)
+2.9.23 chunks: no `typeof define` anywhere                  (Rollup resolved the UMD wrapper at build time)
+fixed build (define.amd -> undefined): no `.amd` left in the room chunk
+
+[first attempt, rejected]
+externalizing loglevel (rollupOptions.external) -> STILL THROWS ("Ei.getLogger is not a function"),
+because loglevel's own UMD wrapper also takes its AMD branch under define.amd. Not used.
