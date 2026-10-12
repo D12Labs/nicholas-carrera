@@ -1,0 +1,20 @@
+livekit.com homepage JS scan, 2026-10-12 (browser pane, one load, same-origin chunks fetched and searched)
+
+Totals: 44 script requests, 1,490,520 B compressed, 5,110,255 B decoded.
+(An earlier count on 2026-10-09 was 46 requests, about 1.5 MB / 5.4 MB. Their build changed since.)
+
+Two chunks contain the livekit-client SDK, and they are different versions:
+  chunks/2z14dic46l_0u.js  1,752,946 B decoded (488,394 B compressed)
+      sdk version "2.0.8", protocol 12. Not referenced in the page HTML. Requested at ~1.06 s as a script.
+      No three.js in it. Also contains krisp, wasm and d3 strings.
+  chunks/28wganrm9765c.js    534,862 B decoded (141,710 B compressed)
+      sdk version "2.21.0", protocol 17, adds logger names livekit-data-tracks, livekit-region, livekit-ice
+      that the 2.0.8 copy lacks. Referenced in the page HTML. Requested at ~0.13 s.
+  Byte overlap between them is about 1 to 3 percent, because the versions and minifier names differ.
+  A third chunk (2uduuo4zszv1t.js, 188,719 B) holds ParticipantEvent and TrackPublication code but not the transport stack.
+three.js is in separate chunks (0jihetca_d_1i.js 523 KB, 2wkgh9yvkv4ye.js).
+
+Not verified: whether any of this is requested before first paint. The pane tab was in the background, so
+paint timestamps (25.5 s) are unusable. Do not state a before-first-paint claim from this run.
+
+Corrected question for LiveKit: is shipping two versions of livekit-client on the homepage intentional?

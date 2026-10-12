@@ -24,3 +24,8 @@ fixed build (define.amd -> undefined): no `.amd` left in the room chunk
 [first attempt, rejected]
 externalizing loglevel (rollupOptions.external) -> STILL THROWS ("Ei.getLogger is not a function"),
 because loglevel's own UMD wrapper also takes its AMD branch under define.amd. Not used.
+
+[merge status, checked 2026-10-12 with gh and npm]
+PR #1466: MERGED 2026-10-12T14:20:51Z by lukasIO, merge commit f3c995cb6734e3feaeb92abe8f29c5337a242295
+Issue #1428: CLOSED, reason COMPLETED, 2026-10-12T14:20:52Z
+npm @livekit/components-react dist-tag latest: 2.9.24 (no release containing the fix yet)
