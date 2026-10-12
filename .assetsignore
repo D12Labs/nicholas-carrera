@@ -1,0 +1,12 @@
+.claude
+.git
+.wrangler
+.gitignore
+.assetsignore
+.DS_Store
+wrangler.jsonc
+*.md
+specs
+*.docx
+acre-site.html
+acre.css

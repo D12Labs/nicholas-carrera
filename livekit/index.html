@@ -83,7 +83,7 @@ node repro.mjs   # <a href="repro.mjs">repro.mjs</a>: sets define.amd, then impo
   <p>I first externalized <code>loglevel</code> in the Rollup options. It still threw (<code>Ei.getLogger is not a function</code>), because <code>loglevel</code>'s own UMD wrapper takes the same AMD branch. A fix that only passes a happy-path check is not a fix, so I kept going until the repro itself passed.</p>
 
   <h2>Status</h2>
-  <p><span class="tag">open</span><a href="https://github.com/livekit/components-js/pull/1466">PR #1466</a> is open against <code>main</code>, with a changeset, and I commented on <a href="https://github.com/livekit/components-js/issues/1428#issuecomment-6084950791">the issue</a>. The issue is assigned to a maintainer, so it may close in favor of theirs. Not merged.</p>
+  <p><span class="tag">merged</span><a href="https://github.com/livekit/components-js/pull/1466">PR #1466</a> was merged into <code>main</code> by a LiveKit maintainer on 2026-10-12, and <a href="https://github.com/livekit/components-js/issues/1428">issue #1428</a> was closed as completed by it. The maintainer approved the fix and noted they wish there were a different way to mitigate it. npm <code>latest</code> is still 2.9.24 as of 2026-10-12, so the fix is in <code>main</code> but not yet in a published release.</p>
 
   <footer>Nicholas Carrera &middot; <a href="/">nicholascarrera.com</a> &middot; Built with AI assistance (Claude); I ran and checked every result above.</footer>
 </main>
