@@ -702,7 +702,7 @@
           "Built a FastAPI server with multi-model provider routing (Anthropic API + Ollama), SSE streaming so the browser receives level-by-level parameter objects as they generate, and a composite JSON cache keyed on descriptor + model + template.",
           "Extended to TouchDesigner: WebSocket endpoint, Script SOP cook() dispatch logic keyed on a baseShape token (sphere, torus, helix, crystal, branching), background thread to keep HTTP off TD's render loop.",
         ],
-        outcome: "Full pipeline operational: type a descriptor in the browser → Claude streams parameters level-by-level → WebSocket delivers each level to TD → Script SOP builds and recooks 3D geometry in real time. Key finding: constraint improves creativity. Sphere-constrained prompts rated 9/10 vs. open-base 4–5/10. Architectural constraints, not model reasoning, are the real bottleneck.",
+        outcome: "Two-quarter DePaul URAP research assistantship (Fall 2025, Winter 2026). Completed: sphere-constrained prompts rated 9/10 for creative quality vs. 4&ndash;5/10 for an open base, and a controlled model comparison found the real bottleneck wasn&rsquo;t reasoning quality (Claude reasoned richly) but the 7-parameter schema discarding everything the model said about form. That&rsquo;s the finding the panel below is built to keep testing.",
         dataHTML: `
   <div class="urap-demo">
     <div class="urap-controls">
