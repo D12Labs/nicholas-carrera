@@ -58,8 +58,9 @@
       --bg:       #0a0a0a;
       --fg:       #f0ece4;
       --border:   #2a2a2a;
-      --muted:    #555;
+      --muted:    #797979;
       --accent:   #00ff41;
+      --focus:    #00ff41;
 
       --space-1:  8px;
       --space-2:  16px;
@@ -77,8 +78,11 @@
       --bg:     #f0ece4;
       --fg:     #0a0a0a;
       --border: #d0ccc4;
-      --muted:  #888;
+      --muted:  #6b6b6b;
+      --focus:  #007a1f;
     }
+
+    :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
 
     /* ─── RESET ──────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
