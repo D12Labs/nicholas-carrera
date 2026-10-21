@@ -689,8 +689,31 @@
 
     const projects = [
       {
-        slug: "urap",
+        slug: "madmadhouse",
         num: "01",
+        title: "MADMADHOUSE Archive &amp; Booking CV",
+        year: 2026,
+        type: "Creative Tech",
+        role: "Design + Development",
+        org: "MADMADHOUSE Collective",
+        context: "Four years of the DJ collective&rsquo;s nights existed only as about 59 Instagram posts, with captions that never state the year. I designed and built a record a stranger can trust; Luis Arriaga, my co-lead, supplied the photography and the facts.",
+        did: [
+          "Treated the Instagram harvest as a contract: it counted as done only when a validator reconciled every post and every failure against the account&rsquo;s own post count. Tested against 8 planted failure modes, it caught all 8.",
+          "Recovered the dates the captions never gave by decoding the timestamp inside each post&rsquo;s shortcode. Checked against the 21 captions that state a weekday, it matched 21 of 21.",
+          "Kept the interface quiet so the flyers carry the color: posters develop as they load, and a draggable three-word nav lights up only when the pointer circles or shakes.",
+        ],
+        outcome: "Live at madmadhouse.com and in use. The booking CV is computed from the archive (44 nights, 21 venues, 3 cities, 27 DJs) and was sent to the Whistler in Chicago for the collective&rsquo;s most recent booking.",
+        stack: ["Vite", "React 19", "TypeScript", "GSAP", "Lenis", "Python", "Cloudflare"],
+        links: {
+          live: "https://madmadhouse.com",
+        },
+        images: [
+          { src: "public/media/madmadhouse/archive.jpg", caption: "The MADMADHOUSE archive, one poster developed under the pointer" },
+        ],
+      },
+      {
+        slug: "urap",
+        num: "02",
         title: "LLM Semantic 3D Geometry Interpretation",
         year: 2026,
         type: "AI Research",
@@ -739,7 +762,7 @@
       },
       {
         slug: "caterpillar",
-        num: "02",
+        num: "03",
         title: "CAT SSO & Access Control",
         year: 2026,
         type: "UX Design",
@@ -756,11 +779,13 @@
         outcome: "Reframed a years-old adoption failure from a usability problem into a trust and value-exchange problem, a diagnosis Cat stakeholders validated. A validated concept and systems design, not a shipped product: the SMS back end and the excavator&rsquo;s portrait display stayed open, and it was never tested with operators outside the design conversations.",
         stack: ["Field Research", "Heuristic Evaluation", "Stakeholder Interviews", "Systems Architecture", "Service Blueprinting", "Userflow Mapping", "Figma"],
         links: {},
-        images: [],
+        images: [
+          { src: "public/media/caterpillar/flows.jpg", caption: "Three flows on the in-cab display: operator sign-in, Guest Mode, adding an operator offline" },
+        ],
       },
       {
         slug: "wabash",
-        num: "03",
+        num: "04",
         title: "Wabash Lights Data Visualization",
         year: 2025,
         type: "Creative Tech",
