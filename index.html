@@ -721,11 +721,9 @@
         org: "DePaul University",
         context: "No existing system mapped abstract language (&ldquo;smoothness,&rdquo; &ldquo;complexity,&rdquo; &ldquo;compulsive&rdquo;) to structured 3D form in a semantically meaningful way. Sole developer and researcher in a DePaul URAP assistantship advised by Nathan Koch (Creative Technologies), investigating whether LLMs reason about geometry or pattern-match from training data.",
         did: [
-          "Designed and ran prompt experiments across 4 LLMs (Mistral 7B, Claude Haiku/Sonnet/Opus): two-step meta-cognitive prompting, constrained vs. unconstrained base shapes, and intensity levels from 1 to 10.",
-          "Built a FastAPI server with a provider registry (Anthropic API + Ollama, no code change to switch), SSE streaming so the browser receives level-by-level results as they generate, and a persistent cache keyed on descriptor + model + template.",
-          "Held the architecture fixed and swapped only the model. Claude reasoned far more richly than Mistral, but the rendered forms barely changed, which moved the bottleneck from the model to the renderer.",
-          "Rebuilt the render target in TouchDesigner: a baseShape dispatch token (sphere, torus, helix, crystal, branching L-system, grid) driving a Script SOP, fed live from the browser over a FastAPI to WebSocket DAT bridge.",
-          "After the assistantship ended, continued independently: a public, browser-native rebuild with the six-topology dispatch, so anyone can keep testing the model versus architecture question.",
+          "Ran prompt experiments across 4 LLMs (Mistral 7B, Claude Haiku/Sonnet/Opus), then held the architecture fixed and swapped only the model. Claude reasoned far more richly, but the rendered forms barely changed, which moved the bottleneck from the model to the renderer.",
+          "Built a FastAPI server with a provider registry (Anthropic API + Ollama, no code change to switch), SSE streaming of level-by-level results, and a persistent cache keyed on descriptor + model + template.",
+          "Rebuilt the render target in TouchDesigner with a six-topology baseShape dispatch, then continued independently as a public browser rebuild so anyone can keep testing the question.",
         ],
         outcome: "Two-quarter DePaul URAP research assistantship (Fall 2025, Winter 2026). Completed: sphere-constrained prompts rated 9/10 for creative quality vs. 4&ndash;5/10 for an open base, and a controlled model comparison found the real bottleneck wasn&rsquo;t reasoning quality (Claude reasoned richly) but the 7-parameter schema discarding everything the model said about form. That&rsquo;s the finding the panel below is built to keep testing.",
         dataHTML: `
@@ -770,11 +768,9 @@
         org: "DePaul × Caterpillar",
         context: "UXD Capstone at DePaul (Jan&ndash;Jun 2026), Team 6 with Joelle Szatkowski, Ally Ohr, and Sanya Verma, partnered with Caterpillar. Operator ID adoption across the fleet sat below 5%. Guest Mode had become the de facto standard, so machines ran anonymously and collected nameless data.",
         did: [
-          "Contributed to a Nielsen heuristic evaluation of Cat displays and access controls across machine types, then moved to simulator testing and field interviews with the Certified Dealer Instructors who train operators every day.",
           "On-site field research at Cat&rsquo;s demo and training center found the failure was motivation, not usability: in a reprimand-heavy culture, logging in created a record and returned nothing, and dealers hid login fobs under rental seats so nobody would call for codes.",
           "Led the team&rsquo;s systems-level reframe from &ldquo;how do we make login easier?&rdquo; to &ldquo;why should operators log in at all?&rdquo; and designed backwards from the answer.",
-          "Contributed to a three-layer architecture (identity, authorization, session) with a Cat Cloud and machine-edge split set by the offline constraint, NFC primary with PIN fallback and conditional SMS, and a 10-flow hi-fi Figma prototype at 1280&times;720.",
-          "Led the stakeholder walkthrough with Cat UX and was present for the technical review with a Cat onboard-systems expert, which caught three gaps: NFC affordance, ambiguous offline copy, and a Guest Mode that hid its own cost.",
+          "Contributed to a three-layer architecture (identity, authorization, session) and a 10-flow hi-fi prototype, then led the stakeholder walkthrough with Cat UX; a technical review with a Cat onboard-systems expert caught three gaps.",
         ],
         outcome: "Reframed a years-old adoption failure from a usability problem into a trust and value-exchange problem, a diagnosis Cat stakeholders validated. A validated concept and systems design, not a shipped product: the SMS back end and the excavator&rsquo;s portrait display stayed open, and it was never tested with operators outside the design conversations.",
         stack: ["Field Research", "Heuristic Evaluation", "Stakeholder Interviews", "Systems Architecture", "Service Blueprinting", "Userflow Mapping", "Figma"],
