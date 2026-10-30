@@ -204,7 +204,7 @@
   let current = -1, mIndex = 0, opener = null, pushed = false, demo = null;
 
   function mediaHTML(m) {
-    if (m.type === 'image') return `<img src="${m.src}" width="${m.w}" height="${m.h}" alt="${esc(m.caption)}">`;
+    if (m.type === 'image') return `<img src="${m.src}" width="${m.w}" height="${m.h}" alt="${esc(m.caption)}"${m.round ? ' class="is-round"' : ''}>`;
     if (m.type === 'video') {
       // Clips with sound (a score) show controls so the visitor can unmute; silent loops stay bare.
       // A clip with a score waits for play, with sound; silent loops autoplay muted.

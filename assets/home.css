@@ -209,6 +209,9 @@
   padding: var(--space-6);
 }
 .dmedia-stage > video.is-pixel { image-rendering: pixelated; width: 100%; }
+/* device screens (CAT display): rounded like the glass they sit behind */
+.dmedia-stage > img.is-round { border-radius: 14px; }
+@media (max-width: 640px) { .dmedia-stage > img.is-round { border-radius: 8px; } }
 .dmedia-stage > img,
 .dmedia-stage > video {
   max-width: 100%;
