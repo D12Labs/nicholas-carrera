@@ -163,6 +163,14 @@
       text-transform: uppercase;
       margin-top: var(--space-3);
     }
+    .site-line {
+      font-size: 1.1rem;
+      color: var(--fg);
+      margin-top: var(--space-3);
+      max-width: 34ch;
+      line-height: 1.6;
+    }
+    .work-label-gap { margin-top: var(--space-6); }
     .site-meta {
       text-align: right;
       color: var(--muted);
@@ -268,7 +276,7 @@
       opacity: 0.5;
     }
 
-    /* outcome — elevated lead statement */
+    /* hook: elevated lead statement */
     .work-outcome-lead {
       padding-left: calc(3ch + var(--space-2));
       margin: var(--space-5) 0 var(--space-8);
@@ -281,7 +289,7 @@
       padding-left: var(--space-4);
     }
 
-    /* body — asymmetric: context sidebar | built dominant */
+    /* body: asymmetric: context sidebar | built dominant */
     .work-body {
       padding-left: calc(3ch + var(--space-2));
       display: grid;
@@ -643,6 +651,7 @@
         <div>
           <h1 class="site-name">Nicholas<br>Carrera</h1>
           <p class="site-role">Creative Technologist &nbsp;&middot;&nbsp; UX Designer &nbsp;&middot;&nbsp; Developer</p>
+          <p class="site-line">I build bound systems so the work inside them can be boundless.</p>
         </div>
         <div class="site-meta">
           <div>Chicago, IL</div>
@@ -696,13 +705,14 @@
         type: "Creative Tech",
         role: "Design + Development",
         org: "MADMADHOUSE Collective",
-        context: "Four years of the DJ collective&rsquo;s nights existed only as about 59 Instagram posts, with captions that never state the year. I designed and built a record a stranger can trust; Luis Arriaga, my co-lead, supplied the photography and the facts.",
+        hook: "Four years of our DJ collective lived in about 59 Instagram posts, with captions like &ldquo;SATURDAY SEPT 19&rdquo; and never a year.",
+        context: "Luis Arriaga and I run MADMADHOUSE out of Aurora and Chicago, and we wanted talent buyers to take us seriously on our own turf. Luis brought the show history while I designed and built the pipeline and site end to end.",
         did: [
-          "Treated the Instagram harvest as a contract: it counted as done only when a validator reconciled every post and every failure against the account&rsquo;s own post count. Tested against 8 planted failure modes, it caught all 8.",
-          "Recovered the dates the captions never gave by decoding the timestamp inside each post&rsquo;s shortcode. Checked against the 21 captions that state a weekday, it matched 21 of 21.",
-          "Kept the interface quiet so the flyers carry the color: posters develop as they load, and a draggable three-word nav lights up only when the pointer circles or shakes.",
+          "Wrote a Python manifest validator tested against 8 planted faults, which immediately caught that Instagram&rsquo;s alt text was blank before anything failed silently.",
+          "Decoded the millisecond timestamp hidden inside each Instagram shortcode to recover missing years without API calls, matching the weekday on all 21 captions that named a day.",
+          "Stripped the nav to bare type you can drag anywhere, for the modular feel and so you can put it where you can reach it. When you lose it, circle the pointer and it lights up.",
         ],
-        outcome: "Live at madmadhouse.com and in use. The booking CV is computed from the archive (44 nights, 21 venues, 3 cities, 27 DJs).",
+        outcome: "The archive and live booking sheet at madmadhouse.com now compute 44 nights across 21 venues straight from our verified flyer data.",
         stack: ["Vite", "React 19", "TypeScript", "GSAP", "Lenis", "Python", "Cloudflare"],
         links: {
           live: "https://madmadhouse.com",
@@ -719,13 +729,14 @@
         type: "AI Research",
         role: "Solo",
         org: "DePaul University",
-        context: "No existing system mapped abstract language (&ldquo;smoothness,&rdquo; &ldquo;complexity,&rdquo; &ldquo;compulsive&rdquo;) to structured 3D form in a semantically meaningful way. Sole developer and researcher in a DePaul URAP assistantship advised by Nathan Koch (Creative Technologies), investigating whether LLMs reason about geometry or pattern-match from training data.",
+        hook: "Claude Opus described &ldquo;compulsive&rdquo; as a tightly wound double helix, and my renderer still drew a bumpy sphere.",
+        context: "Nathan Koch and I bonded over generative electronic music and procedural visual art, and that set the research question: do language models actually reason about form when you hand them a word like &ldquo;smoothness&rdquo; or &ldquo;cowardice&rdquo;? Working solo under him for six months, I watched a local Mistral model collapse unrelated words into the same organic blob, so I had to find out whether the ceiling was the model or my pipeline.",
         did: [
-          "Ran prompt experiments across 4 LLMs (Mistral 7B, Claude Haiku/Sonnet/Opus), then held the architecture fixed and swapped only the model. Claude reasoned far more richly, but the rendered forms barely changed, which moved the bottleneck from the model to the renderer.",
-          "Built a FastAPI server with a provider registry (Anthropic API + Ollama, no code change to switch), SSE streaming of level-by-level results, and a persistent cache keyed on descriptor + model + template.",
-          "Rebuilt the render target in TouchDesigner with a six-topology baseShape dispatch, then continued independently as a public browser rebuild so anyone can keep testing the question.",
+          "Built a FastAPI server with a persistent cache, live SSE streaming, and a provider registry that switches between local Ollama models and the Anthropic API without code changes.",
+          "Held the renderer fixed and compared Mistral against Claude Haiku, Sonnet, and Opus, catching that our 7-number schema discarded the model&rsquo;s shape descriptions before rendering.",
+          "Replaced the sphere deformer with a WebSocket bridge to TouchDesigner&rsquo;s Script SOP, routing the model&rsquo;s discarded shape field into 6 procedural mesh builders including helices, crystals, and L-systems.",
         ],
-        outcome: "Two-quarter DePaul URAP research assistantship (Fall 2025, Winter 2026). Completed: sphere-constrained prompts rated 9/10 for creative quality vs. 4&ndash;5/10 for an open base, and a controlled model comparison found the real bottleneck wasn&rsquo;t reasoning quality (Claude reasoned richly) but the 7-parameter schema discarding everything the model said about form. That&rsquo;s the finding the panel below is built to keep testing.",
+        outcome: "A five-dollar Claude API test showed the bottleneck was my 7-number JSON schema, not the model: it threw away the shape the model described. I rebuilt the renderer around that field in TouchDesigner and on the web. Across models, &ldquo;compulsive&rdquo; reads best as a range, from a calm, simple form at low intensity to a self-inverting matrix of vertices at the top.",
         dataHTML: `
   <div class="urap-demo">
     <div class="urap-controls">
@@ -766,14 +777,15 @@
         type: "UX Design",
         role: "Team of 4",
         org: "DePaul × Caterpillar",
-        context: "UXD Capstone at DePaul (Jan&ndash;Jun 2026), Team 6 with Joelle Szatkowski, Ally Ohr, and Sanya Verma, partnered with Caterpillar. Operator ID adoption across the fleet sat below 5%. Guest Mode had become the de facto standard, so machines ran anonymously and collected nameless data.",
+        hook: "Caterpillar wanted a faster login screen, until we found rental dealers hiding the login fobs under the cab seats.",
+        context: "Across Caterpillar&rsquo;s fleet, Operator ID adoption sat below 5% because contractors defaulted to anonymous Guest Mode. On a four-person DePaul capstone team with Joelle Szatkowski, Ally Ohr, and Sanya Verma, I led the systems reframe and our stakeholder walkthrough.",
         did: [
-          "On-site field research at Cat&rsquo;s demo and training center found the failure was motivation, not usability: in a reprimand-heavy culture, logging in created a record and returned nothing, and dealers hid login fobs under rental seats so nobody would call for codes.",
-          "Led the team&rsquo;s systems-level reframe from &ldquo;how do we make login easier?&rdquo; to &ldquo;why should operators log in at all?&rdquo; and designed backwards from the answer.",
-          "Contributed to a three-layer architecture (identity, authorization, session) and a 10-flow hi-fi prototype, then led the stakeholder walkthrough with Cat UX; a technical review with a Cat onboard-systems expert caught three gaps.",
+          "Led our shift to designing backwards from one question: why would an operator log in at all? Our answer: job-site performance telemetry, and machine settings saved to a profile that follows you to any machine in the fleet. Guest Mode still runs the machine; it just gets neither.",
+          "Ran a competitor analysis of Tesla and Toast: took Tesla&rsquo;s instant personalization and Toast&rsquo;s shift-based tap-in, and kept what neither has and Cat needs, offline sign-in and role-based access.",
+          "Designed the full sign-in experience through to the main display grid, with search in place of menu diving. After the review I rebuilt the status bar (cloud or offline, date and time, machine, operator) and designed the in-cab NFC reader symbol.",
         ],
-        outcome: "Reframed a years-old adoption failure from a usability problem into a trust and value-exchange problem, a diagnosis Cat stakeholders validated. A validated concept and systems design, not a shipped product: the SMS back end and the excavator&rsquo;s portrait display stayed open, and it was never tested with operators outside the design conversations.",
-        stack: ["Field Research", "Heuristic Evaluation", "Stakeholder Interviews", "Systems Architecture", "Service Blueprinting", "Userflow Mapping", "Figma"],
+        outcome: "Our four-person DePaul team delivered a cloud-to-cab authentication architecture and prototype that Caterpillar&rsquo;s onboard systems expert said was getting close to something worth starting to implement. His review caught 3 gaps, including a tap prompt that pointed at the screen when the reader sits outside it. We never got to test the prototype with working operators outside our interviews, and the portrait excavator display remained open when the quarter ended.",
+        stack: ["Field Research", "Heuristic Evaluation", "Stakeholder Interviews", "Systems Architecture", "Competitor Analysis", "Service Blueprinting", "Userflow Mapping", "Figma"],
         links: {},
         images: [
           { src: "public/media/caterpillar/flows.jpg", caption: "Three flows on the in-cab display: operator sign-in, Guest Mode, adding an operator offline" },
@@ -787,13 +799,14 @@
         type: "Creative Tech",
         role: "Solo",
         org: "Public Installation · Chicago",
-        context: "Translated the Urban Displacement Project's Chicago Gentrification and Displacement dataset (1990–2018) into an animated, code-driven light visualization deployed to the Wabash Lights, a public art installation spanning the underside of the CTA elevated tracks in downtown Chicago.",
+        hook: "How do you put decades of Chicago displacement data onto an LED rail under the L tracks without flattening the neighborhood?",
+        context: "The Urban Displacement Project tracks decades of Chicago gentrification tract by tract, yet that research sits in academic CSVs that people priced out of their neighborhoods never see. Working solo at DePaul, I had to translate those census tables onto an overhead strip of lights with zero text, axes, or legends.",
         did: [
-          "Designed a composite statistical metric (Renter-to-Owner Ratio Shift) from 6 key variables across the UDP Chicago Typology Output, then applied mean/median/standard deviation analysis at the census tract level to group neighborhoods into 8 typology levels spanning gentrification and exclusivity.",
-          "Built the source animation in P5.js constrained to the physical grid of the installation: 4 rails, each exactly 1px tall by 468px wide. Used a 10x pixel multiplier to make individual nodes visible at scale. Warm-toned particles (owner-dominant typologies) travel right; cool-toned particles (gentrifying typologies) travel left. Collision flashes yellow.",
-          "Framed the technical work through a critical lens: interrogating what data can and can't say about displaced communities, and designing visual abstraction that honored the weight of the underlying story.",
+          "Started with eight neighborhoods, one at each end of the four rails, then dropped it: eight still left out most of the city. I reorganized the piece around a housing life cycle instead, from family to younger owner to renter to student or early career.",
+          "Cleaned the wide census tables by hand, reconciling tract crosswalks, margins of error, and missing values across 4 census vintages in Tableau and code.",
+          "Wrote the p5.js sketch for four label-free LED rails: warm light runs one way, cool light the other, and a yellow pixel flashes where they meet, a collision I designed in.",
         ],
-        outcome: "Saw the work go live on the Wabash Lights installation in downtown Chicago, making decades of housing displacement legible across a public urban canvas. Developed a methodology for translating human-centered datasets into spatial visual form bridging statistical rigor, code-driven animation, and data ethics.",
+        outcome: "Professor Leanne Wagner approved the piece to run live on the Wabash Lights installation under the CTA tracks in Chicago&rsquo;s Loop. After the class demo I brought friends back to see it twice more. It no longer runs today, and the clip here is the only footage.",
         mediaHTML: `
   <div class="wabash-media">
     <div class="wabash-irl-wrap">
@@ -912,13 +925,14 @@
         </div>
         <div class="work-sub">${p.type} &nbsp;&middot;&nbsp; ${p.role} &nbsp;&middot;&nbsp; ${p.org}</div>
         <div class="work-outcome-lead">
-          <p class="work-label">Outcome</p>
-          <p class="work-outcome">${p.outcome}</p>
+          <p class="work-outcome">${p.hook}</p>
         </div>
         ${mediaHTML}
         <div class="work-body">
           <div>
-            <p class="work-label">Context</p>
+            <p class="work-label">Outcome</p>
+            <p class="work-text">${p.outcome}</p>
+            <p class="work-label work-label-gap">Context</p>
             <p class="work-text">${p.context}</p>
           </div>
           <div class="work-did">
@@ -1056,7 +1070,7 @@
       const pauseBtn = document.getElementById('wsrc-pause');
 
       wrap.addEventListener('click', e => {
-        if (e.target.closest('a')) return;                   // P5.js link — let browser open it
+        if (e.target.closest('a')) return;                   // P5.js link, let browser open it
         if (e.target.closest('[data-action="restart"]')) {
           vid.currentTime = 0; vid.play().catch(() => {}); return;
         }
