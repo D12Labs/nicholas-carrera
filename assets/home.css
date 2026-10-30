@@ -40,29 +40,59 @@
 .card-media > video,
 .card-media > canvas { visibility: visible; }
 
-/* CAT: a coded in-cab display. The device is physical, so its colours do not follow the theme. */
-.card-media.is-screen { display: grid; place-items: center; padding: 8% 10%; }
-.bezel {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  padding: 2.4%;
-  background: #1d1d1d;
-  border-radius: 14px;
-  box-shadow: 0 1px 0 #3a3a3a inset, 0 18px 40px -20px rgba(0, 0, 0, 0.6);
+/* CAT: the team's NFC screen on an in-cab display, floating in a grid world.
+   The scene is a physical space, so its colours do not follow the theme. */
+.card-media.is-cab {
+  --px: 0; --py: 0;
+  background: radial-gradient(ellipse 80% 70% at 50% 40%, #222426 0%, #111213 60%, #0a0a0b 100%);
+  perspective: 900px;
+  overflow: hidden;
 }
-.screen {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 4% 5%;
-  background: #0d0f10;
-  color: #e9ece8;
-  border-radius: 4px;
+.cab-world { position: absolute; inset: 0; transform-style: preserve-3d; }
+.cab-floor, .cab-wall {
+  position: absolute;
+  background-image:
+    linear-gradient(rgba(242, 195, 0, 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(242, 195, 0, 0.5) 1px, transparent 1px);
+  background-size: 40px 40px;
 }
-.screen-bar { display: flex; justify-content: space-between; font-size: 11px; letter-spacing: 0.04em; color: #a9aea8; }
-.screen-bar b { color: #f2c300; font-weight: 700; }
-.screen p { font-family: var(--display); font-size: var(--step-2); line-height: 1.25; letter-spacing: -0.01em; max-width: 26ch; }
+.cab-floor {
+  left: -50%; right: -50%; top: 58%; height: 140%;
+  transform-origin: top center;
+  transform: rotateX(72deg);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 25%, transparent 80%);
+  animation: cab-drift 6s linear infinite;
+}
+.cab-wall {
+  inset: -10% -20% 42% -20%;
+  background-image:
+    linear-gradient(rgba(233, 236, 232, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(233, 236, 232, 0.12) 1px, transparent 1px);
+  transform: translateZ(-260px);
+}
+@keyframes cab-drift { to { background-position: 0 40px; } }
+.cab-monitor {
+  position: absolute; left: 50%; top: 47%; width: 62%;
+  transform: translate(-50%, -50%) rotateX(calc(4deg - var(--py) * 8deg)) rotateY(calc(-16deg + var(--px) * 14deg));
+  transform-style: preserve-3d;
+  transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.cab-bezel {
+  padding: 3.2% 3.2% 4%;
+  background: linear-gradient(160deg, #3a3b3d 0%, #1d1e1f 40%, #121314 100%);
+  border-radius: 12px;
+  box-shadow: 0 1px 0 #4a4b4d inset, 6px 6px 0 #0c0c0d, 0 30px 60px -12px rgba(0, 0, 0, 0.8);
+}
+.cab-bezel img { display: block; width: 100%; height: auto; border-radius: 3px; box-shadow: 0 0 0 2px #050505; }
+.cab-arm {
+  position: absolute; left: 50%; top: 100%; width: 9%; height: 46%;
+  transform: translateX(-50%) translateZ(-30px);
+  background: linear-gradient(90deg, #151617, #2b2c2e 50%, #151617);
+}
+@media (prefers-reduced-motion: reduce) {
+  .cab-floor { animation: none; }
+  .cab-monitor { transition: none; }
+}
 
 .card-media.is-empty {
   display: flex;

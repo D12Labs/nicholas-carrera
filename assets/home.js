@@ -100,12 +100,12 @@
     let media;
     if (c.grid === 'urap') {
       media = `<div class="card-media" data-urap><canvas aria-hidden="true"></canvas></div>`;
-    } else if (c.grid === 'screen') {
-      // a coded in-cab display: bezel, status row, the card's sentence on the screen
-      media = `<div class="card-media is-screen"><div class="bezel" aria-hidden="true"><div class="screen">
-          <span class="screen-bar"><b>CAT</b><span>Operator sign-in</span></span>
-          <p>${esc(c.sentence)}</p>
-        </div></div></div>`;
+    } else if (c.grid === 'cab') {
+      // the team's idle NFC screen on an in-cab display, floating in a grid world
+      media = `<div class="card-media is-cab" data-cab role="img" aria-label="The team's NFC sign-in screen on an in-cab display">
+          <div class="cab-world" aria-hidden="true"><div class="cab-wall"></div><div class="cab-floor"></div>
+          <div class="cab-monitor"><div class="cab-bezel"><img src="public/media/caterpillar/cab-idle.webp" width="800" height="446" alt="" decoding="async"></div><div class="cab-arm"></div></div></div>
+        </div>`;
     } else if (c.grid.video) {
       const v = c.grid;
       media = `<div class="card-media"><video class="is-on" src="${v.src || v.video}" poster="${v.poster}" width="${v.w}" height="${v.h}" muted loop playsinline preload="${i > 1 ? 'none' : 'auto'}" aria-label="${esc(v.alt)}"></video></div>`;
@@ -133,6 +133,17 @@
       const names = Object.keys(PRESETS);
       let k = names.indexOf('complexity');
       carousels.push({ el: li, delay: i * STAGGER_MS, step: () => { k = (k + 1) % names.length; sk.set('descriptor', names[k]); }, sketch: sk });
+    } else if (c.grid === 'cab') {
+      // pointer parallax on fine pointers: the scene tilts toward the cursor
+      if (matchMedia('(pointer: fine)').matches) {
+        box.addEventListener('pointermove', e => {
+          if (reduceMotion.matches) return;
+          const r = box.getBoundingClientRect();
+          box.style.setProperty('--px', ((e.clientX - r.left) / r.width - 0.5).toFixed(3));
+          box.style.setProperty('--py', ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
+        });
+        box.addEventListener('pointerleave', () => { box.style.removeProperty('--px'); box.style.removeProperty('--py'); });
+      }
     } else if (c.grid.video) {
       // a single looping clip: the same pause rules, applied as play and pause
       const vid = box.querySelector('video');

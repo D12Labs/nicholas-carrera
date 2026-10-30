@@ -2,7 +2,7 @@
 // copy-drafts/CARDS-v3-detail.md (cards 01 to 04, 07, 12). Edit there first, then here.
 //
 // grid:   still frames for the auto carousel on the home card (hard cut, no transition).
-// grid can also be { video, poster } (one looping clip), "urap" (live sketch) or "screen" (coded display).
+// grid can also be { video, poster } (one looping clip), "urap" (live sketch) or "cab" (3D cab-display scene).
 // media:  1 to 3 items for the detail card panel. type: image | video | flow | urap.
 //         video: sound = has a score (controls, no autoplay); pixel = keep LED pixels crisp.
 // fit:    "contain" keeps the whole frame on the grid card (posters); default crops to fill.
@@ -28,7 +28,7 @@ window.CARDS = [
     media: [
       { type: "video", src: "public/media/madmadhouse/archive-scroll.mp4", poster: "public/media/madmadhouse/archive-scroll-poster.webp", w: 960, h: 600, caption: "The archive on madmadhouse.com" },
       { type: "image", src: "public/media/madmadhouse/info-light.webp", w: 1440, h: 900, caption: "About the collective, on the Info page" },
-      { type: "image", src: "public/media/madmadhouse/cv-light.webp", w: 1440, h: 900, caption: "The booking CV, computed from the archive" },
+      { type: "image", src: "public/media/madmadhouse/whistler-light.webp", w: 1440, h: 900, caption: "The latest night: The Whistler, 1 Nov 2026" },
     ],
   },
   {
@@ -100,12 +100,12 @@ window.CARDS = [
     ],
     credit: "Team of four with Joelle Szatkowski, Ally Ohr, and Sanya Verma.",
     links: [],
-    // Grid tile is a coded in-cab display with the card's sentence on it; the detail keeps the three screens.
-    grid: "screen",
+    // Grid tile: the team's idle NFC screen on a cab display in a 3D grid scene; the detail shows the original full screens.
+    grid: "cab",
     media: [
-      { type: "image", src: "public/media/caterpillar/01-operator-sign-in.webp", w: 1600, h: 1066, caption: "Operator sign-in" },
-      { type: "image", src: "public/media/caterpillar/02-guest-mode.webp", w: 1600, h: 1066, caption: "Guest Mode" },
-      { type: "image", src: "public/media/caterpillar/03-offline-add-operator.webp", w: 1600, h: 1066, caption: "Adding an operator offline" },
+      { type: "image", src: "public/media/caterpillar/full-01-idle.webp", w: 1264, h: 704, caption: "Idle: locate the reader in the cab and tap" },
+      { type: "image", src: "public/media/caterpillar/full-02-guest-home.webp", w: 1264, h: 704, caption: "Guest Mode home, personal settings grayed out" },
+      { type: "image", src: "public/media/caterpillar/full-03-offline-confirm.webp", w: 1272, h: 712, caption: "Adding an operator offline, confirm access" },
     ],
   },
   {
