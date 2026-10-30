@@ -80,22 +80,27 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 .masthead {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: var(--space-5);
+  flex-direction: column;
+  gap: var(--space-4);
   padding: var(--space-6) 0 var(--space-8);
 }
+.masthead nav { display: flex; justify-content: flex-end; }
 
+/* Neue Haas Grotesk Text Bold, outlined, stretched and overlapped (sizing in frame.js).
+   Falls back to Helvetica Neue Bold, never a synthetic bold of the display cut. */
+.masthead h1 { width: 100%; }
 .wordmark {
   display: inline-block;
-  font-family: var(--display);
-  font-size: var(--step-2);
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  line-height: 1.1;
+  font-family: "neue-haas-grotesk-text", "Neue Haas Grotesk Text Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 10vw;
+  font-weight: 700;
+  line-height: 0.95;
+  white-space: nowrap;
   text-decoration: none;
+  transform-origin: left top;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: max(1px, 0.02em) var(--fg);
 }
-.wordmark img { height: 1.6em; width: auto; }
 
 .links {
   display: flex;
@@ -156,7 +161,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .colophon a:hover { text-decoration: underline; }
 
 @media (max-width: 640px) {
-  .masthead { flex-direction: column; padding-bottom: var(--space-7); }
+  .masthead { padding-bottom: var(--space-7); }
+  .masthead nav { justify-content: flex-start; }
   .links { gap: var(--space-4); }
 }
 
