@@ -86,6 +86,11 @@
   }
 
   // ─── GRID ──────────────────────────────────────────────────
+  // Frames wider than 900px ship a -700.webp sibling for phones and the two-column grid.
+  const SIZES = '(max-width: 760px) calc(100vw - 32px), 50vw';
+  const srcset = f => f.w > 900
+    ? ` srcset="${f.src.replace(/\.webp$/, '-700.webp')} 700w, ${f.src} ${f.w}w" sizes="${SIZES}"`
+    : '';
   const grid = document.getElementById('grid');
   const carousels = [];
 
@@ -99,7 +104,7 @@
       media = `<div class="card-media is-empty"><p>${esc(c.sentence)}</p></div>`;
     } else {
       media = `<div class="card-media">${c.grid.map((f, k) =>
-        `<img src="${f.src}" width="${f.w}" height="${f.h}" alt="${k ? '' : esc(f.alt)}"${k ? ' aria-hidden="true"' : ''} class="${k ? '' : 'is-on'}${f.fit === 'contain' ? ' is-contain' : ''}" ${k ? 'loading="lazy" ' : ''}decoding="async">`
+        `<img src="${f.src}"${srcset(f)} width="${f.w}" height="${f.h}" alt="${k ? '' : esc(f.alt)}"${k ? ' aria-hidden="true"' : ''} class="${k ? '' : 'is-on'}${f.fit === 'contain' ? ' is-contain' : ''}" ${k || i > 1 ? 'loading="lazy" ' : ''}${!k && !i ? 'fetchpriority="high" ' : ''}decoding="async">`
       ).join('')}</div>`;
     }
     li.innerHTML = `
@@ -172,7 +177,8 @@
   function mediaHTML(m) {
     if (m.type === 'image') return `<img src="${m.src}" width="${m.w}" height="${m.h}" alt="${esc(m.caption)}">`;
     if (m.type === 'video') {
-      const auto = reduceMotion.matches ? 'controls' : 'autoplay loop';
+      // Clips with sound (a score) show controls so the visitor can unmute; silent loops stay bare.
+      const auto = reduceMotion.matches ? 'controls' : `autoplay loop${m.sound ? ' controls' : ''}`;
       return `<video src="${m.src}" ${m.poster ? `poster="${m.poster}"` : ''} width="${m.w}" height="${m.h}" muted playsinline ${auto} aria-label="${esc(m.caption)}"></video>`;
     }
     if (m.type === 'flow') return `<div class="flow-slot" data-flow="${m.flow}"></div>`;

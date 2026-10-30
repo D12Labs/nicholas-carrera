@@ -158,7 +158,7 @@ window.CARDS = [
       { src: "public/media/substanz/poster-3.webp", w: 1082, h: 1400, alt: "Substanz poster", fit: "contain" },
     ],
     media: [
-      { type: "video", src: "public/media/substanz/teaser.mp4", poster: "public/media/substanz/teaser-poster.webp", w: 640, h: 480, caption: "From the site teaser I scored" },
+      { type: "video", src: "public/media/substanz/teaser.mp4", poster: "public/media/substanz/teaser-poster.webp", w: 640, h: 480, sound: true, caption: "From the site teaser I scored (unmute for the score)" },
       { type: "image", src: "public/media/substanz/poster-1.webp", w: 1082, h: 1400, caption: "Launch poster" },
       { type: "image", src: "public/media/substanz/poster-2.webp", w: 1082, h: 1400, caption: "Launch poster" },
     ],

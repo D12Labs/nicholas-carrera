@@ -119,6 +119,7 @@
   gap: var(--space-2);
   background: var(--bg);
 }
+.ctl { transition: background-color 0.15s, color 0.15s; }
 .ctl:hover { background: var(--fg); color: var(--bg); }
 .detail-bottom .mid { display: flex; gap: var(--space-2); }
 
@@ -177,7 +178,13 @@
   display: inline-flex; align-items: center; justify-content: center;
   border-radius: var(--radius);
 }
+.step { transition: background-color 0.15s, color 0.15s; }
 .step:hover { background: var(--fg); color: var(--bg); }
+@media (pointer: coarse) {
+  .ctl { min-height: 44px; padding: 0 var(--space-4); }
+  .step { width: 44px; height: 44px; }
+  .dmedia-bar { padding-top: var(--space-2); padding-bottom: var(--space-2); }
+}
 .expand {
   position: absolute;
   top: var(--space-3);

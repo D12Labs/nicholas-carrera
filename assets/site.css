@@ -104,6 +104,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-weight: 500;
 }
 .links a { text-decoration: none; }
+.links a, .theme-btn, .colophon a { transition: color 0.15s, text-decoration-color 0.15s; }
 .links a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
 
 .theme-btn {
@@ -156,4 +157,16 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 @media (max-width: 640px) {
   .masthead { flex-direction: column; padding-bottom: var(--space-7); }
   .links { gap: var(--space-4); }
+}
+
+/* touch: every tap target at least 44px tall, 8px apart */
+@media (pointer: coarse) {
+  .links { gap: var(--space-2) var(--space-4); }
+  .links a, .theme-btn { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
+  .wordmark { display: inline-flex; align-items: center; min-height: 44px; }
+  .colophon a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0s !important; }
 }
