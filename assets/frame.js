@@ -19,25 +19,27 @@
   syncTheme();
 
   // ─── WORDMARK ──────────────────────────────────────────────
-  // The name fills the masthead width as stroked, overlapping, stretched type.
-  // Wide screens stretch it most (so it reads squashed); phones overlap the letters most.
+  // The name is stroked, overlapping, stretched type at one fixed stretch (the SVG's 2.13).
+  // Only the kerning moves: narrow screens overlap the letters most, wide screens least.
+  // It spans the column on phones and stops at 60% of it from 641px up.
   const name = document.getElementById('wordmark');
+  const STRETCH = 2.13;
   const lerp = (a, b, t) => a + (b - a) * t;
   function fitName() {
-    const W = name.parentElement.clientWidth;
-    if (!W) return;
-    const t = Math.min(1, Math.max(0, (W - 340) / (1400 - 340)));
-    const stretch = lerp(1.15, 2.13, t);
-    name.style.letterSpacing = lerp(-0.14, -0.1, t).toFixed(3) + 'em';
+    const col = name.closest('.masthead').clientWidth;
+    if (!col) return;
+    const W = col > 640 ? col * 0.6 : col;
+    const t = Math.min(1, Math.max(0, (W - 340) / (760 - 340)));
+    name.style.letterSpacing = lerp(-0.12, -0.08, t).toFixed(3) + 'em';
     name.style.transform = 'none';
     name.style.fontSize = '100px';
-    const fs = (100 * W) / (name.offsetWidth * stretch);
+    const fs = (100 * W) / (name.offsetWidth * STRETCH);
     name.style.fontSize = fs.toFixed(2) + 'px';
-    name.style.transform = `scaleX(${stretch.toFixed(3)})`;
+    name.style.transform = `scaleX(${STRETCH})`;
   }
   if (name) {
     fitName();
-    new ResizeObserver(fitName).observe(name.parentElement);
+    new ResizeObserver(fitName).observe(name.closest('.masthead'));
     document.fonts?.ready.then(fitName);
   }
 

@@ -80,11 +80,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 .masthead {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-5);
   padding: var(--space-6) 0 var(--space-8);
 }
-.masthead nav { display: flex; justify-content: flex-end; }
 
 /* Neue Haas Grotesk Text Bold, outlined, stretched and overlapped (sizing in frame.js).
    Falls back to Helvetica Neue Bold, never a synthetic bold of the display cut. */
@@ -161,8 +161,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .colophon a:hover { text-decoration: underline; }
 
 @media (max-width: 640px) {
-  .masthead { padding-bottom: var(--space-7); }
-  .masthead nav { justify-content: flex-start; }
+  .masthead { flex-direction: column; padding-bottom: var(--space-7); }
+  .name-wrap { width: 100%; }
   .links { gap: var(--space-4); }
 }
 
