@@ -10,3 +10,5 @@ specs
 *.docx
 v2-site.html
 v2.css
+node_modules
+scripts

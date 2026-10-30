@@ -1,0 +1,159 @@
+/* nicholascarrera.com: shared tokens, type and page frame.
+   Contrast (WCAG, checked 2026-10-30): fg 16.7:1 day, 16.1:1 night; muted 6.4:1 day, 7.2:1 night
+   (5.7:1 and 6.4:1 on panel). Focus ring uses fg, so it clears 3:1 in both themes. */
+
+/* ─── TOKENS ─────────────────────────────────────────────── */
+:root {
+  --bg:     #f5f4f0;
+  --panel:  #e9e7e1;
+  --fg:     #141414;
+  --muted:  #5a5955;
+  --line:   #cfccc4;
+  --focus:  var(--fg);
+  --scrim:  var(--bg);
+
+  /* Neue Haas Grotesk arrives through the Adobe Fonts Web Project (see index.html head).
+     Until the kit is linked, the named system stack below carries the look. */
+  --sans: "neue-haas-grotesk-text", "Neue Haas Grotesk Text Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --display: "neue-haas-grotesk-display", "Neue Haas Grotesk Display Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  --step--1: 0.8125rem;   /* 13px: small labels */
+  --step-0:  1rem;        /* 16px: body */
+  --step-1:  1.1875rem;   /* 19px: card titles on phone */
+  --step-2:  clamp(1.1875rem, 0.9rem + 0.8vw, 1.5rem);    /* card titles */
+  --step-3:  clamp(1.75rem, 1.2rem + 2vw, 2.75rem);       /* detail titles */
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+
+  --gutter: clamp(16px, 3.2vw, 40px);
+  --max-w: 1680px;
+  --radius: 2px;
+  color-scheme: light;
+}
+
+:root[data-theme="night"] {
+  --bg:     #0f0f0e;
+  --panel:  #1c1c1a;
+  --fg:     #ecebe6;
+  --muted:  #a19f98;
+  --line:   #3a3935;
+  --scrim:  var(--bg);
+  color-scheme: dark;
+}
+
+/* ─── RESET ──────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans);
+  font-size: var(--step-0);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+img, video, canvas, svg { display: block; max-width: 100%; }
+a { color: inherit; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+
+/* ─── FRAME ──────────────────────────────────────────────── */
+.page {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.masthead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-5);
+  padding: var(--space-6) 0 var(--space-8);
+}
+
+.wordmark {
+  display: inline-block;
+  font-family: var(--display);
+  font-size: var(--step-2);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  text-decoration: none;
+}
+.wordmark img { height: 1.6em; width: auto; }
+
+.links {
+  display: flex;
+  gap: var(--space-5);
+  list-style: none;
+  font-size: var(--step-0);
+  font-weight: 500;
+}
+.links a { text-decoration: none; }
+.links a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+
+.theme-btn {
+  font-size: var(--step--1);
+  color: var(--muted);
+  padding: 2px 0;
+}
+.theme-btn:hover { color: var(--fg); }
+
+/* the "who" line under the name: follows the cursor on fine pointers,
+   sits static on touch and on keyboard focus */
+.who {
+  font-size: var(--step--1);
+  color: var(--muted);
+  margin-top: var(--space-2);
+  max-width: 40ch;
+}
+.who-float {
+  position: fixed;
+  left: 0; top: 0;
+  z-index: 50;
+  pointer-events: none;
+  max-width: 36ch;
+  padding: var(--space-2) var(--space-3);
+  background: var(--fg);
+  color: var(--bg);
+  font-size: var(--step--1);
+  line-height: 1.4;
+  border-radius: var(--radius);
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+.who-float.is-on { opacity: 1; }
+@media (hover: hover) and (pointer: fine) {
+  .name-wrap:not(:focus-within) .who { display: none; }
+}
+
+.colophon {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-9) 0 var(--space-6);
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+.colophon a { color: var(--fg); text-decoration: none; }
+.colophon a:hover { text-decoration: underline; }
+
+@media (max-width: 640px) {
+  .masthead { flex-direction: column; padding-bottom: var(--space-7); }
+  .links { gap: var(--space-4); }
+}
