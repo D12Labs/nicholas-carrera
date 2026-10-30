@@ -101,13 +101,10 @@ window.CARDS = [
     ],
     credit: "Team of four with Joelle Szatkowski, Ally Ohr, and Sanya Verma.",
     links: [],
-    // Grid tile: the team's idle NFC screen on a cab display in a 3D grid scene; the detail shows the original full screens.
+    // Grid tile: the team's screens cycling on a cab display in a 3D grid scene.
+    // Detail: every screen from the team's flow viewer, in flow order (data/cat-screens.js).
     grid: "cab",
-    media: [
-      { type: "image", src: "public/media/caterpillar/full-01-idle.webp", w: 1264, h: 704, round: true, caption: "Idle: locate the reader in the cab and tap" },
-      { type: "image", src: "public/media/caterpillar/full-02-guest-home.webp", w: 1264, h: 704, round: true, caption: "Guest Mode home, personal settings grayed out" },
-      { type: "image", src: "public/media/caterpillar/full-03-offline-confirm.webp", w: 1272, h: 712, round: true, caption: "Adding an operator offline, confirm access" },
-    ],
+    media: window.CAT_SCREENS || [],
   },
   {
     slug: "cocotazo",

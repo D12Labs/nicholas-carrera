@@ -101,10 +101,10 @@
     if (c.grid === 'urap') {
       media = `<div class="card-media" data-urap><canvas aria-hidden="true"></canvas></div>`;
     } else if (c.grid === 'cab') {
-      // the team's idle NFC screen on an in-cab display, floating in a grid world
-      media = `<div class="card-media is-cab" data-cab role="img" aria-label="The team's NFC sign-in screen on an in-cab display">
+      // the team's screens on an in-cab display, floating in a grid world
+      media = `<div class="card-media is-cab" data-cab role="img" aria-label="The team's sign-in screens cycling on an in-cab display">
           <div class="cab-world" aria-hidden="true"><div class="cab-wall"></div><div class="cab-floor"></div>
-          <div class="cab-monitor"><div class="cab-bezel"><img src="public/media/caterpillar/cab-idle.webp" width="800" height="446" alt="" decoding="async"></div><div class="cab-arm"></div></div></div>
+          <div class="cab-monitor"><div class="cab-bezel"><img src="${c.media[0]?.src}" width="1264" height="704" alt="" decoding="async"></div><div class="cab-arm"></div></div></div>
         </div>`;
     } else if (c.grid.video) {
       const v = c.grid;
@@ -134,6 +134,18 @@
       let k = names.indexOf('complexity');
       carousels.push({ el: li, delay: i * STAGGER_MS, step: () => { k = (k + 1) % names.length; sk.set('descriptor', names[k]); }, sketch: sk });
     } else if (c.grid === 'cab') {
+      // the display cycles every screen; one img, its src swapped, the next one prefetched
+      const shot = box.querySelector('.cab-bezel img');
+      const screens = c.media;
+      let k = 0;
+      if (screens.length > 1) {
+        new Image().src = screens[1].src;
+        carousels.push({ el: li, delay: i * STAGGER_MS, step: () => {
+          k = (k + 1) % screens.length;
+          shot.src = screens[k].src;
+          new Image().src = screens[(k + 1) % screens.length].src;
+        } });
+      }
       // pointer parallax on fine pointers: the scene tilts toward the cursor
       if (matchMedia('(pointer: fine)').matches) {
         box.addEventListener('pointermove', e => {
@@ -233,6 +245,9 @@
     demo?.pause(); demo = null;
     const m = c.media[mIndex];
     stage.innerHTML = mediaHTML(m);
+    // long image runs (CAT): fetch the next frame so the hard cut does not wait on the network
+    const nx = c.media[(mIndex + 1) % c.media.length];
+    if (c.media.length > 3 && nx.type === 'image') new Image().src = nx.src;
     dlg.querySelector('.dmedia-bar .cap').textContent = m.caption || '';
     const n = dlg.querySelector('.dmedia-bar .n');
     if (n) n.textContent = `${String(mIndex + 1).padStart(2, '0')} / ${String(c.media.length).padStart(2, '0')}`;
