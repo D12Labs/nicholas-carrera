@@ -99,7 +99,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   text-decoration: none;
   transform-origin: left top;
   -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: max(1px, 0.02em) var(--fg);
+  -webkit-text-stroke: max(0.75px, 0.012em) var(--fg);
 }
 
 .links {
