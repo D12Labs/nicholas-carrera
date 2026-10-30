@@ -2,7 +2,9 @@
 // copy-drafts/CARDS-v3-detail.md (cards 01 to 04, 07, 12). Edit there first, then here.
 //
 // grid:   still frames for the auto carousel on the home card (hard cut, no transition).
+// grid can also be { video, poster } (one looping clip), "urap" (live sketch) or "screen" (coded display).
 // media:  1 to 3 items for the detail card panel. type: image | video | flow | urap.
+//         video: sound = has a score (controls, no autoplay); pixel = keep LED pixels crisp.
 // fit:    "contain" keeps the whole frame on the grid card (posters); default crops to fill.
 window.CARDS = [
   {
@@ -22,16 +24,11 @@ window.CARDS = [
     ],
     credit: "Co-run with Luis Arriaga, who brought the show history.",
     links: [{ label: "madmadhouse.com", href: "https://madmadhouse.com" }],
-    grid: [
-      { src: "public/media/madmadhouse/madmadhouse-poster.webp", w: 1280, h: 800, alt: "The MADMADHOUSE archive: a grid of flyers" },
-      { src: "public/media/madmadhouse/still-archive-grid.webp", w: 1440, h: 900, alt: "Archive grid of flyers on madmadhouse.com" },
-      { src: "public/media/madmadhouse/still-night-carmines-presented.webp", w: 1440, h: 900, alt: "One night's page: Carmine's, Chicago" },
-      { src: "public/media/madmadhouse/still-night-market96.webp", w: 1440, h: 900, alt: "One night's page: Market 96" },
-    ],
+    grid: { video: "public/media/madmadhouse/archive-scroll.mp4", poster: "public/media/madmadhouse/archive-scroll-poster.webp", w: 960, h: 600, alt: "Scrolling the MADMADHOUSE flyer archive" },
     media: [
-      { type: "video", src: "public/media/madmadhouse/madmadhouse.mp4", poster: "public/media/madmadhouse/madmadhouse-poster.webp", w: 1280, h: 800, caption: "The archive on madmadhouse.com" },
-      { type: "image", src: "public/media/madmadhouse/archive.webp", w: 1280, h: 372, caption: "A poster develops under the pointer" },
-      { type: "flow", flow: "madmadhouse", caption: "The pipeline, from Instagram to the site" },
+      { type: "video", src: "public/media/madmadhouse/archive-scroll.mp4", poster: "public/media/madmadhouse/archive-scroll-poster.webp", w: 960, h: 600, caption: "The archive on madmadhouse.com" },
+      { type: "image", src: "public/media/madmadhouse/info-light.webp", w: 1440, h: 900, caption: "About the collective, on the Info page" },
+      { type: "image", src: "public/media/madmadhouse/cv-light.webp", w: 1440, h: 900, caption: "The booking CV, computed from the archive" },
     ],
   },
   {
@@ -83,7 +80,7 @@ window.CARDS = [
     ],
     media: [
       { type: "video", src: "public/media/wabash/irl.mp4", poster: "public/media/wabash/irl-thumb.webp", w: 1280, h: 720, caption: "Live on the rails under the L" },
-      { type: "video", src: "public/media/wabash/wabashlights_source.mp4", w: 4680, h: 40, caption: "The source animation, one row per rail" },
+      { type: "video", src: "public/media/wabash/source-stacked.mp4", w: 584, h: 412, pixel: true, caption: "The source animation: four rails, cut into eight lengths to fit" },
     ],
   },
   {
@@ -103,11 +100,8 @@ window.CARDS = [
     ],
     credit: "Team of four with Joelle Szatkowski, Ally Ohr, and Sanya Verma.",
     links: [],
-    grid: [
-      { src: "public/media/caterpillar/01-operator-sign-in.webp", w: 1600, h: 1066, alt: "In-cab display: operator sign-in" },
-      { src: "public/media/caterpillar/02-guest-mode.webp", w: 1600, h: 1066, alt: "In-cab display: Guest Mode" },
-      { src: "public/media/caterpillar/03-offline-add-operator.webp", w: 1600, h: 1066, alt: "In-cab display: adding an operator offline" },
-    ],
+    // Grid tile is a coded in-cab display with the card's sentence on it; the detail keeps the three screens.
+    grid: "screen",
     media: [
       { type: "image", src: "public/media/caterpillar/01-operator-sign-in.webp", w: 1600, h: 1066, caption: "Operator sign-in" },
       { type: "image", src: "public/media/caterpillar/02-guest-mode.webp", w: 1600, h: 1066, caption: "Guest Mode" },
@@ -151,16 +145,10 @@ window.CARDS = [
     ],
     credit: "",
     links: [{ label: "substanzmagazine.com", href: "https://substanzmagazine.com" }],
-    grid: [
-      { src: "public/media/substanz/poster-1.webp", w: 1082, h: 1400, alt: "Substanz poster: Coming sumtime soon", fit: "contain" },
-      { src: "public/media/substanz/teaser-poster.webp", w: 640, h: 480, alt: "A frame from the Substanz teaser" },
-      { src: "public/media/substanz/poster-2.webp", w: 1082, h: 1400, alt: "Substanz poster", fit: "contain" },
-      { src: "public/media/substanz/poster-3.webp", w: 1082, h: 1400, alt: "Substanz poster", fit: "contain" },
-    ],
+    grid: { video: "public/media/substanz/site-scroll.mp4", poster: "public/media/substanz/site-scroll-poster.webp", w: 1280, h: 800, alt: "Scrolling substanzmagazine.com" },
     media: [
-      { type: "video", src: "public/media/substanz/teaser.mp4", poster: "public/media/substanz/teaser-poster.webp", w: 640, h: 480, sound: true, caption: "From the site teaser I scored (unmute for the score)" },
-      { type: "image", src: "public/media/substanz/poster-1.webp", w: 1082, h: 1400, caption: "Launch poster" },
-      { type: "image", src: "public/media/substanz/poster-2.webp", w: 1082, h: 1400, caption: "Launch poster" },
+      { type: "video", src: "public/media/substanz/site-scroll.mp4", poster: "public/media/substanz/site-scroll-poster.webp", w: 1280, h: 800, caption: "substanzmagazine.com" },
+      { type: "video", src: "public/media/substanz/teaser-full.mp4", poster: "public/media/substanz/teaser-full-poster.webp", w: 640, h: 480, sound: true, caption: "The site teaser, with my score" },
     ],
   },
 ];

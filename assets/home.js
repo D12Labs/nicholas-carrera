@@ -100,6 +100,15 @@
     let media;
     if (c.grid === 'urap') {
       media = `<div class="card-media" data-urap><canvas aria-hidden="true"></canvas></div>`;
+    } else if (c.grid === 'screen') {
+      // a coded in-cab display: bezel, status row, the card's sentence on the screen
+      media = `<div class="card-media is-screen"><div class="bezel" aria-hidden="true"><div class="screen">
+          <span class="screen-bar"><b>CAT</b><span>Operator sign-in</span></span>
+          <p>${esc(c.sentence)}</p>
+        </div></div></div>`;
+    } else if (c.grid.video) {
+      const v = c.grid;
+      media = `<div class="card-media"><video class="is-on" src="${v.src || v.video}" poster="${v.poster}" width="${v.w}" height="${v.h}" muted loop playsinline preload="${i > 1 ? 'none' : 'auto'}" aria-label="${esc(v.alt)}"></video></div>`;
     } else if (!c.grid.length) {
       media = `<div class="card-media is-empty"><p>${esc(c.sentence)}</p></div>`;
     } else {
@@ -124,6 +133,10 @@
       const names = Object.keys(PRESETS);
       let k = names.indexOf('complexity');
       carousels.push({ el: li, delay: i * STAGGER_MS, step: () => { k = (k + 1) % names.length; sk.set('descriptor', names[k]); }, sketch: sk });
+    } else if (c.grid.video) {
+      // a single looping clip: the same pause rules, applied as play and pause
+      const vid = box.querySelector('video');
+      carousels.push({ el: li, delay: 0, step: () => {}, clip: vid });
     } else if (c.grid.length > 1) {
       const frames = [...box.querySelectorAll('img')];
       let k = 0;
@@ -152,10 +165,11 @@
   function sync(cz) {
     const stop = paused(cz);
     if (stop && cz.timer) { clearTimeout(cz.timer); clearInterval(cz.timer); cz.timer = 0; }
-    if (!stop && !cz.timer) {
+    if (!stop && !cz.timer && !cz.clip) {
       cz.timer = setTimeout(() => { cz.step(); cz.timer = setInterval(cz.step, CUT_MS); }, CUT_MS + cz.delay);
     }
     if (cz.sketch) stop ? cz.sketch.pause() : cz.sketch.play();
+    if (cz.clip) stop ? cz.clip.pause() : cz.clip.play().catch(() => {});
   }
   const syncAll = () => carousels.forEach(sync);
   const io = new IntersectionObserver(entries => entries.forEach(e => {
@@ -167,6 +181,10 @@
   reduceMotion.addEventListener?.('change', syncAll);
 
   // ─── DETAIL CARD ───────────────────────────────────────────
+  // Expand and collapse glyphs: Lucide "maximize-2" and "minimize-2" (ISC licence), 1.5px stroke.
+  const svg = d => `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true">${d}</svg>`;
+  const ICON_EXPAND = svg('<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>');
+  const ICON_COLLAPSE = svg('<path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/>');
   const dlg = document.createElement('dialog');
   dlg.className = 'detail';
   dlg.setAttribute('aria-labelledby', 'dtitle');
@@ -178,8 +196,10 @@
     if (m.type === 'image') return `<img src="${m.src}" width="${m.w}" height="${m.h}" alt="${esc(m.caption)}">`;
     if (m.type === 'video') {
       // Clips with sound (a score) show controls so the visitor can unmute; silent loops stay bare.
-      const auto = reduceMotion.matches ? 'controls' : `autoplay loop${m.sound ? ' controls' : ''}`;
-      return `<video src="${m.src}" ${m.poster ? `poster="${m.poster}"` : ''} width="${m.w}" height="${m.h}" muted playsinline ${auto} aria-label="${esc(m.caption)}"></video>`;
+      // A clip with a score waits for play, with sound; silent loops autoplay muted.
+      const attrs = m.sound ? 'controls preload="metadata"'
+        : reduceMotion.matches ? 'muted controls' : 'muted autoplay loop';
+      return `<video src="${m.src}" ${m.poster ? `poster="${m.poster}"` : ''} width="${m.w}" height="${m.h}" playsinline ${attrs}${m.pixel ? ' class="is-pixel"' : ''} aria-label="${esc(m.caption)}"></video>`;
     }
     if (m.type === 'flow') return `<div class="flow-slot" data-flow="${m.flow}"></div>`;
     if (m.type === 'urap') return `
@@ -232,7 +252,7 @@
         <article class="dcard${hasMedia ? '' : ' no-media'}">
           ${hasMedia ? `
           <section class="dmedia" aria-label="Media">
-            <button class="ctl expand" data-act="expand" type="button" aria-pressed="false">Expand</button>
+            <button class="ctl expand icon" data-act="expand" type="button" aria-pressed="false" aria-label="Expand media">${ICON_EXPAND}</button>
             <div class="dmedia-stage"></div>
             <div class="dmedia-bar">
               <span class="cap"></span>
@@ -309,10 +329,17 @@
       renderMedia();
     } else if (act === 'expand') {
       const card = dlg.querySelector('.dcard');
-      const on = card.classList.toggle('is-expanded');
-      b.setAttribute('aria-pressed', String(on));
-      b.textContent = on ? 'Collapse' : 'Expand';
-      demo?.redraw();
+      const flip = () => {
+        const on = card.classList.toggle('is-expanded');
+        b.setAttribute('aria-pressed', String(on));
+        b.setAttribute('aria-label', on ? 'Collapse media' : 'Expand media');
+        b.innerHTML = on ? ICON_COLLAPSE : ICON_EXPAND;
+        demo?.redraw();
+      };
+      // The panel morphs to full size with the View Transitions API where it exists;
+      // elsewhere, and under reduced motion, it simply switches.
+      if (document.startViewTransition && !reduceMotion.matches) document.startViewTransition(flip);
+      else flip();
     }
   });
   dlg.addEventListener('cancel', e => { e.preventDefault(); close(); });

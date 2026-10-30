@@ -15,6 +15,7 @@
   /* Neue Haas Grotesk arrives through the Adobe Fonts Web Project (see index.html head).
      Until the kit is linked, the named system stack below carries the look. */
   --sans: "neue-haas-grotesk-text", "Neue Haas Grotesk Text Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;   /* URAP demo controls only */
   --display: "neue-haas-grotesk-display", "Neue Haas Grotesk Display Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   --step--1: 0.8125rem;   /* 13px: small labels */

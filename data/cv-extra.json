@@ -3,7 +3,16 @@
   "exclude": {
     "get-lost": "Profile lists Evergreen instead; verify Get Lost is Nico's before listing",
     "iso": "Parked concept, not a work",
-    "nts1": "L049: no public claim until a unit runs on the hardware on video"
+    "nts1": "L049: no public claim until a unit runs on the hardware on video",
+    "music-multitool": "Nico, 2026-10-30: not on the CV yet",
+    "nico-site": "Nico, 2026-10-30: not on the CV yet",
+    "personal-os": "Nico, 2026-10-30: not on the CV yet",
+    "distro-network": "Nico, 2026-10-30: not on the CV yet",
+    "eastwind": "Nico, 2026-10-30: not on the CV yet",
+    "remagen-ui": "Nico, 2026-10-30: not on the CV yet",
+    "remagen": "Nico, 2026-10-30: not on the CV yet",
+    "end-cohort": "Nico, 2026-10-30: not on the CV yet",
+    "ankle-fellowship": "Nico, 2026-10-30: not on the CV yet"
   },
   "rows": [
     {

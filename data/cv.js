@@ -43,60 +43,6 @@ window.CV_ROWS = [
   "role": "PM + lead dev, sole partner contact"
  },
  {
-  "title": "Music Multitool",
-  "year": "2025 to 2026",
-  "type": "Software",
-  "role": "Solo"
- },
- {
-  "title": "nicholascarrera.com",
-  "year": "2025 to 2026",
-  "type": "Software",
-  "role": "Solo"
- },
- {
-  "title": "Personal OS",
-  "year": "2026",
-  "type": "Software",
-  "role": "Solo"
- },
- {
-  "title": "Distro Network",
-  "year": "2026",
-  "type": "Software",
-  "role": "Technical lead"
- },
- {
-  "title": "Eastwind",
-  "year": "2026",
-  "type": "Software",
-  "role": "Solo"
- },
- {
-  "title": "REMAGEN UI",
-  "year": "2026",
-  "type": "Product",
-  "role": "Solo"
- },
- {
-  "title": "REMAGEN Platform",
-  "year": "2026",
-  "type": "Product",
-  "role": "Solo"
- },
- {
-  "title": "END-COHORT",
-  "year": "2026",
-  "type": "Events",
-  "role": "Organizer, curator"
- },
- {
-  "title": "Ankle / Serpentine FAE Fellowship Research",
-  "year": "2026",
-  "type": "Research",
-  "role": "UI/UX + AI semantic systems"
- },
- {
   "title": "Ankle / aleqth: Cultural OS",
   "year": "2026",
   "type": "Software",
