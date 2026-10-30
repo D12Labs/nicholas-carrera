@@ -1,0 +1,48 @@
+/* /cv: every work as a text-only grid. Same tokens and type as the home. */
+.cv-head {
+  font-family: var(--display);
+  font-size: var(--step-2);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin-bottom: var(--space-5);
+}
+.cv-head span { color: var(--muted); font-size: var(--step--1); font-weight: 400; letter-spacing: 0; }
+
+.cv { width: 100%; border-collapse: collapse; }
+.cv thead th {
+  text-align: left;
+  font-size: var(--step--1);
+  font-weight: 400;
+  color: var(--muted);
+  padding: 0 var(--space-4) var(--space-2) 0;
+  border-bottom: 1px solid var(--fg);
+}
+.cv td, .cv tbody th {
+  text-align: left;
+  vertical-align: baseline;
+  padding: var(--space-3) var(--space-4) var(--space-3) 0;
+  border-bottom: 1px solid var(--line);
+}
+.cv tbody th { font-weight: 500; }
+.cv-year { width: 9em; font-variant-numeric: tabular-nums; }
+.cv-type { width: 10em; }
+.cv-year, .cv-type, .cv-role { color: var(--muted); font-size: 0.9375rem; }
+.links a[aria-current="page"] { text-decoration: underline; text-underline-offset: 0.2em; }
+
+@media (max-width: 640px) {
+  .cv thead { display: none; }
+  .cv, .cv tbody, .cv tr { display: block; }
+  .cv tr {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: var(--space-3);
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .cv td, .cv tbody th { padding: 0; border: 0; width: auto; }
+  .cv tbody th { grid-column: 1 / -1; grid-row: 1; }
+  .cv-year { grid-row: 2; }
+  .cv-type { grid-row: 2; }
+  .cv-role { grid-column: 1 / -1; font-size: var(--step--1); }
+  .cv-year:empty { display: none; }
+}

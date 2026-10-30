@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (function () {
+      var t = new URLSearchParams(location.search).get('theme');
+      if (t !== 'day' && t !== 'night') t = null;
+      try { t = t || localStorage.getItem('nico-theme'); } catch (e) {}
+      if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'day';
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+
+  <title>CV, Nicholas Carrera</title>
+  <meta name="description" content="Every work by Nicholas Carrera: software, research, design, music and performances." />
+
+  <!-- Adobe Fonts Web Project (Neue Haas Grotesk): same kit link as index.html -->
+  <link rel="stylesheet" href="assets/site.css" />
+  <link rel="stylesheet" href="assets/cv.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="masthead">
+      <div class="name-wrap">
+        <h1><a class="wordmark" id="wordmark" href="/" aria-describedby="who">Nicholas Carrera</a></h1>
+        <p class="who" id="who">Designer and engineer in Chicago. I build archives, tools and installations, and make music as Nico Nico.</p>
+      </div>
+      <nav aria-label="Links">
+        <ul class="links">
+          <li><a href="mailto:niconicocarrera@gmail.com">Contact</a></li>
+          <li><a href="/cv" aria-current="page">CV</a></li>
+          <li><a href="/resume.pdf">Resume</a></li>
+          <li><button class="theme-btn" id="theme-btn" type="button" aria-label="Switch to dark theme">Dark</button></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <h2 class="cv-head">Every work <span id="cv-count"></span></h2>
+      <table class="cv">
+        <thead>
+          <tr><th scope="col">Year</th><th scope="col">Title</th><th scope="col">Type</th><th scope="col">Role</th></tr>
+        </thead>
+        <tbody id="cv-body"></tbody>
+      </table>
+      <noscript><p>This list needs JavaScript. The <a href="/resume.pdf">resume</a> covers the main work.</p></noscript>
+    </main>
+
+    <footer class="colophon">
+      <span>Nicholas Carrera, Chicago</span>
+      <span>
+        <a href="https://github.com/niconicocarrera">GitHub</a> &middot;
+        <a href="https://www.linkedin.com/in/nicholas-carrera-3b458229b/">LinkedIn</a> &middot;
+        <a href="mailto:niconicocarrera@gmail.com">niconicocarrera@gmail.com</a>
+      </span>
+    </footer>
+  </div>
+
+  <div class="who-float" id="who-float" aria-hidden="true"></div>
+
+  <script src="data/cv.js"></script>
+  <script src="assets/frame.js"></script>
+  <script>
+    (function () {
+      const rows = window.CV_ROWS || [];
+      const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+      document.getElementById('cv-count').textContent = `(${rows.length})`;
+      document.getElementById('cv-body').innerHTML = rows.map(r => `
+        <tr>
+          <td class="cv-year">${esc(r.year)}</td>
+          <th scope="row" class="cv-title">${esc(r.title)}</th>
+          <td class="cv-type">${esc(r.type)}</td>
+          <td class="cv-role">${esc(r.role)}</td>
+        </tr>`).join('');
+    })();
+  </script>
+</body>
+</html>
