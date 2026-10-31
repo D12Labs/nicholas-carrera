@@ -85,6 +85,33 @@
     return api;
   }
 
+  // Reel: rolls the strip upward at a steady speed, loading each screen just before it shows.
+  const REEL_PX_S = 40;
+  function reelDriver(strip, n) {
+    const imgs = strip.children;
+    let y = 0, last = 0, raf = 0;
+    const slot = () => imgs[1].offsetTop - imgs[0].offsetTop;
+    function load(from) {
+      for (let k = from; k < from + 4 && k < imgs.length; k++) {
+        const im = imgs[k];
+        if (im.dataset.src) { im.src = im.dataset.src; delete im.dataset.src; }
+      }
+    }
+    function frame(t) {
+      const h = slot();
+      y += Math.min(t - last, 100) / 1000 * REEL_PX_S;
+      last = t;
+      if (y >= n * h) y -= n * h;
+      load(Math.floor(y / h));
+      strip.style.transform = `translateY(${-y}px)`;
+      raf = requestAnimationFrame(frame);
+    }
+    return {
+      play() { if (!raf) raf = requestAnimationFrame(t => { last = t; frame(t); }); },
+      pause() { cancelAnimationFrame(raf); raf = 0; },
+    };
+  }
+
   // ─── GRID ──────────────────────────────────────────────────
   // Frames wider than 900px ship a -700.webp sibling for phones and the two-column grid.
   const SIZES = '(max-width: 760px) calc(100vw - 32px), 50vw';
@@ -100,12 +127,12 @@
     let media;
     if (c.grid === 'urap') {
       media = `<div class="card-media" data-urap><canvas aria-hidden="true"></canvas></div>`;
-    } else if (c.grid === 'cab') {
-      // the team's screens on an in-cab display, floating in a grid world
-      media = `<div class="card-media is-cab" data-cab role="img" aria-label="The team's sign-in screens cycling on an in-cab display">
-          <div class="cab-world" aria-hidden="true"><div class="cab-wall"></div><div class="cab-floor"></div>
-          <div class="cab-monitor"><div class="cab-bezel"><img src="${c.media[0]?.src}" width="1264" height="704" alt="" decoding="async"></div><div class="cab-arm"></div></div></div>
-        </div>`;
+    } else if (c.grid.reel) {
+      // a vertical strip of every screen, the first few repeated at the end for a seamless loop
+      const r = c.grid.reel, tail = r.slice(0, 3);
+      media = `<div class="card-media" data-reel role="img" aria-label="${esc(c.grid.alt)}"><div class="reel">${
+        [...r, ...tail].map((f, k) => `<img ${k < 3 || k >= r.length ? 'src' : 'data-src'}="${f.src}" width="${f.w}" height="${f.h}" alt="" decoding="async">`).join('')
+      }</div></div>`;
     } else if (c.grid.video) {
       const v = c.grid;
       media = `<div class="card-media"><video class="is-on" src="${v.src || v.video}" poster="${v.poster}" width="${v.w}" height="${v.h}" muted loop playsinline preload="${i > 1 ? 'none' : 'auto'}" aria-label="${esc(v.alt)}"></video></div>`;
@@ -133,29 +160,8 @@
       const names = Object.keys(PRESETS);
       let k = names.indexOf('complexity');
       carousels.push({ el: li, delay: i * STAGGER_MS, step: () => { k = (k + 1) % names.length; sk.set('descriptor', names[k]); }, sketch: sk });
-    } else if (c.grid === 'cab') {
-      // the display cycles every screen; one img, its src swapped, the next one prefetched
-      const shot = box.querySelector('.cab-bezel img');
-      const screens = c.media;
-      let k = 0;
-      if (screens.length > 1) {
-        new Image().src = screens[1].src;
-        carousels.push({ el: li, delay: i * STAGGER_MS, step: () => {
-          k = (k + 1) % screens.length;
-          shot.src = screens[k].src;
-          new Image().src = screens[(k + 1) % screens.length].src;
-        } });
-      }
-      // pointer parallax on fine pointers: the scene tilts toward the cursor
-      if (matchMedia('(pointer: fine)').matches) {
-        box.addEventListener('pointermove', e => {
-          if (reduceMotion.matches) return;
-          const r = box.getBoundingClientRect();
-          box.style.setProperty('--px', ((e.clientX - r.left) / r.width - 0.5).toFixed(3));
-          box.style.setProperty('--py', ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
-        });
-        box.addEventListener('pointerleave', () => { box.style.removeProperty('--px'); box.style.removeProperty('--py'); });
-      }
+    } else if (c.grid.reel) {
+      carousels.push({ el: li, delay: 0, step: () => {}, reel: reelDriver(box.querySelector('.reel'), c.grid.reel.length) });
     } else if (c.grid.video) {
       // a single looping clip: the same pause rules, applied as play and pause
       const vid = box.querySelector('video');
@@ -188,10 +194,11 @@
   function sync(cz) {
     const stop = paused(cz);
     if (stop && cz.timer) { clearTimeout(cz.timer); clearInterval(cz.timer); cz.timer = 0; }
-    if (!stop && !cz.timer && !cz.clip) {
+    if (!stop && !cz.timer && !cz.clip && !cz.reel) {
       cz.timer = setTimeout(() => { cz.step(); cz.timer = setInterval(cz.step, CUT_MS); }, CUT_MS + cz.delay);
     }
     if (cz.sketch) stop ? cz.sketch.pause() : cz.sketch.play();
+    if (cz.reel) stop ? cz.reel.pause() : cz.reel.play();
     if (cz.clip) stop ? cz.clip.pause() : cz.clip.play().catch(() => {});
   }
   const syncAll = () => carousels.forEach(sync);

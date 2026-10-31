@@ -2,7 +2,7 @@
 // copy-drafts/CARDS-v3-detail.md (cards 01 to 04, 07, 12). Edit there first, then here.
 //
 // grid:   still frames for the auto carousel on the home card (hard cut, no transition).
-// grid can also be { video, poster } (one looping clip), "urap" (live sketch) or "cab" (3D cab-display scene).
+// grid can also be { video, poster } (one looping clip), "urap" (live sketch) or { reel, alt } (screens rolling upward).
 // media:  1 to 3 items for the detail card panel. type: image | video | flow | urap.
 //         image: round = device screen with rounded corners.
 //         video: sound = has a score (controls, no autoplay); pixel = keep LED pixels crisp.
@@ -101,10 +101,13 @@ window.CARDS = [
     ],
     credit: "Team of four with Joelle Szatkowski, Ally Ohr, and Sanya Verma.",
     links: [],
-    // Grid tile: the team's screens cycling on a cab display in a 3D grid scene.
-    // Detail: every screen from the team's flow viewer, in flow order (data/cat-screens.js).
-    grid: "cab",
-    media: window.CAT_SCREENS || [],
+    // Grid tile: every screen from the team's flow viewer rolling past (data/cat-screens.js).
+    grid: { reel: window.CAT_SCREENS || [], alt: "The team's screens for the in-cab display, rolling past" },
+    media: [
+      { type: "image", src: "public/media/caterpillar/full-01-idle.webp", w: 1264, h: 704, round: true, caption: "Idle: locate the reader in the cab and tap" },
+      { type: "image", src: "public/media/caterpillar/full-02-guest-home.webp", w: 1264, h: 704, round: true, caption: "Guest Mode home, personal settings grayed out" },
+      { type: "image", src: "public/media/caterpillar/full-03-offline-confirm.webp", w: 1272, h: 712, round: true, caption: "Adding an operator offline, confirm access" },
+    ],
   },
   {
     slug: "cocotazo",
