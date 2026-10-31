@@ -74,11 +74,7 @@ window.CARDS = [
     ],
     credit: "Approved by Professor Leanne Wagner to run on the Wabash Lights installation. It no longer runs; this clip is the only footage.",
     links: [{ label: "p5.js sketch", href: "https://editor.p5js.org/niconico/sketches/JsD_jBcDK" }],
-    grid: [
-      { src: "public/media/wabash/irl-thumb.webp", w: 1400, h: 788, alt: "The LED rails lit under the Wabash L tracks at night" },
-      { src: "public/media/wabash/irl-3.webp", w: 1400, h: 788, alt: "Warm and cool light running along the rails" },
-      { src: "public/media/wabash/irl-9.webp", w: 1400, h: 788, alt: "The installation from the street" },
-    ],
+    grid: { video: "public/media/wabash/irl.mp4", poster: "public/media/wabash/irl-thumb.webp", w: 1280, h: 720, alt: "The LED rails running under the Wabash L tracks at night" },
     media: [
       { type: "video", src: "public/media/wabash/irl.mp4", poster: "public/media/wabash/irl-thumb.webp", w: 1280, h: 720, caption: "Live on the rails under the L" },
       { type: "video", src: "public/media/wabash/source-stacked.mp4", w: 584, h: 412, pixel: true, caption: "The source animation: four rails, cut into eight lengths to fit" },
