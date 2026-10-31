@@ -177,28 +177,18 @@
     }
   });
 
-  // One driver per carousel. Held until hovered or focused (hover devices), paused offscreen, in a hidden tab,
+  // One driver per carousel. Plays whether or not it is hovered; paused offscreen, in a hidden tab,
   // an open detail card, and always under prefers-reduced-motion (first frame stays).
   let detailOpen = false;
-  carousels.forEach(cz => {
-    cz.hover = cz.focus = false;
-    cz.visible = false;
-    cz.el.addEventListener('pointerenter', () => { cz.hover = true; sync(cz); });
-    cz.el.addEventListener('pointerleave', () => { cz.hover = false; sync(cz); });
-    cz.el.addEventListener('focusin', () => { cz.focus = true; sync(cz); });
-    cz.el.addEventListener('focusout', () => { cz.focus = false; sync(cz); });
-  });
-  // Where the pointer can hover, a preview plays only while hovered or focused; touch screens play when visible.
-  const canHover = matchMedia('(hover: hover)');
+  carousels.forEach(cz => { cz.visible = false; });
   function paused(cz) {
-    const held = canHover.matches && !cz.hover && !cz.focus;
-    return reduceMotion.matches || held || !cz.visible || document.hidden || detailOpen;
+    return reduceMotion.matches || !cz.visible || document.hidden || detailOpen;
   }
   function sync(cz) {
     const stop = paused(cz);
     if (stop && cz.timer) { clearTimeout(cz.timer); clearInterval(cz.timer); cz.timer = 0; }
     if (!stop && !cz.timer && !cz.clip && !cz.reel) {
-      cz.timer = setTimeout(() => { cz.step(); cz.timer = setInterval(cz.step, CUT_MS); }, canHover.matches ? CUT_MS / 3 : CUT_MS + cz.delay);
+      cz.timer = setTimeout(() => { cz.step(); cz.timer = setInterval(cz.step, CUT_MS); }, CUT_MS + cz.delay);
     }
     if (cz.sketch) stop ? cz.sketch.pause() : cz.sketch.play();
     if (cz.reel) stop ? cz.reel.pause() : cz.reel.play();
