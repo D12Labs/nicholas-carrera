@@ -101,8 +101,19 @@ window.CARDS = [
     ],
     credit: "Team of four with Joelle Szatkowski, Ally Ohr, and Sanya Verma.",
     links: [],
-    // Grid tile: every screen from the team's flow viewer rolling past (data/cat-screens.js).
-    grid: { reel: window.CAT_SCREENS || [], alt: "The team's screens for the in-cab display, rolling past" },
+    // Grid tile: nine screens of different kinds rolling past (tap, PIN, welcome, roading, guest,
+    // service, operator management, offline access role, access restricted).
+    grid: { alt: "The team's screens for the in-cab display, rolling past", reel: [
+      { src: "public/media/caterpillar/screens/01-01-idle-screen.webp", w: 1264, h: 704 },
+      { src: "public/media/caterpillar/screens/06-02-pinpad.webp", w: 1272, h: 712 },
+      { src: "public/media/caterpillar/screens/01-03-welcome-operator.webp", w: 1264, h: 704 },
+      { src: "public/media/caterpillar/screens/01-04-roading-screen.webp", w: 1272, h: 712 },
+      { src: "public/media/caterpillar/screens/11-02-guest-mode.webp", w: 1264, h: 704 },
+      { src: "public/media/caterpillar/screens/03-05-service-home-screen.webp", w: 1264, h: 704 },
+      { src: "public/media/caterpillar/screens/04-05-operator-management-home.webp", w: 1264, h: 704 },
+      { src: "public/media/caterpillar/screens/10-07-add-operator-access-role.webp", w: 1272, h: 712 },
+      { src: "public/media/caterpillar/screens/05-03-access-restricted.webp", w: 1272, h: 712 },
+    ] },
     media: [
       { type: "image", src: "public/media/caterpillar/full-01-idle.webp", w: 1264, h: 704, round: true, caption: "Idle: locate the reader in the cab and tap" },
       { type: "image", src: "public/media/caterpillar/full-02-guest-home.webp", w: 1264, h: 704, round: true, caption: "Guest Mode home, personal settings grayed out" },
