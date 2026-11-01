@@ -4,10 +4,14 @@
 
   // ─── THEME ─────────────────────────────────────────────────
   const themeBtn = document.getElementById('theme-btn');
+  // Lucide "moon" and "sun" (ISC licence), drawn like the expand/collapse glyphs in home.js.
+  const svg = d => `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true">${d}</svg>`;
+  const ICON_MOON = svg('<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>');
+  const ICON_SUN = svg('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>');
   function syncTheme() {
     if (!themeBtn) return;
     const night = root.dataset.theme === 'night';
-    themeBtn.textContent = night ? 'Light' : 'Dark';
+    themeBtn.innerHTML = night ? ICON_SUN : ICON_MOON;
     themeBtn.setAttribute('aria-label', night ? 'Switch to light theme' : 'Switch to dark theme');
   }
   themeBtn?.addEventListener('click', () => {
