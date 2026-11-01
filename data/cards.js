@@ -145,10 +145,11 @@ window.CARDS = [
       "Produced and mixed the score in Ableton 11.",
     ],
     credit: "With Julee Tree Flowers, for J.J. Goods. Produced by Yusef Agency and Gudfolk.",
-    links: [],
-    // No media yet: the reels need files from Nico. The card shows type only, never a placeholder image.
-    grid: [],
-    media: [],
+    links: [{ label: "Chapter 1 on Instagram", href: "https://www.instagram.com/j.j.goods/reel/DcCiKryNtHs/" }],
+    grid: { video: "public/media/cocotazo/title-loop.mp4", poster: "public/media/cocotazo/title-loop-poster.webp", w: 960, h: 630, alt: "COCOTAZO title card and opening shots" },
+    media: [
+      { type: "video", src: "public/media/cocotazo/chapter-1.mp4", poster: "public/media/cocotazo/chapter-1-poster.webp", w: 1280, h: 840, sound: true, caption: "Chapter 1, with our score" },
+    ],
   },
   {
     slug: "substanz",
