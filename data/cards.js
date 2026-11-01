@@ -6,7 +6,7 @@
 // media:  1 to 3 items for the detail card panel. type: image | video | flow | urap | metric.
 //         metric: Wabash ratio shift index + typology table, drawn in HTML (bands, typologies).
 //         image: round = device screen with rounded corners.
-//         video: sound = has a score (controls, no autoplay); unmute = autoplays muted, controls to unmute;
+//         video: sound = has a score, waits for play (others loop muted; all have controls);
 //                pixel = keep LED pixels crisp.
 // fit:    "contain" keeps the whole frame on the grid card (posters); default crops to fill.
 window.CARDS = [
@@ -158,9 +158,9 @@ window.CARDS = [
       { src: "public/media/cocotazo/cocotazo-ch3.mp4?v=6s", poster: "public/media/cocotazo/cocotazo-ch3.webp?v=6s", w: 1280, h: 720 },
     ] },
     media: [
-      { type: "video", src: "public/media/cocotazo/cocotazo-ch1-full.mp4", poster: "public/media/cocotazo/cocotazo-ch1-full.webp", w: 1280, h: 768, unmute: true, caption: "Chapter 1, full, with our score (unmute to hear it)" },
-      { type: "video", src: "public/media/cocotazo/cocotazo-ch2-full.mp4", poster: "public/media/cocotazo/cocotazo-ch2-full.webp", w: 1280, h: 798, unmute: true, caption: "Chapter 2, full, with our score (unmute to hear it)" },
-      { type: "video", src: "public/media/cocotazo/cocotazo-ch3-full.mp4", poster: "public/media/cocotazo/cocotazo-ch3-full.webp", w: 1280, h: 720, unmute: true, caption: "Chapter 3, full, with our score (unmute to hear it)" },
+      { type: "video", src: "public/media/cocotazo/cocotazo-ch1-full.mp4", poster: "public/media/cocotazo/cocotazo-ch1-full.webp", w: 1280, h: 768, caption: "Chapter 1, full, with our score (unmute to hear it)" },
+      { type: "video", src: "public/media/cocotazo/cocotazo-ch2-full.mp4", poster: "public/media/cocotazo/cocotazo-ch2-full.webp", w: 1280, h: 798, caption: "Chapter 2, full, with our score (unmute to hear it)" },
+      { type: "video", src: "public/media/cocotazo/cocotazo-ch3-full.mp4", poster: "public/media/cocotazo/cocotazo-ch3-full.webp", w: 1280, h: 720, caption: "Chapter 3, full, with our score (unmute to hear it)" },
     ],
   },
   {

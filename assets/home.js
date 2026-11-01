@@ -34,8 +34,12 @@
     function draw() {
       const w = canvas.width, h = canvas.height;
       const cx = w / 2, cy = h / 2;
-      const R = Math.min(w * 0.3, h * 0.36);
       const pr = PRESETS[s.descriptor];
+      // Fit the form at full intensity (widest reach, times the vertical stretch) inside the canvas,
+      // so no descriptor clips and the slider never rescales it.
+      let reach = 1;
+      for (let k = 1; k <= pr.harmonics; k++) reach += pr.ampRatio / k;
+      const R = Math.min(w * 0.4, h * 0.42 / pr.ys) / reach;
       const amp = pr.ampRatio * ((s.intensity - 1) / 9) * R;
       ctx.clearRect(0, 0, w, h);
       ctx.strokeStyle = cssVar('--fg');
@@ -245,13 +249,11 @@
   function mediaHTML(m) {
     if (m.type === 'image') return `<img src="${m.src}" width="${m.w}" height="${m.h}" alt="${esc(m.caption)}"${m.round ? ' class="is-round"' : ''}>`;
     if (m.type === 'video') {
-      // Clips with sound (a score) show controls so the visitor can unmute; silent loops stay bare.
-      // A clip with a score waits for play, with sound; silent loops autoplay muted.
-      // unmute: a clip with its score that loops muted, with controls to turn the sound on.
+      // Every clip has controls (pause, scrub, unmute). sound: waits for play, with sound; the rest loop muted.
       // Only the showing slide is in the DOM, so the other (large) chapters never load or play.
       const attrs = m.sound ? 'controls preload="metadata"'
         : reduceMotion.matches ? 'muted controls'
-        : m.unmute ? 'muted autoplay loop controls preload="metadata"' : 'muted autoplay loop';
+        : 'muted autoplay loop controls preload="metadata"';   // every detail video can be paused and scrubbed
       return `<video src="${m.src}" ${m.poster ? `poster="${m.poster}"` : ''} width="${m.w}" height="${m.h}" playsinline ${attrs}${m.pixel ? ' class="is-pixel"' : ''} aria-label="${esc(m.caption)}"></video>`;
     }
     if (m.type === 'flow') return `<div class="flow-slot" data-flow="${m.flow}"></div>`;
@@ -376,6 +378,7 @@
   function close() {
     if (!dlg.open) return;
     demo?.pause(); demo = null;
+    dlg.querySelectorAll('video').forEach(v => v.pause());   // a closed dialog stays in the DOM, so its sound would carry on
     dlg.close();
     document.documentElement.style.overflow = '';
     detailOpen = false; syncAll();
