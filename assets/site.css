@@ -114,7 +114,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .links a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
 
 .theme-btn {
-  font-size: var(--step--1);
+  display: inline-flex;
+  align-items: center;
   color: var(--muted);
   padding: 2px 0;
 }
