@@ -112,6 +112,27 @@
     };
   }
 
+  // Clips: each plays to its end, then a hard cut to the next; the one after is fetched while this one plays.
+  function clipsDriver(vids) {
+    let k = 0, on = false;
+    vids.forEach(v => v.addEventListener('ended', () => {
+      v.classList.remove('is-on');
+      k = (k + 1) % vids.length;
+      const nx = vids[k];
+      nx.classList.add('is-on');
+      nx.currentTime = 0;
+      if (on) start();
+    }));
+    function start() {
+      vids[(k + 1) % vids.length].preload = 'auto';
+      vids[k].play().catch(() => {});
+    }
+    return {
+      play() { on = true; start(); },
+      pause() { on = false; vids[k].pause(); },
+    };
+  }
+
   // ─── GRID ──────────────────────────────────────────────────
   // Frames wider than 900px ship a -700.webp sibling for phones and the two-column grid.
   const SIZES = '(max-width: 760px) calc(100vw - 32px), 50vw';
@@ -133,6 +154,10 @@
       media = `<div class="card-media" data-reel role="img" aria-label="${esc(c.grid.alt)}"><div class="reel">${
         [...r, ...tail].map((f, k) => `<img ${k < 3 || k >= r.length ? 'src' : 'data-src'}="${f.src}" width="${f.w}" height="${f.h}" alt="" decoding="async">`).join('')
       }</div></div>`;
+    } else if (c.grid.clips) {
+      media = `<div class="card-media" role="img" aria-label="${esc(c.grid.alt)}">${c.grid.clips.map((v, k) =>
+        `<video class="${k ? '' : 'is-on'}" src="${v.src}" poster="${v.poster}" width="${v.w}" height="${v.h}" muted playsinline preload="${k ? 'none' : 'metadata'}" aria-hidden="true"></video>`
+      ).join('')}</div>`;
     } else if (c.grid.video) {
       const v = c.grid;
       media = `<div class="card-media"><video class="is-on" src="${v.src || v.video}" poster="${v.poster}" width="${v.w}" height="${v.h}" muted loop playsinline preload="${i > 1 ? 'none' : 'auto'}" aria-label="${esc(v.alt)}"></video></div>`;
@@ -162,6 +187,8 @@
       carousels.push({ el: li, delay: i * STAGGER_MS, step: () => { k = (k + 1) % names.length; sk.set('descriptor', names[k]); }, sketch: sk });
     } else if (c.grid.reel) {
       carousels.push({ el: li, delay: 0, step: () => {}, reel: reelDriver(box.querySelector('.reel'), c.grid.reel.length) });
+    } else if (c.grid.clips) {
+      carousels.push({ el: li, delay: 0, step: () => {}, reel: clipsDriver([...box.querySelectorAll('video')]) });
     } else if (c.grid.video) {
       // a single looping clip: the same pause rules, applied as play and pause
       const vid = box.querySelector('video');
@@ -220,8 +247,11 @@
     if (m.type === 'video') {
       // Clips with sound (a score) show controls so the visitor can unmute; silent loops stay bare.
       // A clip with a score waits for play, with sound; silent loops autoplay muted.
+      // unmute: a clip with its score that loops muted, with controls to turn the sound on.
+      // Only the showing slide is in the DOM, so the other (large) chapters never load or play.
       const attrs = m.sound ? 'controls preload="metadata"'
-        : reduceMotion.matches ? 'muted controls' : 'muted autoplay loop';
+        : reduceMotion.matches ? 'muted controls'
+        : m.unmute ? 'muted autoplay loop controls preload="metadata"' : 'muted autoplay loop';
       return `<video src="${m.src}" ${m.poster ? `poster="${m.poster}"` : ''} width="${m.w}" height="${m.h}" playsinline ${attrs}${m.pixel ? ' class="is-pixel"' : ''} aria-label="${esc(m.caption)}"></video>`;
     }
     if (m.type === 'flow') return `<div class="flow-slot" data-flow="${m.flow}"></div>`;

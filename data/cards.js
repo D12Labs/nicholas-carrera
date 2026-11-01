@@ -2,11 +2,12 @@
 // copy-drafts/CARDS-v3-detail.md (cards 01 to 04, 07, 12). Edit there first, then here.
 //
 // grid:   still frames for the auto carousel on the home card (hard cut, no transition).
-// grid can also be { video, poster } (one looping clip), "urap" (live sketch) or { reel, alt } (screens rolling upward).
+// grid can also be { video, poster } (one looping clip), { clips, alt } (short clips, hard cut on each end), "urap" (live sketch) or { reel, alt } (screens rolling upward).
 // media:  1 to 3 items for the detail card panel. type: image | video | flow | urap | metric.
 //         metric: Wabash ratio shift index + typology table, drawn in HTML (bands, typologies).
 //         image: round = device screen with rounded corners.
-//         video: sound = has a score (controls, no autoplay); pixel = keep LED pixels crisp.
+//         video: sound = has a score (controls, no autoplay); unmute = autoplays muted, controls to unmute;
+//                pixel = keep LED pixels crisp.
 // fit:    "contain" keeps the whole frame on the grid card (posters); default crops to fill.
 window.CARDS = [
   {
@@ -145,10 +146,22 @@ window.CARDS = [
       "Produced and mixed the score in Ableton 11.",
     ],
     credit: "With Julee Tree Flowers, for J.J. Goods. Produced by Yusef Agency and Gudfolk.",
-    links: [],
-    // No media yet: the reels need files from Nico. The card shows type only, never a placeholder image.
-    grid: [],
-    media: [],
+    links: [
+      { label: "Chapter 1", href: "https://www.instagram.com/j.j.goods/reel/DcCiKryNtHs/" },
+      { label: "Chapter 2", href: "https://www.instagram.com/j.j.goods/reel/DcKRtEGhiBA/" },
+      { label: "Chapter 3", href: "https://www.instagram.com/j.j.goods/reel/DcUlCnhtE8N/" },
+    ],
+    // Grid tile: a 6s clip from each chapter, hard cut from one to the next.
+    grid: { alt: "Six seconds from each COCOTAZO chapter", clips: [
+      { src: "public/media/cocotazo/cocotazo-ch1.mp4?v=6s", poster: "public/media/cocotazo/cocotazo-ch1.webp?v=6s", w: 1280, h: 768 },
+      { src: "public/media/cocotazo/cocotazo-ch2.mp4?v=6s", poster: "public/media/cocotazo/cocotazo-ch2.webp?v=6s", w: 1280, h: 798 },
+      { src: "public/media/cocotazo/cocotazo-ch3.mp4?v=6s", poster: "public/media/cocotazo/cocotazo-ch3.webp?v=6s", w: 1280, h: 720 },
+    ] },
+    media: [
+      { type: "video", src: "public/media/cocotazo/cocotazo-ch1-full.mp4", poster: "public/media/cocotazo/cocotazo-ch1-full.webp", w: 1280, h: 768, unmute: true, caption: "Chapter 1, full, with our score (unmute to hear it)" },
+      { type: "video", src: "public/media/cocotazo/cocotazo-ch2-full.mp4", poster: "public/media/cocotazo/cocotazo-ch2-full.webp", w: 1280, h: 798, unmute: true, caption: "Chapter 2, full, with our score (unmute to hear it)" },
+      { type: "video", src: "public/media/cocotazo/cocotazo-ch3-full.mp4", poster: "public/media/cocotazo/cocotazo-ch3-full.webp", w: 1280, h: 720, unmute: true, caption: "Chapter 3, full, with our score (unmute to hear it)" },
+    ],
   },
   {
     slug: "substanz",
