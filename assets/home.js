@@ -220,10 +220,11 @@
     if (m.type === 'video') {
       // Clips with sound (a score) show controls so the visitor can unmute; silent loops stay bare.
       // A clip with a score waits for play, with sound; silent loops autoplay muted.
-      // unmute: a short clip with its score that loops muted, with controls to turn the sound on.
+      // unmute: a clip with its score that loops muted, with controls to turn the sound on.
+      // Only the showing slide is in the DOM, so the other (large) chapters never load or play.
       const attrs = m.sound ? 'controls preload="metadata"'
         : reduceMotion.matches ? 'muted controls'
-        : m.unmute ? 'muted autoplay loop controls' : 'muted autoplay loop';
+        : m.unmute ? 'muted autoplay loop controls preload="metadata"' : 'muted autoplay loop';
       return `<video src="${m.src}" ${m.poster ? `poster="${m.poster}"` : ''} width="${m.w}" height="${m.h}" playsinline ${attrs}${m.pixel ? ' class="is-pixel"' : ''} aria-label="${esc(m.caption)}"></video>`;
     }
     if (m.type === 'flow') return `<div class="flow-slot" data-flow="${m.flow}"></div>`;

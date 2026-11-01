@@ -153,9 +153,9 @@ window.CARDS = [
     ],
     grid: { video: "public/media/cocotazo/title-loop.mp4", poster: "public/media/cocotazo/title-loop-poster.webp", w: 960, h: 630, alt: "COCOTAZO title card and opening shots" },
     media: [
-      { type: "video", src: "public/media/cocotazo/cocotazo-ch1.mp4", poster: "public/media/cocotazo/cocotazo-ch1.webp", w: 1280, h: 768, unmute: true, caption: "Chapter 1, with our score (unmute to hear it)" },
-      { type: "video", src: "public/media/cocotazo/cocotazo-ch2.mp4", poster: "public/media/cocotazo/cocotazo-ch2.webp", w: 1280, h: 798, unmute: true, caption: "Chapter 2, with our score (unmute to hear it)" },
-      { type: "video", src: "public/media/cocotazo/cocotazo-ch3.mp4", poster: "public/media/cocotazo/cocotazo-ch3.webp", w: 1280, h: 720, unmute: true, caption: "Chapter 3, with our score (unmute to hear it)" },
+      { type: "video", src: "public/media/cocotazo/cocotazo-ch1.mp4?v=full", poster: "public/media/cocotazo/cocotazo-ch1.webp?v=full", w: 1280, h: 768, unmute: true, caption: "Chapter 1, full, with our score (unmute to hear it)" },
+      { type: "video", src: "public/media/cocotazo/cocotazo-ch2.mp4?v=full", poster: "public/media/cocotazo/cocotazo-ch2.webp?v=full", w: 1280, h: 798, unmute: true, caption: "Chapter 2, full, with our score (unmute to hear it)" },
+      { type: "video", src: "public/media/cocotazo/cocotazo-ch3.mp4?v=full", poster: "public/media/cocotazo/cocotazo-ch3.webp?v=full", w: 1280, h: 720, unmute: true, caption: "Chapter 3, full, with our score (unmute to hear it)" },
     ],
   },
   {
