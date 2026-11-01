@@ -8,5 +8,7 @@ wrangler.jsonc
 *.md
 specs
 *.docx
-acre-site.html
-acre.css
+v2-site.html
+v2.css
+node_modules
+scripts

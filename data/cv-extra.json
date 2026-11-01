@@ -1,0 +1,115 @@
+{
+  "_source": "nico-profile/nico-profile.md (2026-10-28), Full record tables 1 and 3. Only rows with a VERIFIED flyer, link or file. Merged with CAREER/modular-cv/data/works.json by scripts/build_cv.py.",
+  "exclude": {
+    "get-lost": "Profile lists Evergreen instead; verify Get Lost is Nico's before listing",
+    "iso": "Parked concept, not a work",
+    "nts1": "L049: no public claim until a unit runs on the hardware on video",
+    "music-multitool": "Nico, 2026-10-30: not on the CV yet",
+    "nico-site": "Nico, 2026-10-30: not on the CV yet",
+    "personal-os": "Nico, 2026-10-30: not on the CV yet",
+    "distro-network": "Nico, 2026-10-30: not on the CV yet",
+    "eastwind": "Nico, 2026-10-30: not on the CV yet",
+    "remagen-ui": "Nico, 2026-10-30: not on the CV yet",
+    "remagen": "Nico, 2026-10-30: not on the CV yet",
+    "end-cohort": "Nico, 2026-10-30: not on the CV yet",
+    "ankle-fellowship": "Nico, 2026-10-30: not on the CV yet"
+  },
+  "rows": [
+    {
+      "title": "Evergreen",
+      "year": "2022",
+      "type": "Music",
+      "role": "Nico Nico"
+    },
+    {
+      "title": "Más Fácil (Yiyo feat. Blinco)",
+      "year": "",
+      "type": "Feature",
+      "role": "Blinco"
+    },
+    {
+      "title": "Explanations (Edzo feat. Blinco)",
+      "year": "",
+      "type": "Feature",
+      "role": "Blinco"
+    },
+    {
+      "title": "Kiss the Sky, Batavia",
+      "year": "2023",
+      "type": "Performance",
+      "role": "Nico Nico, with Vacants"
+    },
+    {
+      "title": "Space 333, Chicago (Chicago debut)",
+      "year": "2023",
+      "type": "Performance",
+      "role": "Nico Nico"
+    },
+    {
+      "title": "Bookclub, Chicago",
+      "year": "2024",
+      "type": "Performance",
+      "role": "Nico Nico, headline set"
+    },
+    {
+      "title": "Bookclub, Chicago",
+      "year": "2024",
+      "type": "Performance",
+      "role": "Nico Nico, with live band"
+    },
+    {
+      "title": "ATT1C: MidNight Dub, Subterranean, Chicago",
+      "year": "2024",
+      "type": "Performance",
+      "role": "DJ set as KIOTL"
+    },
+    {
+      "title": "END show",
+      "year": "2025",
+      "type": "Performance",
+      "role": "END"
+    },
+    {
+      "title": "END / Record Breakers set",
+      "year": "2025",
+      "type": "Performance",
+      "role": "END, with Dew and Yiyo"
+    },
+    {
+      "title": "Noche De Musica, Aurora",
+      "year": "2025",
+      "type": "Performance",
+      "role": "Nico Nico"
+    },
+    {
+      "title": "630 Fest (Garden Collective)",
+      "year": "2025",
+      "type": "Performance",
+      "role": "Nico Nico"
+    },
+    {
+      "title": "Feltwell live, East Wind, Aurora",
+      "year": "2025",
+      "type": "Performance",
+      "role": "Nico Nico, support"
+    },
+    {
+      "title": "Saturday Tiradores, East Wind, Aurora",
+      "year": "2026",
+      "type": "Performance",
+      "role": "Blinco, with Yiyo and Dew"
+    },
+    {
+      "title": "MADMADHOUSE nights (30, Aurora, Chicago, Naperville)",
+      "year": "2023 to 2026",
+      "type": "Performance",
+      "role": "DJ, co-founder"
+    },
+    {
+      "title": "KIOTL party series (001 to 7, Chicago)",
+      "year": "2024 to 2025",
+      "type": "Event series",
+      "role": "Founder: booking, promotion, ticketing, flyers, web"
+    }
+  ]
+}
