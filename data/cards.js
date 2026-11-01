@@ -3,7 +3,8 @@
 //
 // grid:   still frames for the auto carousel on the home card (hard cut, no transition).
 // grid can also be { video, poster } (one looping clip), "urap" (live sketch) or { reel, alt } (screens rolling upward).
-// media:  1 to 3 items for the detail card panel. type: image | video | flow | urap.
+// media:  1 to 3 items for the detail card panel. type: image | video | flow | urap | metric.
+//         metric: Wabash ratio shift index + typology table, drawn in HTML (bands, typologies).
 //         image: round = device screen with rounded corners.
 //         video: sound = has a score (controls, no autoplay); pixel = keep LED pixels crisp.
 // fit:    "contain" keeps the whole frame on the grid card (posters); default crops to fill.
@@ -78,6 +79,18 @@ window.CARDS = [
     media: [
       { type: "video", src: "public/media/wabash/irl.mp4", poster: "public/media/wabash/irl-thumb.webp", w: 1280, h: 720, caption: "Live on the rails under the L" },
       { type: "video", src: "public/media/wabash/source-stacked.mp4", w: 584, h: 412, pixel: true, caption: "The source animation: four rails, cut into eight lengths to fit" },
+      { type: "metric", caption: "The metric: renter to owner shift, and the eight housing typologies it is weighted across",
+        bands: [["S > 10: renter dominance", "renter"], ["S = 10: stable", ""], ["S < 10: owner dominance", "owner"]],
+        typologies: [
+          ["Ongoing Displacement", "#7fb0ee", 8],
+          ["At Risk of Gentrification", "#a7a3dc", 10],
+          ["Early/Ongoing Gentrification", "#6a60cc", 12],
+          ["Advanced Gentrification", "#6a2fbd", 8],
+          ["Stable/Moderate Mixed Income", "#f3b892", 17],
+          ["At Risk of Becoming Exclusive", "#f4a462", 9],
+          ["Becoming Exclusive", "#f26a1f", 7],
+          ["Stable/Advanced Exclusive", "#d7191c", 11],
+        ] },
     ],
   },
   {

@@ -225,6 +225,26 @@
       return `<video src="${m.src}" ${m.poster ? `poster="${m.poster}"` : ''} width="${m.w}" height="${m.h}" playsinline ${attrs}${m.pixel ? ' class="is-pixel"' : ''} aria-label="${esc(m.caption)}"></video>`;
     }
     if (m.type === 'flow') return `<div class="flow-slot" data-flow="${m.flow}"></div>`;
+    if (m.type === 'metric') {
+      // Wabash: the ratio shift index and the weighted typologies, as text so it reflows with the stage
+      const frac = y => `<span>R<sub>${y}</sub> / O<sub>${y}</sub></span>`;
+      return `
+      <div class="metric">
+        <section>
+          <h3 class="metric-h">Ratio shift index</h3>
+          <p class="metric-eq" role="math" aria-label="S equals the renter to owner ratio in 2018 divided by the renter to owner ratio in 1990, times 10">
+            <b>S</b><span class="metric-op">=</span><span class="metric-frac">${frac(2018)}${frac(1990)}</span><span class="metric-op">&times; 10</span></p>
+          <ul class="metric-bands">${m.bands.map(([t, k]) => `<li${k ? ` class="is-${k}"` : ''}>${esc(t)}</li>`).join('')}</ul>
+        </section>
+        <section>
+          <h3 class="metric-h">Typology levels</h3>
+          <table class="metric-table">
+            <thead><tr><th scope="col"><span class="sr">Color</span></th><th scope="col">Typology</th><th scope="col">Wt</th></tr></thead>
+            <tbody>${m.typologies.map(([t, c, w]) => `<tr><td><i style="background:${c}"></i></td><th scope="row">${esc(t)}</th><td>${w}</td></tr>`).join('')}</tbody>
+          </table>
+        </section>
+      </div>`;
+    }
     if (m.type === 'urap') return `
       <div class="urap-demo">
         <div class="urap-canvas"><canvas role="img" aria-label="Wireframe form for the chosen descriptor"></canvas></div>
