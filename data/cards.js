@@ -6,7 +6,8 @@
 // media:  1 to 3 items for the detail card panel. type: image | video | flow | urap | metric.
 //         metric: Wabash ratio shift index + typology table, drawn in HTML (bands, typologies).
 //         image: round = device screen with rounded corners.
-//         video: sound = has a score (controls, no autoplay); pixel = keep LED pixels crisp.
+//         video: sound = has a score (controls, no autoplay); unmute = autoplays muted, controls to unmute;
+//                pixel = keep LED pixels crisp.
 // fit:    "contain" keeps the whole frame on the grid card (posters); default crops to fill.
 window.CARDS = [
   {
@@ -145,10 +146,16 @@ window.CARDS = [
       "Produced and mixed the score in Ableton 11.",
     ],
     credit: "With Julee Tree Flowers, for J.J. Goods. Produced by Yusef Agency and Gudfolk.",
-    links: [{ label: "Chapter 1 on Instagram", href: "https://www.instagram.com/j.j.goods/reel/DcCiKryNtHs/" }],
+    links: [
+      { label: "Chapter 1", href: "https://www.instagram.com/j.j.goods/reel/DcCiKryNtHs/" },
+      { label: "Chapter 2", href: "https://www.instagram.com/j.j.goods/reel/DcKRtEGhiBA/" },
+      { label: "Chapter 3", href: "https://www.instagram.com/j.j.goods/reel/DcUlCnhtE8N/" },
+    ],
     grid: { video: "public/media/cocotazo/title-loop.mp4", poster: "public/media/cocotazo/title-loop-poster.webp", w: 960, h: 630, alt: "COCOTAZO title card and opening shots" },
     media: [
-      { type: "video", src: "public/media/cocotazo/chapter-1.mp4", poster: "public/media/cocotazo/chapter-1-poster.webp", w: 1280, h: 840, sound: true, caption: "Chapter 1, with our score" },
+      { type: "video", src: "public/media/cocotazo/cocotazo-ch1.mp4", poster: "public/media/cocotazo/cocotazo-ch1.webp", w: 1280, h: 768, unmute: true, caption: "Chapter 1, with our score (unmute to hear it)" },
+      { type: "video", src: "public/media/cocotazo/cocotazo-ch2.mp4", poster: "public/media/cocotazo/cocotazo-ch2.webp", w: 1280, h: 798, unmute: true, caption: "Chapter 2, with our score (unmute to hear it)" },
+      { type: "video", src: "public/media/cocotazo/cocotazo-ch3.mp4", poster: "public/media/cocotazo/cocotazo-ch3.webp", w: 1280, h: 720, unmute: true, caption: "Chapter 3, with our score (unmute to hear it)" },
     ],
   },
   {
