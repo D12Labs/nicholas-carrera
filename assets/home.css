@@ -37,7 +37,7 @@
 }
 .card-media > img.is-contain { object-fit: contain; }
 .card-media > img.is-on,
-.card-media > video,
+.card-media > video.is-on,
 .card-media > canvas { visibility: visible; }
 
 /* CAT: every team screen rolling upward like a reel, on the same panel as the detail. */
