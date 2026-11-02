@@ -326,6 +326,12 @@
       sp.querySelector('[data-src="restart"]').addEventListener('click', () => { v.currentTime = 0; v.play(); });
       v.addEventListener('play', () => { tg.textContent = 'Pause'; });
       v.addEventListener('pause', () => { tg.textContent = 'Resume'; });
+      // object-fit: contain letterboxes the picture inside the element; start the buttons at the picture's left edge
+      const row = sp.querySelector('.src-controls');
+      new ResizeObserver(() => {
+        const r = v.getBoundingClientRect();
+        row.style.marginLeft = `${Math.max(0, (r.width - Math.min(r.width, r.height * m.w / m.h)) / 2)}px`;
+      }).observe(v);
     }
     if (m.type === 'urap') {
       demo = urapSketch(stage.querySelector('canvas'));
