@@ -55,10 +55,16 @@ window.CV_ROWS = [
   "role": "Technical cofounder (spatial / 3D layer)"
  },
  {
+  "title": "Explanations (Edzo feat. Blinco)",
+  "year": "2026",
+  "type": "Feature",
+  "role": "Production"
+ },
+ {
   "title": "Saturday Tiradores, East Wind, Aurora",
   "year": "2026",
   "type": "Performance",
-  "role": "Blinco, with Yiyo and Dew"
+  "role": "Live set with Yiyo and Dew"
  },
  {
   "title": "MADMADHOUSE nights (30, Aurora, Chicago, Naperville)",
@@ -70,7 +76,7 @@ window.CV_ROWS = [
   "title": "SANVALENTIN",
   "year": "2025",
   "type": "Music",
-  "role": "Solo"
+  "role": "Writing, production, mix/master"
  },
  {
   "title": "Wabash Lights Data Visualization",
@@ -83,6 +89,12 @@ window.CV_ROWS = [
   "year": "2025",
   "type": "Software",
   "role": "Solo"
+ },
+ {
+  "title": "Más Fácil (Yiyo feat. Blinco)",
+  "year": "2025",
+  "type": "Feature",
+  "role": "Production"
  },
  {
   "title": "END show",
@@ -100,19 +112,19 @@ window.CV_ROWS = [
   "title": "Noche De Musica, Aurora",
   "year": "2025",
   "type": "Performance",
-  "role": "Nico Nico"
+  "role": "Live set"
  },
  {
   "title": "630 Fest (Garden Collective)",
   "year": "2025",
   "type": "Performance",
-  "role": "Nico Nico"
+  "role": "Live set"
  },
  {
   "title": "Feltwell live, East Wind, Aurora",
   "year": "2025",
   "type": "Performance",
-  "role": "Nico Nico, support"
+  "role": "Support"
  },
  {
   "title": "KIOTL party series (001 to 7, Chicago)",
@@ -130,13 +142,13 @@ window.CV_ROWS = [
   "title": "Bookclub, Chicago",
   "year": "2024",
   "type": "Performance",
-  "role": "Nico Nico, headline set"
+  "role": "Headline set"
  },
  {
   "title": "Bookclub, Chicago",
   "year": "2024",
   "type": "Performance",
-  "role": "Nico Nico, with live band"
+  "role": "Live band set"
  },
  {
   "title": "ATT1C: MidNight Dub, Subterranean, Chicago",
@@ -154,36 +166,24 @@ window.CV_ROWS = [
   "title": "Kiss the Sky, Batavia",
   "year": "2023",
   "type": "Performance",
-  "role": "Nico Nico, with Vacants"
+  "role": "Live set with Vacants"
  },
  {
   "title": "Space 333, Chicago (Chicago debut)",
   "year": "2023",
   "type": "Performance",
-  "role": "Nico Nico"
+  "role": "Live set"
  },
  {
   "title": "Subrosa",
   "year": "2022",
   "type": "Music",
-  "role": "Solo"
+  "role": "Writing, production, mix/master"
  },
  {
   "title": "Evergreen",
   "year": "2022",
   "type": "Music",
-  "role": "Nico Nico"
- },
- {
-  "title": "Más Fácil (Yiyo feat. Blinco)",
-  "year": "",
-  "type": "Feature",
-  "role": "Blinco"
- },
- {
-  "title": "Explanations (Edzo feat. Blinco)",
-  "year": "",
-  "type": "Feature",
-  "role": "Blinco"
+  "role": "Writing, production, mix/master"
  }
 ];

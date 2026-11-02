@@ -19,43 +19,43 @@
       "title": "Evergreen",
       "year": "2022",
       "type": "Music",
-      "role": "Nico Nico"
+      "role": "Writing, production, mix/master"
     },
     {
       "title": "Más Fácil (Yiyo feat. Blinco)",
-      "year": "",
+      "year": "2025",
       "type": "Feature",
-      "role": "Blinco"
+      "role": "Production"
     },
     {
       "title": "Explanations (Edzo feat. Blinco)",
-      "year": "",
+      "year": "2026",
       "type": "Feature",
-      "role": "Blinco"
+      "role": "Production"
     },
     {
       "title": "Kiss the Sky, Batavia",
       "year": "2023",
       "type": "Performance",
-      "role": "Nico Nico, with Vacants"
+      "role": "Live set with Vacants"
     },
     {
       "title": "Space 333, Chicago (Chicago debut)",
       "year": "2023",
       "type": "Performance",
-      "role": "Nico Nico"
+      "role": "Live set"
     },
     {
       "title": "Bookclub, Chicago",
       "year": "2024",
       "type": "Performance",
-      "role": "Nico Nico, headline set"
+      "role": "Headline set"
     },
     {
       "title": "Bookclub, Chicago",
       "year": "2024",
       "type": "Performance",
-      "role": "Nico Nico, with live band"
+      "role": "Live band set"
     },
     {
       "title": "ATT1C: MidNight Dub, Subterranean, Chicago",
@@ -79,25 +79,25 @@
       "title": "Noche De Musica, Aurora",
       "year": "2025",
       "type": "Performance",
-      "role": "Nico Nico"
+      "role": "Live set"
     },
     {
       "title": "630 Fest (Garden Collective)",
       "year": "2025",
       "type": "Performance",
-      "role": "Nico Nico"
+      "role": "Live set"
     },
     {
       "title": "Feltwell live, East Wind, Aurora",
       "year": "2025",
       "type": "Performance",
-      "role": "Nico Nico, support"
+      "role": "Support"
     },
     {
       "title": "Saturday Tiradores, East Wind, Aurora",
       "year": "2026",
       "type": "Performance",
-      "role": "Blinco, with Yiyo and Dew"
+      "role": "Live set with Yiyo and Dew"
     },
     {
       "title": "MADMADHOUSE nights (30, Aurora, Chicago, Naperville)",
@@ -111,5 +111,10 @@
       "type": "Event series",
       "role": "Founder: booking, promotion, ticketing, flyers, web"
     }
-  ]
+  ],
+  "role_override": {
+    "_note": "works.json rows whose CV role differs (Nico, 2026-11-02: no artist names as roles)",
+    "subrosa": "Writing, production, mix/master",
+    "sanvalentin": "Writing, production, mix/master"
+  }
 }
