@@ -30,6 +30,8 @@ EM_DASH = "\u2014"
 def year_key(y: str) -> int:
     # latest date in the cell as YYYYMM (MM-YYYY or a bare year, which sorts after its months)
     keys = [int(yr) * 100 + int(mm or 13) for mm, yr in re.findall(r"(?:(\d{2})-)?(\d{4})", y)]
+    if y.endswith("present"):
+        return 999999  # ongoing work sorts first
     return max(keys) if keys else 0
 
 
@@ -39,13 +41,14 @@ def rows() -> list[dict]:
     skip = set(extra.get("exclude", {}))
     roles = extra.get("role_override", {})
     dates = extra.get("dates", {})
+    titles = extra.get("title_override", {})
     out = []
     for w in works:
         if w["id"] in skip:
             continue
         year = str(w.get("year", "")).replace("-", " to ")
         role = roles.get(w["id"], w.get("role", ""))
-        out.append({"title": w["title"], "year": year, "type": TYPE.get(w["category"], w["category"].title()), "role": role})
+        out.append({"title": titles.get(w["id"], w["title"]), "year": year, "type": TYPE.get(w["category"], w["category"].title()), "role": role})
     out += extra["rows"]
     for r in out:
         r["year"] = dates.get(r["title"], r["year"])
@@ -59,7 +62,7 @@ def validate(rs: list[dict]) -> list[str]:
         for k in ("title", "type", "role"):
             if not r.get(k):
                 errs.append(f"missing {k}: {r}")
-        if not re.fullmatch(r"\d{2}-\d{4}( to \d{2}-\d{4})?", r.get("year", "")):
+        if not re.fullmatch(r"\d{2}-\d{4}( to (\d{2}-\d{4}|present))?", r.get("year", "")):
             errs.append(f"no MM-YYYY date: {r['title']} ({r.get('year')})")
         if any(EM_DASH in str(v) for v in r.values()):
             errs.append(f"em dash: {r['title']}")
