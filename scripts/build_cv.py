@@ -36,12 +36,14 @@ def rows() -> list[dict]:
     works = json.loads(WORKS.read_text())["works"]
     extra = json.loads(EXTRA.read_text())
     skip = set(extra.get("exclude", {}))
+    roles = extra.get("role_override", {})
     out = []
     for w in works:
         if w["id"] in skip:
             continue
         year = str(w.get("year", "")).replace("-", " to ")
-        out.append({"title": w["title"], "year": year, "type": TYPE.get(w["category"], w["category"].title()), "role": w.get("role", "")})
+        role = roles.get(w["id"], w.get("role", ""))
+        out.append({"title": w["title"], "year": year, "type": TYPE.get(w["category"], w["category"].title()), "role": role})
     out += extra["rows"]
     # newest first; undated rows last; stable within a year
     return sorted(out, key=lambda r: -year_key(r["year"]) if r["year"] else 1)
