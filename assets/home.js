@@ -248,6 +248,19 @@
 
   function mediaHTML(m) {
     if (m.type === 'image') return `<img src="${m.src}" width="${m.w}" height="${m.h}" alt="${esc(m.caption)}"${m.round ? ' class="is-round"' : ''}>`;
+    if (m.type === 'video' && m.code) {
+      // Wabash source: Nico's own three-button UI (pause, restart, the sketch), no browser player chrome
+      const run = !reduceMotion.matches;
+      return `
+      <div class="src-player">
+        <video src="${m.src}" width="${m.w}" height="${m.h}" playsinline muted loop${run ? ' autoplay' : ''}${m.pixel ? ' class="is-pixel"' : ''} aria-label="${esc(m.caption)}"></video>
+        <div class="src-controls">
+          <button class="ctl" type="button" data-src="toggle">${run ? 'Pause' : 'Play'}</button>
+          <button class="ctl" type="button" data-src="restart">Restart</button>
+          <a class="ctl" href="${m.code}" target="_blank" rel="noopener">p5.js <span aria-hidden="true">&#x2197;</span></a>
+        </div>
+      </div>`;
+    }
     if (m.type === 'video') {
       // Every clip has controls (pause, scrub, unmute). sound: waits for play, with sound; the rest loop muted.
       // Only the showing slide is in the DOM, so the other (large) chapters never load or play.
@@ -304,6 +317,22 @@
     const n = dlg.querySelector('.dmedia-bar .n');
     if (n) n.textContent = `${String(mIndex + 1).padStart(2, '0')} / ${String(c.media.length).padStart(2, '0')}`;
     if (m.type === 'flow') window.renderFlow?.(stage.querySelector('.flow-slot'), m.flow);
+    const sp = stage.querySelector('.src-player');
+    if (sp) {
+      const v = sp.querySelector('video'), tg = sp.querySelector('[data-src="toggle"]');
+      const flip = () => (v.paused ? v.play() : v.pause());
+      v.addEventListener('click', flip);
+      tg.addEventListener('click', flip);
+      sp.querySelector('[data-src="restart"]').addEventListener('click', () => { v.currentTime = 0; v.play(); });
+      v.addEventListener('play', () => { tg.textContent = 'Pause'; });
+      v.addEventListener('pause', () => { tg.textContent = 'Resume'; });
+      // object-fit: contain letterboxes the picture inside the element; start the buttons at the picture's left edge
+      const row = sp.querySelector('.src-controls');
+      new ResizeObserver(() => {
+        const r = v.getBoundingClientRect();
+        row.style.marginLeft = `${Math.max(0, (r.width - Math.min(r.width, r.height * m.w / m.h)) / 2)}px`;
+      }).observe(v);
+    }
     if (m.type === 'urap') {
       demo = urapSketch(stage.querySelector('canvas'));
       demo.redraw(); demo.play();

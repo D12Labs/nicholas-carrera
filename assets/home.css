@@ -180,6 +180,12 @@
   height: auto;
   object-fit: contain;
 }
+/* Wabash source clip: video plus Nico's three buttons (pause, restart, sketch) */
+.src-player { display: flex; flex-direction: column; gap: var(--space-4); width: 100%; max-height: 100%; min-height: 0; }
+.src-player video { width: 100%; min-height: 0; flex: 0 1 auto; object-fit: contain; cursor: pointer; }
+.src-player video.is-pixel { image-rendering: pixelated; }
+.src-controls { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+.src-controls a { text-decoration: none; }
 .dmedia-stage:has(.flow) { overflow-y: auto; align-items: flex-start; padding-top: 60px; }
 .dmedia-stage > .flow,
 .dmedia-stage > .urap-demo { width: 100%; max-height: 100%; }
