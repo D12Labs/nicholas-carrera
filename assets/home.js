@@ -239,6 +239,8 @@
   const svg = d => `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true">${d}</svg>`;
   const ICON_EXPAND = svg('<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>');
   const ICON_COLLAPSE = svg('<path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/>');
+  // Lucide "arrow-up-right": a text arrow (U+2197) renders as an emoji on iOS
+  const ICON_OUT = svg('<path d="M7 7h10v10M7 17 17 7"/>');
   const dlg = document.createElement('dialog');
   dlg.className = 'detail';
   dlg.setAttribute('aria-labelledby', 'dtitle');
@@ -257,7 +259,7 @@
         <div class="src-controls">
           <button class="ctl" type="button" data-src="toggle">${run ? 'Pause' : 'Play'}</button>
           <button class="ctl" type="button" data-src="restart">Restart</button>
-          <a class="ctl" href="${m.code}" target="_blank" rel="noopener">p5.js <span aria-hidden="true">&#x2197;</span></a>
+          <a class="ctl" href="${m.code}" target="_blank" rel="noopener">p5.js ${ICON_OUT}</a>
         </div>
       </div>`;
     }
