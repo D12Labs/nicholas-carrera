@@ -24,7 +24,7 @@
   border-bottom: 1px solid var(--line);
 }
 .cv tbody th { font-weight: 500; }
-.cv-year { width: 9em; font-variant-numeric: tabular-nums; }
+.cv-year { width: 11.5em; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .cv-type { width: 10em; }
 .cv-year, .cv-type, .cv-role { color: var(--muted); font-size: 0.9375rem; }
 .links a[aria-current="page"] { text-decoration: underline; text-underline-offset: 0.2em; }
