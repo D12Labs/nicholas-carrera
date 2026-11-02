@@ -12,7 +12,8 @@
     "remagen-ui": "Nico, 2026-10-30: not on the CV yet",
     "remagen": "Nico, 2026-10-30: not on the CV yet",
     "end-cohort": "Nico, 2026-10-30: not on the CV yet",
-    "ankle-fellowship": "Nico, 2026-10-30: not on the CV yet"
+    "ankle-fellowship": "Nico, 2026-10-30: not on the CV yet",
+    "midi-mapper": "Nico, 2026-11-02: folded into MULTI as a module; off the CV until it ships there"
   },
   "rows": [
     {
@@ -47,13 +48,13 @@
     },
     {
       "title": "Bookclub, Chicago",
-      "year": "2024",
+      "year": "02-2024",
       "type": "Performance",
       "role": "Headline set"
     },
     {
       "title": "Bookclub, Chicago",
-      "year": "2024",
+      "year": "06-2024",
       "type": "Performance",
       "role": "Live band set"
     },
@@ -116,5 +117,36 @@
     "_note": "works.json rows whose CV role differs (Nico, 2026-11-02: no artist names as roles)",
     "subrosa": "Writing, production, mix/master",
     "sanvalentin": "Writing, production, mix/master"
+  },
+  "dates": {
+    "_note": "MM-YYYY per row, keyed by title. Sources: copy-drafts/CV-DATES.md. Overrides the year shown.",
+    "EXCELSIOR / BTM (Official Music Video)": "02-2026",
+    "Substanz Magazine": "09-2025 to 12-2025",
+    "COCOTAZO": "08-2026",
+    "MADMADHOUSE Archive + Booking CV": "09-2026",
+    "LLM-to-Geometry Research Pipeline": "09-2025 to 03-2026",
+    "CAT SSO & Access Control Redesign": "01-2026 to 06-2026",
+    "GSECAC Nonprofit Website": "04-2026 to 05-2026",
+    "Ankle / aleqth: Cultural OS": "08-2026",
+    "Scene Portal": "08-2026",
+    "Explanations (Edzo feat. Blinco)": "05-2026",
+    "Saturday Tiradores, East Wind, Aurora": "05-2026",
+    "MADMADHOUSE nights (30, Aurora, Chicago, Naperville)": "03-2023 to 09-2026",
+    "SANVALENTIN": "02-2025",
+    "Wabash Lights Data Visualization": "05-2025",
+    "Más Fácil (Yiyo feat. Blinco)": "06-2025",
+    "END show": "02-2025",
+    "END / Record Breakers set": "03-2025",
+    "Noche De Musica, Aurora": "06-2025",
+    "630 Fest (Garden Collective)": "07-2025",
+    "Feltwell live, East Wind, Aurora": "08-2025",
+    "KIOTL party series (001 to 7, Chicago)": "07-2024 to 08-2025",
+    "Could Be": "12-2024",
+    "ATT1C: MidNight Dub, Subterranean, Chicago": "11-2024",
+    "IDK": "10-2023",
+    "Kiss the Sky, Batavia": "07-2023",
+    "Space 333, Chicago (Chicago debut)": "03-2023",
+    "Subrosa": "11-2022",
+    "Evergreen": "06-2022"
   }
 }

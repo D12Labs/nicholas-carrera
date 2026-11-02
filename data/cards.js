@@ -170,7 +170,7 @@ window.CARDS = [
     title: "Substanz",
     kind: "Web build and score",
     tag: "Client work · Web + score",
-    status: "Live, 2026",
+    status: "Live, 2025",
     sentence: "Built the website for Substanz, an online magazine, and wrote its score.",
     contribution: "Web build and score",
     work: [
