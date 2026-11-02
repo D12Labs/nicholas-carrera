@@ -41,13 +41,14 @@ def rows() -> list[dict]:
     skip = set(extra.get("exclude", {}))
     roles = extra.get("role_override", {})
     dates = extra.get("dates", {})
+    titles = extra.get("title_override", {})
     out = []
     for w in works:
         if w["id"] in skip:
             continue
         year = str(w.get("year", "")).replace("-", " to ")
         role = roles.get(w["id"], w.get("role", ""))
-        out.append({"title": w["title"], "year": year, "type": TYPE.get(w["category"], w["category"].title()), "role": role})
+        out.append({"title": titles.get(w["id"], w["title"]), "year": year, "type": TYPE.get(w["category"], w["category"].title()), "role": role})
     out += extra["rows"]
     for r in out:
         r["year"] = dates.get(r["title"], r["year"])

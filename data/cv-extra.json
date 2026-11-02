@@ -127,7 +127,6 @@
     "LLM-to-Geometry Research Pipeline": "09-2025 to 03-2026",
     "CAT SSO & Access Control Redesign": "01-2026 to 06-2026",
     "GSECAC Nonprofit Website": "04-2026 to 05-2026",
-    "Ankle / aleqth: Cultural OS": "08-2026 to present",
     "Scene Portal": "08-2026 to present",
     "Explanations (Edzo feat. Blinco)": "05-2026",
     "Saturday Tiradores, East Wind, Aurora": "05-2026",
@@ -147,6 +146,10 @@
     "Kiss the Sky, Batavia": "07-2023",
     "Space 333, Chicago (Chicago debut)": "03-2023",
     "Subrosa": "11-2022",
-    "Evergreen": "06-2022"
+    "Evergreen": "06-2022",
+    "Ankle": "08-2026 to present"
+  },
+  "title_override": {
+    "ankle": "Ankle"
   }
 }
