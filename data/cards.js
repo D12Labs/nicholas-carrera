@@ -7,7 +7,7 @@
 //         metric: Wabash ratio shift index + typology table, drawn in HTML (bands, typologies).
 //         image: round = device screen with rounded corners.
 //         video: sound = has a score, waits for play (others loop muted; all have controls);
-//                pixel = keep LED pixels crisp.
+//                pixel = keep LED pixels crisp; code = sketch URL, swaps the browser player for pause / restart / sketch buttons.
 // fit:    "contain" keeps the whole frame on the grid card (posters); default crops to fill.
 window.CARDS = [
   {
@@ -79,7 +79,7 @@ window.CARDS = [
     grid: { video: "public/media/wabash/irl.mp4", poster: "public/media/wabash/irl-thumb.webp", w: 1280, h: 720, alt: "The LED rails running under the Wabash L tracks at night" },
     media: [
       { type: "video", src: "public/media/wabash/irl.mp4", poster: "public/media/wabash/irl-thumb.webp", w: 1280, h: 720, caption: "Live on the rails under the L" },
-      { type: "video", src: "public/media/wabash/source-stacked.mp4", w: 584, h: 412, pixel: true, caption: "The source animation: four rails, cut into eight lengths to fit" },
+      { type: "video", src: "public/media/wabash/source-stacked.mp4", w: 584, h: 412, pixel: true, code: "https://editor.p5js.org/niconico/sketches/JsD_jBcDK", caption: "The source animation: four rails, cut into eight lengths to fit" },
       { type: "metric", caption: "The metric: renter to owner shift, and the eight housing typologies it is weighted across",
         bands: [["S > 10: renter dominance", "renter"], ["S = 10: stable", ""], ["S < 10: owner dominance", "owner"]],
         typologies: [
